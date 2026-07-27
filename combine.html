@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Combine | A.I CV & Cover-letter Generator</title>
+    <meta name="description" content="Generate your professional CV with Quixote A.I" />
+    <meta name="theme-color" content="#0b2a35" />
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="images/favicon.svg" />
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;600;700;900&display=swap" rel="stylesheet" />
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+    
+    <!-- PDF-lib for PDF operations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+    
+    <!-- Main Styles -->
+    <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+    <!-- ========================================== -->
+    <!-- NAVBAR -->
+    <!-- ========================================== -->
+    <header class="navbar" data-aos="fade-down" data-aos-duration="800">
+        <div class="logo-container">
+            <a href="index.html">
+                <img src="images/logo.svg" alt="Quixote A.I CV Generator Logo" class="logo" />
+                <h1>C.V Generator</h1>
+            </a>
+        </div>
+
+        <!-- Hamburger Menu Button -->
+        <button class="hamburger" id="hamburgerBtn" aria-label="Toggle navigation">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </button>
+
+        <nav id="mainNav">
+            <ul>
+                <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="generate.html"><i class="fas fa-file-alt"></i> Generate CV</a></li>
+                <li class="active"><a href="combine.html"><i class="fas fa-compress-alt"></i> Combine Documents</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- ========================================== -->
+    <!-- HERO SECTION - WITH AOS -->
+    <!-- ========================================== -->
+    <section class="generate-header" style="padding: 140px 48px 60px; text-align: center; background: linear-gradient(135deg, var(--primary-dark), var(--primary), var(--primary-light)); position: relative; overflow: hidden; margin-top: 82px;" data-aos="fade-up" data-aos-duration="1000">
+        <div style="position: absolute; top: -50%; right: -20%; width: 600px; height: 600px; background: radial-gradient(circle, rgba(201, 168, 76, 0.06) 0%, transparent 70%); border-radius: 50%; pointer-events: none;"></div>
+        <div style="position: absolute; bottom: -30%; left: -10%; width: 400px; height: 400px; background: radial-gradient(circle, rgba(201, 168, 76, 0.04) 0%, transparent 70%); border-radius: 50%; pointer-events: none;"></div>
+        
+        <div class="page-header-content" style="max-width: 800px; margin: 0 auto; position: relative; z-index: 1;">
+            <!-- Document Tools Badge -->
+            <div style="display: inline-flex; align-items: center; gap: 8px; padding: 6px 20px; background: rgba(201, 168, 76, 0.12); border: 1px solid rgba(201, 168, 76, 0.15); border-radius: 999px; font-size: 13px; font-weight: 600; color: var(--gold); margin-bottom: 16px;" data-aos="fade-up" data-aos-delay="100">
+                <i class="fas fa-compress-alt"></i> Document Tools
+            </div>
+            <!-- Main Heading -->
+            <h1 style="font-size: 48px; font-weight: 900; color: var(--white); line-height: 1.1; letter-spacing: -1px; margin-bottom: 12px;" data-aos="fade-up" data-aos-delay="200">
+                Combine & <span style="color: var(--gold);">Split</span> Documents
+            </h1>
+            <!-- Description -->
+            <p style="font-size: 18px; color: rgba(255, 255, 255, 0.7); max-width: 600px; margin: 0 auto 28px; line-height: 1.7;" data-aos="fade-up" data-aos-delay="300">
+                Effortlessly merge multiple PDFs into one seamless document, or split a PDF into individual pages. 
+                <strong style="color: var(--gold);">100% private and secure</strong> — all processing happens in your browser.
+            </p>
+            <!-- Trust Badges -->
+            <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;" data-aos="fade-up" data-aos-delay="400">
+                <span style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 16px; background: rgba(255,255,255,0.06); border-radius: 999px; font-size: 13px; color: rgba(255,255,255,0.6);">
+                    <i class="fas fa-check-circle" style="color: #22c55e;"></i> No Uploads to Server
+                </span>
+                <span style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 16px; background: rgba(255,255,255,0.06); border-radius: 999px; font-size: 13px; color: rgba(255,255,255,0.6);">
+                    <i class="fas fa-check-circle" style="color: #22c55e;"></i> Completely Free
+                </span>
+                <span style="display: inline-flex; align-items: center; gap: 6px; padding: 6px 16px; background: rgba(255,255,255,0.06); border-radius: 999px; font-size: 13px; color: rgba(255,255,255,0.6);">
+                    <i class="fas fa-check-circle" style="color: #22c55e;"></i> Works Offline
+                </span>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- DOCUMENT MANAGER SECTION - WITH AOS -->
+    <!-- ========================================== -->
+    <section class="document-manager" style="padding: 40px 48px 80px; max-width: 1200px; margin: 0 auto;">
+
+        <!-- Document Manager Tabs -->
+        <div class="doc-manager-tabs" data-aos="fade-up" data-aos-delay="100">
+            <button class="tab-btn active" data-tab="combine">
+                <i class="fas fa-object-group"></i> Combine PDFs
+            </button>
+            <button class="tab-btn" data-tab="split">
+                <i class="fas fa-cut"></i> Split PDF
+            </button>
+        </div>
+
+        <!-- COMBINE TAB -->
+        <div id="doc-tab-combine" class="doc-manager-content active" data-aos="fade-up" data-aos-delay="200">
+            <h2><i class="fas fa-object-group"></i> Combine PDF Documents</h2>
+            <p>Upload multiple PDF files and combine them into one document. Drag to rearrange order.</p>
+
+            <div class="doc-upload-area" id="docCombineUploadArea" data-aos="fade-up" data-aos-delay="300">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <h3>Drop PDF files here or click to upload</h3>
+                <p>Supports PDF files only</p>
+                <input type="file" id="docCombineFileInput" accept=".pdf" multiple style="display:none;">
+            </div>
+
+            <div class="doc-file-list" id="docCombineFileList" data-aos="fade-up" data-aos-delay="400">
+                <div class="doc-empty-state">
+                    <i class="fas fa-inbox"></i>
+                    <p>No files uploaded yet</p>
+                </div>
+            </div>
+
+            <div class="doc-action-buttons" data-aos="fade-up" data-aos-delay="500">
+                <button class="btn-primary" onclick="openDocNameModal()">
+                    <i class="fas fa-object-group"></i> Combine & Download
+                </button>
+                <button class="btn-secondary" onclick="clearDocFiles('combine')">
+                    <i class="fas fa-trash"></i> Clear All
+                </button>
+            </div>
+
+            <div class="doc-preview-container" id="docCombinePreview" style="display:none;" data-aos="fade-up" data-aos-delay="600">
+                <div class="preview-header">
+                    <h3>Preview Combined Document</h3>
+                    <button class="btn-secondary" onclick="viewCombinedDoc()">
+                        <i class="fas fa-eye"></i> View
+                    </button>
+                </div>
+                <div id="docCombinePreviewContent"></div>
+            </div>
+        </div>
+
+        <!-- SPLIT TAB -->
+        <div id="doc-tab-split" class="doc-manager-content" data-aos="fade-up" data-aos-delay="200">
+            <h2><i class="fas fa-cut"></i> Split PDF Document</h2>
+            <p>Upload a PDF and split it into separate pages.</p>
+
+            <div class="doc-upload-area" id="docSplitUploadArea" data-aos="fade-up" data-aos-delay="300">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <h3>Drop PDF file here or click to upload</h3>
+                <p>Supports PDF files only</p>
+                <input type="file" id="docSplitFileInput" accept=".pdf" style="display:none;">
+            </div>
+
+            <div class="doc-file-list" id="docSplitFileList" data-aos="fade-up" data-aos-delay="350">
+                <div class="doc-empty-state">
+                    <i class="fas fa-inbox"></i>
+                    <p>No file uploaded yet</p>
+                </div>
+            </div>
+
+            <div id="docSplitControls" style="display: none; margin: 20px 0;" data-aos="fade-up" data-aos-delay="400">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; padding: 16px; background: var(--off-white); border-radius: var(--radius); margin-bottom: 16px;">
+                    <div>
+                        <span style="font-weight: 600; color: var(--primary);">Document:</span>
+                        <span id="docSplitFileName" style="color: var(--gray-600);"></span>
+                        <span style="margin-left: 16px; font-weight: 600; color: var(--primary);">Total Pages:</span>
+                        <span id="docTotalPages" style="color: var(--gray-600);"></span>
+                    </div>
+                    <div>
+                        <span style="font-weight: 600; color: var(--primary);">Selected Page:</span>
+                        <span id="docSelectedPageDisplay" style="color: var(--gold); font-weight: 700; font-size: 18px;">1</span>
+                        <span style="color: var(--gray-500);"> of <span id="docTotalPagesDisplay"></span></span>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 12px; flex-wrap: wrap; align-items: center; margin-bottom: 16px;">
+                    <button class="btn-secondary" onclick="navigateSplitPage(-1)" style="padding: 8px 16px;">
+                        <i class="fas fa-chevron-left"></i> Previous
+                    </button>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <label style="font-weight: 600; font-size: 14px; color: var(--gray-700);">Page:</label>
+                        <input type="number" id="docSplitPageNumber" min="1" value="1" style="width: 70px; padding: 8px 10px; border: 2px solid var(--gray-200); border-radius: 8px; font-size: 14px; font-family: 'Inter', sans-serif; text-align: center;">
+                        <span style="color: var(--gray-500); font-size: 14px;">of <span id="docTotalPagesInput"></span></span>
+                    </div>
+                    <button class="btn-secondary" onclick="navigateSplitPage(1)" style="padding: 8px 16px;">
+                        Next <i class="fas fa-chevron-right"></i>
+                    </button>
+                    <button class="btn-primary" onclick="splitSelectedPage()" style="padding: 8px 20px;">
+                        <i class="fas fa-cut"></i> Split This Page
+                    </button>
+                </div>
+
+                <div style="background: var(--white); border: 2px solid var(--gray-200); border-radius: var(--radius); padding: 20px; margin-bottom: 16px; text-align: center;">
+                    <div style="position: relative; display: inline-block;">
+                        <div id="docPagePreviewContainer" style="min-height: 200px; display: flex; align-items: center; justify-content: center; background: var(--off-white); border-radius: 8px; padding: 20px;">
+                            <div style="text-align: center;">
+                                <i class="fas fa-file-pdf" style="font-size: 64px; color: var(--gold);"></i>
+                                <p style="margin-top: 8px; color: var(--gray-500);">Page <span id="docPreviewPageNumber">1</span> preview</p>
+                                <button class="btn-secondary" onclick="viewSplitPage()" style="margin-top: 8px; padding: 6px 16px; font-size: 13px;">
+                                    <i class="fas fa-eye"></i> View Full Page
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 12px; flex-wrap: wrap; align-items: center; padding: 16px; background: var(--off-white); border-radius: var(--radius);">
+                    <button class="btn-primary" onclick="splitAllDocPages()" style="flex: 1; min-width: 50px;">
+                        <i class="fas fa-cut"></i> Split All Pages
+                    </button>
+                    <span style="color: var(--gray-500); font-size: 14px;">or</span>
+                    <button class="btn-secondary" onclick="clearDocFiles('split')" style="color: rgba(201, 168, 68, 0.5);">
+                        <i class="fas fa-trash"></i> Clear File
+                    </button>
+                </div>
+            </div>
+
+            <div class="doc-preview-container" id="docSplitPreview" style="display:none;" data-aos="fade-up" data-aos-delay="500">
+                <div class="preview-header">
+                    <h3><i class="fas fa-files"></i> Split Pages</h3>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                        <button class="btn-primary" onclick="downloadAllSplitPages()" style="padding: 8px 20px; font-size: 13px;">
+                            <i class="fas fa-download"></i> Download All
+                        </button>
+                        <button class="btn-secondary" onclick="clearSplitResults()" style="padding: 8px 20px; font-size: 13px;">
+                            <i class="fas fa-times"></i> Clear Results
+                        </button>
+                    </div>
+                </div>
+                <div id="docSplitPreviewContent"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- WHY CHOOSE SECTION - WITH AOS -->
+    <!-- ========================================== -->
+    <section style="padding: 60px 48px 80px; max-width: 1200px; margin: 0 auto; background: var(--off-white);" data-aos="fade-up" data-aos-duration="800" data-aos-delay="100">
+        <div style="text-align: center; margin-bottom: 48px;" data-aos="fade-up" data-aos-delay="200">
+            <span style="display: inline-block; padding: 6px 18px; background: rgba(201, 168, 76, 0.12); border: 1px solid rgba(201, 168, 76, 0.15); border-radius: 999px; font-size: 12px; font-weight: 700; color: var(--gold); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px;">
+                <i class="fas fa-star"></i> Why Use Our Document Tools
+            </span>
+            <h2 style="font-size: 36px; font-weight: 800; font-family: var(--font-heading); color: var(--primary); line-height: 1.1;">
+                Smart, Simple & <span style="color: var(--gold);">Secure</span>
+            </h2>
+            <p style="font-size: 17px; color: var(--gray-500); max-width: 600px; margin: 12px auto 0; line-height: 1.7;">
+                Everything you need to manage your PDF documents efficiently.
+            </p>
+        </div>
+        
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px;">
+            <div style="background: var(--white); padding: 30px 24px; border-radius: var(--radius-lg); border: 1px solid var(--gray-200); transition: var(--transition); text-align: center;" data-aos="fade-up" data-aos-delay="300">
+                <div style="width: 64px; height: 64px; border-radius: 50%; background: rgba(201, 168, 76, 0.12); display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
+                    <i class="fas fa-shield-alt" style="font-size: 28px; color: var(--gold);"></i>
+                </div>
+                <h3 style="font-size: 18px; font-weight: 700; color: var(--primary); margin-bottom: 8px; font-family: var(--font-heading);">100% Privacy</h3>
+                <p style="font-size: 14px; color: var(--gray-500); line-height: 1.7;">All processing happens locally in your browser. Your documents never leave your device.</p>
+            </div>
+            
+            <div style="background: var(--white); padding: 30px 24px; border-radius: var(--radius-lg); border: 1px solid var(--gray-200); transition: var(--transition); text-align: center;" data-aos="fade-up" data-aos-delay="400">
+                <div style="width: 64px; height: 64px; border-radius: 50%; background: rgba(201, 168, 76, 0.12); display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
+                    <i class="fas fa-bolt" style="font-size: 28px; color: var(--gold);"></i>
+                </div>
+                <h3 style="font-size: 18px; font-weight: 700; color: var(--primary); margin-bottom: 8px; font-family: var(--font-heading);">Instant Results</h3>
+                <p style="font-size: 14px; color: var(--gray-500); line-height: 1.7;">Combine or split documents in seconds. No uploads, no waiting, no queues.</p>
+            </div>
+            
+            <div style="background: var(--white); padding: 30px 24px; border-radius: var(--radius-lg); border: 1px solid var(--gray-200); transition: var(--transition); text-align: center;" data-aos="fade-up" data-aos-delay="500">
+                <div style="width: 64px; height: 64px; border-radius: 50%; background: rgba(201, 168, 76, 0.12); display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
+                    <i class="fas fa-gem" style="font-size: 28px; color: var(--gold);"></i>
+                </div>
+                <h3 style="font-size: 18px; font-weight: 700; color: var(--primary); margin-bottom: 8px; font-family: var(--font-heading);">Completely Free</h3>
+                <p style="font-size: 14px; color: var(--gray-500); line-height: 1.7;">No sign-ups, no limits, no hidden costs. Use our tools as much as you need.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- MODALS - WITH CLOSE BUTTON (X) FIXED -->
+    <!-- ========================================== -->
+    
+    <!-- Name Modal -->
+    <div class="doc-modal-overlay" id="docNameModal">
+        <div class="doc-modal">
+            <!-- Added Close (X) Button -->
+            <button onclick="closeDocNameModal()" style="position: absolute; top: 16px; right: 20px; background: none; border: none; font-size: 28px; color: var(--gray-500); cursor: pointer; transition: var(--transition);">
+                ×
+            </button>
+            <h2><i class="fas fa-file-pdf"></i> Name Your Document</h2>
+            <p>Enter a name for your combined PDF document.</p>
+            <input type="text" id="docDocumentNameInput" placeholder="Enter document name..." value="Combined_Document">
+            <div class="modal-actions">
+                <button class="btn-secondary" onclick="closeDocNameModal()">Cancel</button>
+                <button class="btn-primary" onclick="confirmDocCombine()">
+                    <i class="fas fa-check"></i> Combine
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- View Modal - FIXED WITH CLOSE BUTTON -->
+    <div class="doc-modal-overlay" id="docViewModal">
+        <div class="doc-modal" style="max-width: 800px; position: relative;">
+            <!-- Close (X) Button - Top Right Corner -->
+            <button onclick="closeDocViewModal()" style="position: absolute; top: 16px; right: 20px; background: none; border: none; font-size: 32px; color: var(--gray-500); cursor: pointer; transition: var(--transition); z-index: 10; line-height: 1;" aria-label="Close modal">
+                <i class="fas fa-times"></i>
+            </button>
+            <h2><i class="fas fa-eye"></i> Document Preview</h2>
+            <p style="margin-bottom: 16px;">Preview of your document.</p>
+            <div id="docViewModalContent">
+                <p style="text-align: center; color: var(--gray-500);">Loading preview...</p>
+            </div>
+            <div class="modal-actions" style="margin-top: 16px;">
+                <button class="btn-secondary" onclick="closeDocViewModal()">
+                    <i class="fas fa-times"></i> Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- FOOTER - ORIGINAL -->
+    <!-- ========================================== -->
+    <footer class="footer" data-aos="fade-up" data-aos-duration="800">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <i class="fas fa-robot"></i>
+                 <span>A.I</span> CV Generator
+            </div>
+            <p style="font-size: 14px; margin-bottom: 16px;">Create professional CVs powered by artificial intelligence</p>
+            <div class="footer-links">
+                <a href="index.html"><i class="fas fa-home"></i> Home</a>
+                <a href="generate.html"><i class="fas fa-file-alt"></i> Generate CV</a>
+                <a href="combine.html"><i class="fas fa-compress-alt"></i> Combine Documents</a>
+                
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 A.I CV Generator. All rights reserved.</p>
+                <div class="footer-social">
+                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                    <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ========================================== -->
+    <!-- SCRIPTS -->
+    <!-- ========================================== -->
+    
+    <!-- AOS Animation -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    
+    <!-- Document Manager JavaScript -->
+    <script src="js/doc-manager.js"></script>
+    
+    <!-- Main Script -->
+    <script>
+        // Initialize AOS
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof AOS !== 'undefined') {
+                AOS.init({
+                    duration: 800,
+                    once: true,
+                    offset: 100,
+                    mobile: false
+                });
+            }
+        });
+    </script>
+</body>
+</html>

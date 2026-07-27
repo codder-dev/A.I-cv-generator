@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Generate CV & Cover Letter | A.I CV & Cover-letter Generator</title>
+    <meta name="description" content="Generate your professional CV with Quixote A.I" />
+    <meta name="theme-color" content="#0b2a35" />
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="images/favicon.svg" />
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;600;700;900&display=swap" rel="stylesheet" />
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+    
+    <!-- Main Styles -->
+    <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+   <!-- ========================================== -->
+    <!-- NAVBAR -->
+    <!-- ========================================== -->
+    <header class="navbar" data-aos="fade-down" data-aos-duration="800">
+        <div class="logo-container">
+            <a href="index.html">
+                <img src="images/logo.svg" alt="Quixote A.I CV Generator Logo" class="logo" />
+                <h1>C.V Generator</h1>
+            </a>
+        </div>
+
+        <!-- Hamburger Menu Button -->
+        <button class="hamburger" id="hamburgerBtn" aria-label="Toggle navigation">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </button>
+
+        <nav id="mainNav">
+            <ul>
+                <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+                <li class="active"><a href="generate.html"><i class="fas fa-file-alt"></i> Generate CV</a></li>
+                <li><a href="combine.html"><i class="fas fa-compress-alt"></i> Combine Documents</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- ========================================== -->
+    <!-- PAGE HEADER - REDESIGNED CLEAN & MODERN -->
+    <!-- ========================================== -->
+    <section class="page-header generate-header" data-aos="fade-up" data-aos-duration="1000">
+        <div class="page-header-content" style="max-width: 750px; margin: 0 auto; position: relative; z-index: 1; padding: 20px 0;">
+            
+            <!-- AI Badge -->
+            <div style="display: inline-flex; align-items: center; gap: 8px; padding: 6px 18px; background: rgba(201, 168, 76, 0.12); border: 1px solid rgba(201, 168, 76, 0.2); border-radius: 999px; font-size: 12px; font-weight: 600; color: var(--gold); margin-bottom: 20px; letter-spacing: 0.3px;">
+                <i class="fas fa-wand-magic-sparkles" style="font-size: 13px;"></i> AI-Powered
+            </div>
+            
+            <!-- Main Heading -->
+            <h1 data-aos="fade-up" data-aos-delay="200" style="font-size: 38px; font-weight: 800; font-family: var(--font-heading); color: var(--white); line-height: 1.1; letter-spacing: -0.5px; margin-bottom: 10px;">
+                Generate Your <span style="color: var(--gold);">Professional CV</span>
+            </h1>
+            
+            <!-- Subtitle -->
+            <p data-aos="fade-up" data-aos-delay="250" style="font-size: 17px; color: rgba(255, 255, 255, 0.75); max-width: 550px; margin: 0 auto 18px; line-height: 1.6; font-weight: 400;">
+                And a professional <span style="color: var(--gold); font-weight: 500;">Application Letter</span> — 
+                from your generated CV or as a standalone document
+            </p>
+            
+            <!-- Description -->
+            <p data-aos="fade-up" data-aos-delay="300" style="font-size: 15px; color: rgba(255, 255, 255, 0.6); max-width: 500px; margin: 0 auto 22px; line-height: 1.6;">
+                Fill in your details and let our AI create a stunning, ATS-friendly CV tailored to your career goals.
+            </p>
+            
+            <!-- Trust Badges -->
+            <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 24px;">
+                <span style="display: inline-flex; align-items: center; gap: 5px; padding: 4px 14px; background: rgba(255,255,255,0.06); border-radius: 999px; font-size: 12px; color: rgba(255,255,255,0.6); border: 1px solid rgba(255,255,255,0.06);">
+                    <i class="fas fa-check-circle" style="color: #22c55e; font-size: 11px;"></i> ATS-Friendly
+                </span>
+                <span style="display: inline-flex; align-items: center; gap: 5px; padding: 4px 14px; background: rgba(255,255,255,0.06); border-radius: 999px; font-size: 12px; color: rgba(255,255,255,0.6); border: 1px solid rgba(255,255,255,0.06);">
+                    <i class="fas fa-check-circle" style="color: #22c55e; font-size: 11px;"></i> AI-Powered
+                </span>
+                <span style="display: inline-flex; align-items: center; gap: 5px; padding: 4px 14px; background: rgba(255,255,255,0.06); border-radius: 999px; font-size: 12px; color: rgba(255,255,255,0.6); border: 1px solid rgba(255,255,255,0.06);">
+                    <i class="fas fa-check-circle" style="color: #22c55e; font-size: 11px;"></i> Instant Results
+                </span>
+            </div>
+            
+            <!-- Action Buttons -->
+            <div class="header-actions" data-aos="fade-up" data-aos-delay="400" style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+                <a href="#generator-section" class="btn btn-primary btn-large" style="padding: 12px 32px; font-size: 15px; background: var(--gold); color: var(--primary-dark); border-radius: 999px; font-weight: 700; display: inline-flex; align-items: center; gap: 8px; transition: var(--transition); box-shadow: 0 8px 24px rgba(201, 168, 76, 0.3);">
+                    <i class="fas fa-arrow-down"></i> Start Building
+                </a>
+                <a href="#letter-section" class="btn btn-secondary btn-large" style="padding: 12px 32px; font-size: 15px; background: rgba(255,255,255,0.08); color: var(--white); border-radius: 999px; font-weight: 700; display: inline-flex; align-items: center; gap: 8px; transition: var(--transition); border: 1px solid rgba(255,255,255,0.15);">
+                    <i class="fas fa-envelope"></i> Application Letter
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- GENERATOR MAIN CONTENT -->
+    <!-- ========================================== -->
+    <section class="generator-container" id="generator-section" data-aos="fade-up" data-aos-duration="800">
+
+        <!-- CV TYPE SELECTOR -->
+        <div class="cv-type-selector" data-aos="fade-up" data-aos-delay="100">
+            <div class="cv-type-card active" data-type="generic" data-aos="fade-up" data-aos-delay="150">
+                <div class="check-mark"><i class="fas fa-check"></i></div>
+                <div class="icon"><i class="fas fa-file-lines"></i></div>
+                <h3>Generic CV</h3>
+                <p>Entry-level & internships</p>
+            </div>
+            <div class="cv-type-card" data-type="professional" data-aos="fade-up" data-aos-delay="250">
+                <div class="check-mark"><i class="fas fa-check"></i></div>
+                <div class="icon"><i class="fas fa-file-pen"></i></div>
+                <h3>Professional CV</h3>
+                <p>Experienced professionals</p>
+            </div>
+        </div>
+
+        <!-- MULTI-STEP FORM -->
+        <div class="form-container" data-aos="fade-up" data-aos-delay="100">
+            
+            <!-- Progress Bar -->
+            <div class="form-progress" data-aos="fade-up" data-aos-delay="150">
+                <div class="progress-step active" data-step="1">
+                    <span class="step-num">01</span>
+                    <span>Personal</span>
+                </div>
+                <div class="progress-line"></div>
+                <div class="progress-step" data-step="2">
+                    <span class="step-num">02</span>
+                    <span>Education</span>
+                </div>
+                <div class="progress-line"></div>
+                <div class="progress-step" data-step="3">
+                    <span class="step-num">03</span>
+                    <span>Experience</span>
+                </div>
+                <div class="progress-line"></div>
+                <div class="progress-step" data-step="4">
+                    <span class="step-num">04</span>
+                    <span>References</span>
+                </div>
+                <div class="progress-line"></div>
+                <div class="progress-step" data-step="5">
+                    <span class="step-num">05</span>
+                    <span>Generate</span>
+                </div>
+            </div>
+
+            <form id="cvForm" onsubmit="return false;">
+
+                <!-- STEP 1: PERSONAL DETAILS -->
+                <div class="form-section active" data-step="1" data-aos="fade-up" data-aos-delay="200">
+                    <h3><i class="fas fa-user"></i> Personal Details</h3>
+                    <p class="subtitle">Please fill in your personal information accurately</p>
+                    
+                    <div class="form-grid">
+                        <div class="form-group full-width" data-aos="fade-up" data-aos-delay="250">
+                            <label>Full Name <span class="required">*</span></label>
+                            <input type="text" id="fullName" placeholder="e.g. John Mwangi" />
+                            <small class="field-error">Please enter your full name (at least 2 names)</small>
+                        </div>
+                        <div class="form-group" data-aos="fade-up" data-aos-delay="300">
+                            <label>Job Title / Profession <span class="required">*</span></label>
+                            <input type="text" id="jobTitle" placeholder="e.g. Software Developer" />
+                            <small class="field-error">Please enter your job title</small>
+                        </div>
+                        <div class="form-group" data-aos="fade-up" data-aos-delay="350">
+                            <label>Email Address <span class="required">*</span></label>
+                            <input type="email" id="email" placeholder="e.g. john@email.com" />
+                            <small class="field-error">Please enter a valid email address</small>
+                        </div>
+                        <div class="form-group" data-aos="fade-up" data-aos-delay="400">
+                            <label>Primary Phone <span class="required">*</span></label>
+                            <input type="tel" id="phone" placeholder="e.g. 0712 345 678" />
+                            <small class="field-error">Please enter a valid phone number</small>
+                        </div>
+                        <div class="form-group" data-aos="fade-up" data-aos-delay="450">
+                            <label>Additional Phone <span class="optional">(Optional)</span></label>
+                            <input type="tel" id="phone2" placeholder="e.g. 0722 345 678" />
+                        </div>
+                        <div class="form-group full-width" data-aos="fade-up" data-aos-delay="500">
+                            <label>Physical Address <span class="required">*</span></label>
+                            <input type="text" id="address" placeholder="e.g. Nairobi, Kenya" />
+                            <small class="field-error">Please enter your physical address</small>
+                        </div>
+                        <div class="form-group full-width" id="photoGroup" style="display:none;" data-aos="fade-up" data-aos-delay="550">
+                            <label>Professional Photo <span class="required">*</span></label>
+                            <div class="photo-upload-area" id="photoUploadArea">
+                                <img id="photoPreview" class="photo-preview" alt="Preview" />
+                                <div id="photoPlaceholder" class="photo-placeholder"><i class="fas fa-camera"></i></div>
+                                <div class="photo-info">
+                                    <h5>Upload Photo</h5>
+                                    <p>JPG, PNG, WEBP — Max 5MB</p>
+                                </div>
+                                <input type="file" id="photoInput" accept="image/*" style="display:none;" />
+                            </div>
+                            <small class="field-error">Please upload a professional photo</small>
+                        </div>
+                    </div>
+                    
+                    <div class="form-nav" data-aos="fade-up" data-aos-delay="600">
+                        <button type="button" class="btn btn-primary next-step">
+                            Next <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- STEP 2: EDUCATION -->
+                <div class="form-section" data-step="2" data-aos="fade-up" data-aos-delay="200">
+                    <h3><i class="fas fa-graduation-cap"></i> Education</h3>
+                    <p class="subtitle">Add your education from highest to lowest level</p>
+                    
+                    <div class="entry-container" id="educationContainer">
+                        <div class="entry-item" data-aos="fade-up" data-aos-delay="250">
+                            <button type="button" class="remove-btn" style="display:none;">
+                                <i class="fas fa-times"></i>
+                            </button>
+                            <div class="entry-grid">
+                                <div class="form-group">
+                                    <label>Qualification <span class="required">*</span></label>
+                                    <select class="edu-qualification">
+                                        <option value="">Select...</option>
+                                        <option value="PhD">PhD</option>
+                                        <option value="Masters">Masters</option>
+                                        <option value="Degree">Degree</option>
+                                        <option value="Diploma">Diploma</option>
+                                        <option value="Certificate">Certificate</option>
+                                        <option value="KCSE">KCSE</option>
+                                        <option value="KCPE">KCPE</option>
+                                        <option value="Artisan">Artisan</option>
+                                    </select>
+                                    <small class="field-error">Please select a qualification</small>
+                                </div>
+                                <div class="form-group">
+                                    <label>Field of Study</label>
+                                    <input type="text" class="edu-field" placeholder="e.g. Computer Science" />
+                                </div>
+                                <div class="form-group">
+                                    <label>School/Institution <span class="required">*</span></label>
+                                    <input type="text" class="edu-school" placeholder="e.g. University of Nairobi" />
+                                    <small class="field-error">Please enter your school name</small>
+                                </div>
+                                <div class="form-group">
+                                    <label>Year Completed</label>
+                                    <input type="text" class="edu-year" placeholder="e.g. 2022" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button type="button" class="add-btn" id="addEducationBtn" data-aos="fade-up" data-aos-delay="300">
+                        <i class="fas fa-plus"></i> Add Education
+                    </button>
+                    
+                    <div class="form-nav" data-aos="fade-up" data-aos-delay="350">
+                        <button type="button" class="btn btn-outline prev-step">
+                            <i class="fas fa-arrow-left"></i> Previous
+                        </button>
+                        <button type="button" class="btn btn-primary next-step">
+                            Next <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- STEP 3: WORK EXPERIENCE -->
+                <div class="form-section" data-step="3" data-aos="fade-up" data-aos-delay="200">
+                    <h3><i class="fas fa-briefcase"></i> Work Experience</h3>
+                    <p class="subtitle" id="experienceSubtitle">Add your work experience (optional for Generic CV)</p>
+                    
+                    <div class="entry-container" id="experienceContainer">
+                        <div class="entry-item" data-aos="fade-up" data-aos-delay="250">
+                            <button type="button" class="remove-btn" style="display:none;">
+                                <i class="fas fa-times"></i>
+                            </button>
+                            <div class="entry-grid">
+                                <div class="form-group">
+                                    <label>Job Title</label>
+                                    <input type="text" class="exp-title" placeholder="e.g. Software Engineer" />
+                                </div>
+                                <div class="form-group">
+                                    <label>Company</label>
+                                    <input type="text" class="exp-company" placeholder="e.g. Tech Corp" />
+                                </div>
+                                <div class="form-group">
+                                    <label>Start Date</label>
+                                    <input type="text" class="exp-start" placeholder="e.g. Jan 2022" />
+                                </div>
+                                <div class="form-group">
+                                    <label>End Date</label>
+                                    <input type="text" class="exp-end" placeholder="e.g. Dec 2023" />
+                                </div>
+                                <div class="form-group full-width">
+                                    <label>Key Responsibilities & Achievements</label>
+                                    <textarea class="exp-description" rows="3" placeholder="Describe your responsibilities and achievements..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button type="button" class="add-btn" id="addExperienceBtn" data-aos="fade-up" data-aos-delay="300">
+                        <i class="fas fa-plus"></i> Add Experience
+                    </button>
+                    
+                    <div class="form-nav" data-aos="fade-up" data-aos-delay="350">
+                        <button type="button" class="btn btn-outline prev-step">
+                            <i class="fas fa-arrow-left"></i> Previous
+                        </button>
+                        <button type="button" class="btn btn-primary next-step">
+                            Next <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- STEP 4: REFERENCES -->
+                <div class="form-section" data-step="4" data-aos="fade-up" data-aos-delay="200">
+                    <h3><i class="fas fa-users"></i> References</h3>
+                    <p class="subtitle">Add professional references (optional - if none, will show "Available upon request")</p>
+                    
+                    <div class="entry-container" id="referenceContainer">
+                        <div class="entry-item" data-aos="fade-up" data-aos-delay="250">
+                            <button type="button" class="remove-btn" style="display:none;">
+                                <i class="fas fa-times"></i>
+                            </button>
+                            <div class="entry-grid">
+                                <div class="form-group">
+                                    <label>Full Name</label>
+                                    <input type="text" class="ref-name" placeholder="e.g. Jane Doe" />
+                                </div>
+                                <div class="form-group">
+                                    <label>Job Title</label>
+                                    <input type="text" class="ref-title" placeholder="e.g. Senior Manager" />
+                                </div>
+                                <div class="form-group">
+                                    <label>Company</label>
+                                    <input type="text" class="ref-company" placeholder="e.g. Tech Corp" />
+                                </div>
+                                <div class="form-group">
+                                    <label>Email</label>
+                                    <input type="email" class="ref-email" placeholder="e.g. jane@email.com" />
+                                </div>
+                                <div class="form-group">
+                                    <label>Phone</label>
+                                    <input type="tel" class="ref-phone" placeholder="e.g. 0712 345 678" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button type="button" class="add-btn" id="addReferenceBtn" data-aos="fade-up" data-aos-delay="300">
+                        <i class="fas fa-plus"></i> Add Reference
+                    </button>
+                    
+                    <div class="form-nav" data-aos="fade-up" data-aos-delay="350">
+                        <button type="button" class="btn btn-outline prev-step">
+                            <i class="fas fa-arrow-left"></i> Previous
+                        </button>
+                        <button type="button" class="btn btn-primary next-step">
+                            Next <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- STEP 5: GENERATE -->
+                <div class="form-section" data-step="5" data-aos="fade-up" data-aos-delay="200">
+                    <h3><i class="fas fa-wand-magic-sparkles"></i> Generate Your CV</h3>
+                    <p class="subtitle">Review your information and click generate to create your professional CV</p>
+                    
+                    <div class="summary-box" data-aos="fade-up" data-aos-delay="250">
+                        <h4>📋 Summary of Your Information</h4>
+                        <div id="summaryContent">
+                            <p style="color: var(--gray-500);">Loading your information...</p>
+                        </div>
+                    </div>
+                    
+                    <div class="form-nav" style="border-top: none; padding-top: 0;" data-aos="fade-up" data-aos-delay="300">
+                        <button type="button" class="btn btn-outline prev-step">
+                            <i class="fas fa-arrow-left"></i> Previous
+                        </button>
+                        <button type="button" class="btn btn-primary generate-btn" id="generateBtn">
+                            <i class="fas fa-wand-magic-sparkles"></i> Generate CV
+                        </button>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+
+        <!-- PREVIEW SECTION -->
+        <div class="preview-section" id="previewSection" style="display:none;" data-aos="fade-up" data-aos-delay="300">
+            <div class="preview-toolbar">
+                <div class="preview-actions">
+                    <button class="btn btn-primary" id="downloadPdfBtn">
+                        <i class="fas fa-file-pdf"></i> Download PDF
+                    </button>
+                    <button class="btn btn-outline" id="downloadWordBtn">
+                        <i class="fas fa-file-word"></i> Download Word
+                    </button>
+                    <button class="btn btn-secondary" id="printBtn">
+                        <i class="fas fa-print"></i> Print
+                    </button>
+                </div>
+            </div>
+            <div id="cvPreviewContainer"></div>
+        </div>
+
+    </section>
+
+    <!-- ========================================== -->
+    <!-- WHY CHOOSE SECTION -->
+    <!-- ========================================== -->
+    <section style="padding: 60px 48px; max-width: 1200px; margin: 0 auto; background: var(--off-white);" data-aos="fade-up" data-aos-duration="800">
+        <div style="text-align: center; margin-bottom: 48px;">
+            <span style="display: inline-block; padding: 6px 18px; background: rgba(201, 168, 76, 0.12); border: 1px solid rgba(201, 168, 76, 0.15); border-radius: 999px; font-size: 12px; font-weight: 700; color: var(--gold); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px;">
+                <i class="fas fa-star"></i> Why Choose Our AI CV Generator
+            </span>
+            <h2 style="font-size: 36px; font-weight: 800; font-family: var(--font-heading); color: var(--primary); line-height: 1.1;">
+                Build a CV That <span style="color: var(--gold);">Opens Doors</span>
+            </h2>
+            <p style="font-size: 17px; color: var(--gray-500); max-width: 600px; margin: 12px auto 0; line-height: 1.7;">
+                Our AI-powered tool helps you create professional documents that impress employers.
+            </p>
+        </div>
+        
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px;">
+            <div style="background: var(--white); padding: 30px 24px; border-radius: var(--radius-lg); border: 1px solid var(--gray-200); transition: var(--transition); text-align: center;">
+                <div style="width: 64px; height: 64px; border-radius: 50%; background: rgba(201, 168, 76, 0.12); display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
+                    <i class="fas fa-robot" style="font-size: 28px; color: var(--gold);"></i>
+                </div>
+                <h3 style="font-size: 18px; font-weight: 700; color: var(--primary); margin-bottom: 8px; font-family: var(--font-heading);">AI-Powered CV Writing</h3>
+                <p style="font-size: 14px; color: var(--gray-500); line-height: 1.7;">Our AI analyzes your input to generate professional, ATS-friendly CVs that stand out to recruiters.</p>
+            </div>
+            
+            <div style="background: var(--white); padding: 30px 24px; border-radius: var(--radius-lg); border: 1px solid var(--gray-200); transition: var(--transition); text-align: center;">
+                <div style="width: 64px; height: 64px; border-radius: 50%; background: rgba(201, 168, 76, 0.12); display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
+                    <i class="fas fa-envelope" style="font-size: 28px; color: var(--gold);"></i>
+                </div>
+                <h3 style="font-size: 18px; font-weight: 700; color: var(--primary); margin-bottom: 8px; font-family: var(--font-heading);">Smart Application Letters</h3>
+                <p style="font-size: 14px; color: var(--gray-500); line-height: 1.7;">Generate compelling cover letters from your CV or create a standalone letter that captures attention.</p>
+            </div>
+            
+            <div style="background: var(--white); padding: 30px 24px; border-radius: var(--radius-lg); border: 1px solid var(--gray-200); transition: var(--transition); text-align: center;">
+                <div style="width: 64px; height: 64px; border-radius: 50%; background: rgba(201, 168, 76, 0.12); display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
+                    <i class="fas fa-shield-alt" style="font-size: 28px; color: var(--gold);"></i>
+                </div>
+                <h3 style="font-size: 18px; font-weight: 700; color: var(--primary); margin-bottom: 8px; font-family: var(--font-heading);">100% Privacy Guaranteed</h3>
+                <p style="font-size: 14px; color: var(--gray-500); line-height: 1.7;">All processing happens locally in your browser. We never store or share your personal information.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- STANDALONE APPLICATION LETTER SECTION -->
+    <!-- ========================================== -->
+    <section class="application-generator" id="letter-section" data-aos="fade-up" data-aos-delay="850">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <div class="section-badge">
+                    <i class="fas fa-envelope"></i> Standalone Document
+                </div>
+                <h2>Professional <span class="highlight">Application Letter</span></h2>
+                <p>Generate a compelling application letter independently — no CV required</p>
+            </div>
+
+            <div class="letter-form-container" data-aos="fade-up">
+                
+                <div class="letter-progress" data-aos="fade-up">
+                    <div class="progress-step active" data-step="1">
+                        <span class="step-num">01</span>
+                        <span>Personal Info</span>
+                    </div>
+                    <div class="progress-line"></div>
+                    <div class="progress-step" data-step="2">
+                        <span class="step-num">02</span>
+                        <span>Company Details</span>
+                    </div>
+                    <div class="progress-line"></div>
+                    <div class="progress-step" data-step="3">
+                        <span class="step-num">03</span>
+                        <span>Generate</span>
+                    </div>
+                </div>
+
+                <form id="letterForm" onsubmit="return false;">
+
+                    <!-- STEP 1 -->
+                    <div class="letter-section active" data-step="1">
+                        <h3><i class="fas fa-user"></i> Your Personal Details</h3>
+                        <p class="subtitle">Fill in your personal information accurately</p>
+                        
+                        <div class="form-grid">
+                            <div class="form-group full-width">
+                                <label>Full Name <span class="required">*</span></label>
+                                <input type="text" id="letterFullName" placeholder="e.g. John Mwangi" required />
+                                <small class="field-error">Please enter your full name</small>
+                            </div>
+                            <div class="form-group full-width">
+                                <label>Your Address <span class="required">*</span></label>
+                                <input type="text" id="letterAddress" placeholder="P.O Box 000-0000, Nairobi" required />
+                                <small class="field-error">Please enter your address</small>
+                            </div>
+                            <div class="form-group">
+                                <label>Phone Number <span class="required">*</span></label>
+                                <input type="tel" id="letterPhone" placeholder="0700 000 000" required />
+                                <small class="field-error">Please enter your phone number</small>
+                            </div>
+                            <div class="form-group">
+                                <label>Email Address <span class="required">*</span></label>
+                                <input type="email" id="letterEmail" placeholder="user@domain.com" required />
+                                <small class="field-error">Please enter a valid email address</small>
+                            </div>
+                            <div class="form-group">
+                                <label>Current Job Title <span class="optional">(Optional)</span></label>
+                                <input type="text" id="letterCurrentJob" placeholder="e.g. Junior Developer" />
+                            </div>
+                            <div class="form-group">
+                                <label>Current Company <span class="optional">(Optional)</span></label>
+                                <input type="text" id="letterCurrentCompany" placeholder="e.g. Tech Corp" />
+                            </div>
+                        </div>
+                        
+                        <div class="form-nav">
+                            <button type="button" class="btn btn-primary letter-next-step">
+                                Next <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- STEP 2 -->
+                    <div class="letter-section" data-step="2">
+                        <h3><i class="fas fa-building"></i> Company Details</h3>
+                        <p class="subtitle">Provide information about the company you're applying to</p>
+                        
+                        <div class="form-grid">
+                            <div class="form-group full-width">
+                                <label>Company Name <span class="required">*</span></label>
+                                <input type="text" id="letterCompanyName" placeholder="e.g. Tech Solutions Ltd" required />
+                                <small class="field-error">Please enter the company name</small>
+                            </div>
+                            <div class="form-group full-width">
+                                <label>Company Address <span class="required">*</span></label>
+                                <input type="text" id="letterCompanyAddress" placeholder="P.O Box 12345-00100, Nairobi" required />
+                                <small class="field-error">Please enter the company address</small>
+                            </div>
+                            <div class="form-group full-width">
+                                <label>Position Applying For <span class="required">*</span></label>
+                                <input type="text" id="letterPosition" placeholder="e.g. Senior Software Developer" required />
+                                <small class="field-error">Please enter the position you're applying for</small>
+                            </div>
+                        </div>
+                        
+                        <div class="form-nav">
+                            <button type="button" class="btn btn-outline letter-prev-step">
+                                <i class="fas fa-arrow-left"></i> Previous
+                            </button>
+                            <button type="button" class="btn btn-primary letter-next-step">
+                                Next <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- STEP 3 -->
+                    <div class="letter-section" data-step="3">
+                        <h3><i class="fas fa-wand-magic-sparkles"></i> Generate Your Letter</h3>
+                        <p class="subtitle">Review your information and generate your professional application letter</p>
+                        
+                        <div class="summary-box">
+                            <h4>📋 Letter Summary</h4>
+                            <div id="letterSummaryContent">
+                                <p style="color: var(--gray-500);">Fill in your details to see the summary...</p>
+                            </div>
+                        </div>
+                        
+                        <div class="form-nav" style="border-top: none; padding-top: 0;">
+                            <button type="button" class="btn btn-outline letter-prev-step">
+                                <i class="fas fa-arrow-left"></i> Previous
+                            </button>
+                            <button type="button" class="btn btn-primary generate-btn" id="generateLetterBtn">
+                                <i class="fas fa-wand-magic-sparkles"></i> Generate Letter
+                            </button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+
+            <div class="letter-preview-section" id="letterPreviewSection" style="display:none;">
+                <div class="preview-toolbar">
+                    <div class="preview-actions">
+                        <button class="btn btn-primary" id="downloadLetterPdfBtn">
+                            <i class="fas fa-file-pdf"></i> Download PDF
+                        </button>
+                        <button class="btn btn-outline" id="downloadLetterWordBtn">
+                            <i class="fas fa-file-word"></i> Download Word
+                        </button>
+                        <button class="btn btn-secondary" id="printLetterBtn">
+                            <i class="fas fa-print"></i> Print
+                        </button>
+                    </div>
+                </div>
+                <div id="letterPreviewContainer"></div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- FOOTER -->
+    <!-- ========================================== -->
+    <footer class="footer" data-aos="fade-up" data-aos-duration="800">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <i class="fas fa-file-pen"></i>
+                <span>A.I</span>CV Generator
+            </div>
+            <p>Professional CV Generator — Create stunning CVs with AI</p>
+            <div class="footer-links">
+                <a href="index.html"><i class="fas fa-home"></i> Home</a>
+                <a href="generate.html"><i class="fas fa-file-alt"></i> Generate CV</a>
+                <a href="combine.html"><i class="fas fa-compress-alt"></i> Combine Documents</a>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 A.I CV & Cover-letter Generator. All rights reserved.</p>
+                <div class="footer-social">
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#"><i class="fab fa-github"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ========================================== -->
+    <!-- SCRIPTS -->
+    <!-- ========================================== -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    
+    <!-- Main Script -->
+    <script src="js/script.js"></script>
+    
+    <!-- Standalone Letter Script -->
+    <script src="js/standalone-letter.js"></script>
+
+    <!-- Initialize Everything -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize AOS
+            if (typeof AOS !== 'undefined') {
+                AOS.init({
+                    duration: 800,
+                    once: true,
+                    offset: 100,
+                    mobile: false,
+                    easing: 'ease-out-cubic'
+                });
+                console.log('✅ AOS initialized successfully!');
+                
+                setTimeout(function() {
+                    AOS.refresh();
+                }, 100);
+            }
+            
+            console.log('✅ All scripts loaded successfully!');
+        });
+        
+        window.addEventListener('load', function() {
+            if (typeof AOS !== 'undefined') {
+                setTimeout(function() {
+                    AOS.refresh();
+                }, 500);
+            }
+        });
+    </script>
+
+    <!-- ========================================== -->
+<!-- SCROLL TO TOP FIX - MODIFIED -->
+<!-- ========================================== -->
+<script>
+    (function() {
+        // DON'T remove the hash - let it work naturally
+        // if (window.location.hash) {
+        //     history.replaceState(null, document.title, window.location.pathname + window.location.search);
+        // }
+        
+        // Force scroll to top only if no hash
+        if (!window.location.hash) {
+            window.scrollTo(0, 0);
+        }
+        
+        // On page load, handle hash
+        window.addEventListener('load', function() {
+            if (window.location.hash) {
+                // Let the hash work naturally
+                // Don't remove it
+            } else {
+                window.scrollTo(0, 0);
+            }
+        });
+        
+        // Fix for header buttons - handle cross-page links properly
+        document.querySelectorAll('.header-actions a, .navbar a').forEach(function(link) {
+            link.addEventListener('click', function(e) {
+                var href = this.getAttribute('href');
+                if (href && href.startsWith('#')) {
+                    e.preventDefault();
+                    var targetId = href.substring(1);
+                    var target = document.getElementById(targetId);
+                    if (target) {
+                        var rect = target.getBoundingClientRect();
+                        var offset = 100;
+                        var targetPosition = window.pageYOffset + rect.top - offset;
+                        window.scrollTo({
+                            top: targetPosition,
+                            behavior: 'smooth'
+                        });
+                    }
+                }
+                // For cross-page links (generate.html#letter-section), let them work naturally
+            });
+        });
+        
+        console.log('✅ Page scroll fix applied');
+    })();
+</script>

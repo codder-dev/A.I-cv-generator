@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0b2a35;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1a3f4a;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#c9a84c;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#e8d5a3;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <rect width="100" height="100" rx="20" fill="url(#bgGrad)"/>
+  
+  <!-- Document -->
+  <rect x="22" y="12" width="56" height="76" rx="6" fill="white" opacity="0.95"/>
+  <rect x="28" y="24" width="44" height="3" rx="1.5" fill="#e0dbd3"/>
+  <rect x="28" y="32" width="44" height="3" rx="1.5" fill="#e0dbd3"/>
+  <rect x="28" y="40" width="34" height="3" rx="1.5" fill="#e0dbd3"/>
+  <rect x="28" y="48" width="38" height="3" rx="1.5" fill="#e0dbd3"/>
+  <rect x="28" y="56" width="30" height="3" rx="1.5" fill="#e0dbd3"/>
+  <rect x="28" y="64" width="20" height="3" rx="1.5" fill="url(#goldGrad)"/>
+  
+  <!-- Pen -->
+  <circle cx="72" cy="72" r="16" fill="url(#goldGrad)"/>
+  <path d="M77 68 L73 80 L65 75 Z" fill="#0b2a35"/>
+  <rect x="75" y="67" width="2" height="12" rx="1" transform="rotate(45 76 73)" fill="#0b2a35"/>
+  
+  <!-- Sparkles -->
+  <circle cx="12" cy="12" r="3" fill="#c9a84c" opacity="0.8"/>
+  <circle cx="88" cy="10" r="2" fill="#c9a84c" opacity="0.6"/>
+  <circle cx="90" cy="90" r="3" fill="#c9a84c" opacity="0.7"/>
+</svg>
