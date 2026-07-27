@@ -1,2 +1,19 @@
+# Protect API keys - NEVER COMMIT THESE!
 js/config.js
+config.js
+.env
+
+# Node modules
 node_modules/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+
+# Temporary files
+*.log
+*.tmp

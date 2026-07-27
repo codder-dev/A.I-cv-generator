@@ -32,7 +32,6 @@ document.addEventListener('keydown', function(e) {
     }
 });
 
-
 (function() {
     'use strict';
 
@@ -348,10 +347,10 @@ document.addEventListener('keydown', function(e) {
         }
 
         // ==========================================
-        // GENERATE LETTER - CALLS AI
+        // GENERATE LETTER - CALLS BACKEND API
         // ==========================================
         async function generateLetter() {
-            // Validate all steps first - SAME AS CV FORM
+            // Validate all steps first
             for (let i = 1; i <= totalSteps; i++) {
                 if (!validateLetterStep(i)) {
                     goToStep(i);
@@ -372,14 +371,14 @@ document.addEventListener('keydown', function(e) {
                 position: document.getElementById('letterPosition')?.value?.trim() || ''
             };
 
-            // Validate required fields - SAME AS CV FORM
+            // Validate required fields
             if (!data.fullName || !data.address || !data.phone || !data.email || 
                 !data.companyName || !data.companyAddress || !data.position) {
                 showNotification('Please fill in all required fields.', 'error');
                 return;
             }
 
-            // Show loading state - SAME AS CV FORM
+            // Show loading state
             const generateBtn = document.getElementById('generateLetterBtn');
             const originalText = generateBtn.innerHTML;
             generateBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
@@ -388,26 +387,27 @@ document.addEventListener('keydown', function(e) {
             try {
                 var prompt = buildStandaloneLetterPrompt(data);
 
-                var response = await fetch(OR_API_URL, {
+                // Build messages for the API
+                var messages = [
+                    {
+                        role: 'system',
+                        content: 'Write a Professional cover letter. Write ONLY the body paragraphs of the application letter. Do not include any salutation, sender details, date, closing, or placeholder text. Just write 2-3 professional paragraphs explaining why the candidate is suitable for the position. Be specific and precise, do not add unnecessary information.'
+                    },
+                    {
+                        role: 'user',
+                        content: prompt
+                    }
+                ];
+
+                // Call our backend API (not OpenRouter directly)
+                var response = await fetch('/api/generate-cv', {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': 'Bearer ' + OR_API_KEY,
-                        'HTTP-Referer': window.location.href,
-                        'X-Title': 'Quixote CV Generator'
+                        'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        model: OR_MODEL,
-                        messages: [
-                            {
-                                role: 'system',
-                                content: 'Write a Professional cover letter. Write ONLY the body paragraphs of the application letter. Do not include any salutation, sender details, date, closing, or placeholder text. Just write 2-3 professional paragraphs explaining why the candidate is suitable for the position. Be specific and precise, do not add unnecessary information.'
-                            },
-                            {
-                                role: 'user',
-                                content: prompt
-                            }
-                        ],
+                        messages: messages,
+                        model: 'meta-llama/llama-3.1-8b-instruct',
                         temperature: 0.7,
                         max_tokens: 2000
                     })
@@ -415,7 +415,7 @@ document.addEventListener('keydown', function(e) {
 
                 if (!response.ok) {
                     var errorData = await response.json();
-                    throw new Error(errorData.error?.message || 'API request failed');
+                    throw new Error(errorData.error || 'API request failed');
                 }
 
                 var result = await response.json();
@@ -526,7 +526,7 @@ document.addEventListener('keydown', function(e) {
             });
         }
 
-        // Enter key support - SAME AS CV FORM
+        // Enter key support
         form.addEventListener('keydown', function(e) {
             if (e.key === 'Enter') {
                 if (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'BUTTON') {

@@ -1,4 +1,3 @@
-
 // ==========================================
 // WAIT FOR DOM
 // ==========================================
@@ -213,7 +212,6 @@ function animateCounters() {
 // ==========================================
 // OPENROUTER API CONFIGURATION
 // ==========================================
-var OR_API_KEY = '';
 var OR_API_URL = 'https://openrouter.ai/api/v1/chat/completions';
 var OR_MODEL = 'meta-llama/llama-3.1-8b-instruct';
 
@@ -517,7 +515,7 @@ function goToStep(step) {
 }
 
 // ==========================================
-// VALIDATE STEP - FIXED
+// VALIDATE STEP
 // ==========================================
 function validateStep(step) {
     var section = document.querySelector('.form-section[data-step="' + step + '"]');
@@ -540,43 +538,21 @@ function validateStep(step) {
 
     // STEP 1: Personal Details Validation
     if (step === 1) {
-        // Validate full name - must have at least 2 names
-var fullName = document.getElementById('fullName');
-if (fullName) {
-    var nameValue = fullName.value.trim();
-    
-    // Check if empty
-    if (!nameValue) {
-        fullName.classList.add('error');
-        var error7 = fullName.closest('.form-group').querySelector('.field-error');
-        if (error7) {
-            error7.textContent = 'Please enter your full name';
-            error7.classList.add('show');
-        }
-        isValid = false;
-    } else {
-        // Check if at least 2 names
-        var nameParts = nameValue.split(' ');
-        nameParts = nameParts.filter(function(part) { return part.length > 0; });
-        if (nameParts.length < 2) {
-            fullName.classList.add('error');
-            var error2 = fullName.closest('.form-group').querySelector('.field-error');
-            if (error2) {
-                error2.textContent = 'Please enter at least 2 names (First and Last name)';
-                error2.classList.add('show');
-            }
-            isValid = false;
-        } else {
-            fullName.classList.remove('error');
-            var error2 = fullName.closest('.form-group').querySelector('.field-error');
-            if (error2) {
-                error2.classList.remove('show');
+        var fullName = document.getElementById('fullName');
+        if (fullName && fullName.value.trim()) {
+            var nameParts = fullName.value.trim().split(' ');
+            nameParts = nameParts.filter(function(part) { return part.length > 0; });
+            if (nameParts.length < 2) {
+                fullName.classList.add('error');
+                var error2 = fullName.closest('.form-group').querySelector('.field-error');
+                if (error2) {
+                    error2.textContent = 'Please enter at least 2 names (First and Last name)';
+                    error2.classList.add('show');
+                }
+                isValid = false;
             }
         }
-    }
-}
         
-        // Validate job title
         var jobTitle = document.getElementById('jobTitle');
         if (jobTitle && !jobTitle.value.trim()) {
             jobTitle.classList.add('error');
@@ -588,7 +564,6 @@ if (fullName) {
             isValid = false;
         }
         
-        // Validate address
         var address = document.getElementById('address');
         if (address && !address.value.trim()) {
             address.classList.add('error');
@@ -599,22 +574,8 @@ if (fullName) {
             }
             isValid = false;
         }
-    
 
-        // Validate email 
         var email = document.getElementById('email');
-        if (email) {
-            var personalEmail = email.value.trim();
-        }
-        //check if email is empty//
-        if (!personalEmail){
-            var error9 = email.closest('.form-group').querySelector('.field-error');
-            if (error9){
-                error9.textContent = 'Please enter your email';
-                error9.classList.add('show');
-            }
-            isValid = false;
-        } else{
         if (email && email.value.trim()) {
             var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailRegex.test(email.value.trim())) {
@@ -627,10 +588,7 @@ if (fullName) {
                 isValid = false;
             }
         }
-    }
-        
 
-        // Validate phone
         var phone = document.getElementById('phone');
         if (phone && !phone.value.trim()) {
             phone.classList.add('error');
@@ -1016,7 +974,7 @@ function sortEducation(education) {
 }
 
 // ==========================================
-// GENERATE CV WITH OPENROUTER API
+// GENERATE CV WITH BACKEND API
 // ==========================================
 async function generateCVWithAI() {
     console.log('Generate button clicked!');
@@ -1061,35 +1019,35 @@ async function generateCVWithAI() {
         var prompt = buildCVPrompt(data);
         console.log('Prompt built successfully');
 
-        var response = await fetch(OR_API_URL, {
+        // Build messages for the API
+        var messages = [
+            {
+                role: 'system',
+                content: 'You are a professional CV writer with 20+ years of experience. Write a complete, well-structured CV. The PROFESSIONAL SUMMARY is the most important section - it must be a complete, compelling paragraph of 4-6 sentences that sells the candidate. DO NOT leave any section incomplete or cut off. Write the complete summary without truncation. Do NOT put any text in the SKILLS section - leave it empty.'
+            },
+            {
+                role: 'user',
+                content: prompt
+            }
+        ];
+
+        // Call our backend API (not OpenRouter directly)
+        var response = await fetch('/api/generate-cv', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + OR_API_KEY,
-                'HTTP-Referer': window.location.href,
-                'X-Title': 'Quixote CV Generator'
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify({
+                messages: messages,
                 model: OR_MODEL,
-                messages: [
-                    {
-                        role: 'system',
-                        content: 'You are a professional CV writer with 20+ years of experience. Write a complete, well-structured CV. The PROFESSIONAL SUMMARY is the most important section - it must be a complete, compelling paragraph of 4-6 sentences that sells the candidate. DO NOT leave any section incomplete or cut off. Write the complete summary without truncation. Do NOT put any text in the SKILLS section - leave it empty.'
-                    },
-                    {
-                        role: 'user',
-                        content: prompt
-                    }
-                ],
                 temperature: 0.7,
-                max_tokens: 8000,
-                min_tokens: 500
+                max_tokens: 8000
             })
         });
 
         if (!response.ok) {
             var errorData = await response.json();
-            throw new Error(errorData.error?.message || 'API request failed');
+            throw new Error(errorData.error || 'API request failed');
         }
 
         var result = await response.json();
@@ -2077,26 +2035,25 @@ async function submitLetterDetails() {
     try {
         var prompt = buildLetterPrompt(data);
         
-        var response = await fetch(OR_API_URL, {
+        var messages = [
+            {
+                role: 'system',
+                content: 'Write a Professional cover letter. Write ONLY the body paragraphs of the application letter. Do not include any salutation, sender details, date, closing, or placeholder text. Just write 2-3 professional paragraphs explaining why the candidate is suitable for the position. Just be specific and precise to the point, dont add unnecessary information.'
+            },
+            {
+                role: 'user',
+                content: prompt
+            }
+        ];
+
+        var response = await fetch('/api/generate-cv', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + OR_API_KEY,
-                'HTTP-Referer': window.location.href,
-                'X-Title': 'Quixote CV Generator'
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify({
+                messages: messages,
                 model: OR_MODEL,
-                messages: [
-                    {
-                        role: 'system',
-                        content: 'Write a Professional cover letter. Write ONLY the body paragraphs of the application letter. Do not include any salutation, sender details, date, closing, or placeholder text. Just write 2-3 professional paragraphs explaining why the candidate is suitable for the position. Just be specific and precise to the point, dont add unnecessary information.'
-                    },
-                    {
-                        role: 'user',
-                        content: prompt
-                    }
-                ],
                 temperature: 0.7,
                 max_tokens: 2000
             })
@@ -2104,7 +2061,7 @@ async function submitLetterDetails() {
         
         if (!response.ok) {
             var errorData = await response.json();
-            throw new Error(errorData.error?.message || 'API request failed');
+            throw new Error(errorData.error || 'API request failed');
         }
         
         var result = await response.json();
@@ -2204,7 +2161,7 @@ function downloadLetter(format) {
 }
 
 // ==========================================
-// DOWNLOAD CV - FIXED NOTIFICATION
+// DOWNLOAD CV
 // ==========================================
 function downloadCV(format) {
     var container = document.getElementById('cvPreviewContainer');
@@ -2296,7 +2253,7 @@ function printCV() {
 }
 
 // ==========================================
-// NOTIFICATION SYSTEM - FIXED
+// NOTIFICATION SYSTEM
 // ==========================================
 function showNotification(message, type) {
     type = type || 'success';

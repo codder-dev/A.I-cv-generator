@@ -1,0 +1,8 @@
+{
+    "name": "cv-generator",
+    "version": "1.0.0",
+    "description": "AI CV Generator",
+    "scripts": {
+        "dev": "vercel dev"
+    }
+}
