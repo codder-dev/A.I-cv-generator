@@ -32,6 +32,21 @@ document.addEventListener('keydown', function(e) {
     }
 });
 
+// ==========================================
+// API URL DETECTION
+// ==========================================
+var API_URL = '';
+
+if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+    API_URL = '/api/generate-cv';
+} else if (window.location.hostname.includes('github.io')) {
+    API_URL = 'https://a-i-cv-generator-3qfbft222-quixote.vercel.app/api/generate-cv';
+} else {
+    API_URL = '/api/generate-cv';
+}
+
+console.log('🌐 Standalone API URL:', API_URL);
+
 (function() {
     'use strict';
 
@@ -399,8 +414,8 @@ document.addEventListener('keydown', function(e) {
                     }
                 ];
 
-                // Call our backend API (not OpenRouter directly)
-                var response = await fetch('/api/generate-cv', {
+                // Call our backend API using the API_URL variable
+                var response = await fetch(API_URL, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -564,8 +579,8 @@ document.addEventListener('keydown', function(e) {
             }
         });
 
-        console.log('✅ Standalone Letter Generator initialized!');
-        console.log('📊 Current step: ' + currentStep);
+        console.log(' Standalone Letter Generator initialized!');
+        console.log(' Current step: ' + currentStep);
     }
 
     // ===== Make functions globally accessible =====

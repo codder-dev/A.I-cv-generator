@@ -216,6 +216,25 @@ var OR_API_URL = 'https://openrouter.ai/api/v1/chat/completions';
 var OR_MODEL = 'meta-llama/llama-3.1-8b-instruct';
 
 // ==========================================
+// API URL DETECTION
+// ==========================================
+var API_URL = '';
+
+// Detect environment
+if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+    // Local development - use local API
+    API_URL = '/api/generate-cv';
+} else if (window.location.hostname.includes('github.io')) {
+    // GitHub Pages - use Vercel API
+    API_URL = 'https://a-i-cv-generator-3qfbft222-quixote.vercel.app/api/generate-cv';
+} else {
+    // Production on Vercel - use relative path
+    API_URL = '/api/generate-cv';
+}
+
+console.log('🌐 API URL:', API_URL);
+
+// ==========================================
 // STATE VARIABLES
 // ==========================================
 var selectedCVType = 'generic';
@@ -1032,7 +1051,7 @@ async function generateCVWithAI() {
         ];
 
         // Call our backend API (not OpenRouter directly)
-        var response = await fetch('/api/generate-cv', {
+        var response = await fetch(API_URL, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -2046,7 +2065,7 @@ async function submitLetterDetails() {
             }
         ];
 
-        var response = await fetch('/api/generate-cv', {
+        var response = await fetch(API_URL, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
