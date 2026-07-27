@@ -3130,12 +3130,6 @@ nav ul li.active a i {
     }
 
     /* Split Controls */
-    #docSplitControls > div:first-child {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 8px;
-    }
-
     .doc-split-controls {
         flex-direction: column;
         align-items: stretch;
