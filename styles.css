@@ -4244,3 +4244,332 @@ textarea:focus-visible {
         color: var(--gold-dark);
     }
 }
+/* ============================================
+   EMERGENCY FIXES - ALL CARDS & SECTIONS STACKING
+   ============================================ */
+
+/* ===== FORCE ALL CARDS TO STACK ON MOBILE ===== */
+@media (max-width: 768px) {
+    
+    /* 1. MAIN CONTENT - Force stacking */
+    .main-content-inner {
+        display: block !important;
+    }
+    
+    .main-text {
+        width: 100% !important;
+        margin-bottom: 25px !important;
+    }
+    
+    .main-visual {
+        width: 100% !important;
+    }
+    
+    .visual-card {
+        max-width: 100% !important;
+        margin: 0 auto !important;
+        padding: 16px !important;
+    }
+
+    /* 2. FEATURE CARDS - Force stacking */
+    .main-features {
+        display: block !important;
+    }
+    
+    .main-features .feature-item {
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        gap: 14px !important;
+        padding: 14px 16px !important;
+        margin-bottom: 10px !important;
+        background: var(--white) !important;
+        border-radius: var(--radius) !important;
+        border: 1px solid var(--gray-200) !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+    
+    .main-features .feature-item:last-child {
+        margin-bottom: 0 !important;
+    }
+    
+    .main-features .feature-item i {
+        font-size: 18px !important;
+        width: 30px !important;
+        flex-shrink: 0 !important;
+        color: var(--gold) !important;
+    }
+    
+    .main-features .feature-item span {
+        font-size: 14px !important;
+        line-height: 1.4 !important;
+        color: var(--gray-700) !important;
+        flex: 1 !important;
+    }
+
+    /* 3. CV TYPE CARDS - Force stacking */
+    .cv-type-selector {
+        display: block !important;
+    }
+    
+    .cv-type-card {
+        width: 100% !important;
+        margin-bottom: 12px !important;
+        padding: 18px 16px !important;
+        box-sizing: border-box !important;
+    }
+    
+    .cv-type-card:last-child {
+        margin-bottom: 0 !important;
+    }
+    
+    .cv-type-card .icon {
+        font-size: 30px !important;
+    }
+    
+    .cv-type-card h3 {
+        font-size: 16px !important;
+    }
+    
+    .cv-type-card p {
+        font-size: 13px !important;
+    }
+
+    /* 4. STATS CARDS - Force proper grid */
+    .stats-container {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 16px !important;
+    }
+    
+    .stat-item {
+        padding: 12px !important;
+    }
+    
+    .stat-item .stat-number {
+        font-size: 22px !important;
+    }
+    
+    .stat-item .stat-label {
+        font-size: 11px !important;
+    }
+
+    /* 5. DOCUMENT MANAGER CARDS - Force stacking */
+    .doc-file-item {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 8px !important;
+        padding: 12px 14px !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+    
+    .doc-file-item .file-info {
+        width: 100% !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 12px !important;
+    }
+    
+    .doc-file-item .file-actions {
+        width: 100% !important;
+        display: flex !important;
+        justify-content: flex-end !important;
+        gap: 8px !important;
+    }
+
+    /* 6. FORM CARDS - Force stacking */
+    .form-grid {
+        display: block !important;
+    }
+    
+    .form-grid .full-width {
+        display: block !important;
+        width: 100% !important;
+    }
+    
+    .form-group {
+        width: 100% !important;
+        margin-bottom: 14px !important;
+    }
+    
+    .entry-item .entry-grid {
+        display: block !important;
+    }
+    
+    .entry-item .entry-grid .form-group {
+        width: 100% !important;
+        margin-bottom: 12px !important;
+    }
+
+    /* 7. LETTER FORM - Force stacking */
+    .letter-form-container .form-grid {
+        display: block !important;
+    }
+    
+    .letter-form-container .form-grid .full-width {
+        display: block !important;
+        width: 100% !important;
+    }
+    
+    .letter-form-container .form-group {
+        width: 100% !important;
+        margin-bottom: 14px !important;
+    }
+
+    /* 8. DOCUMENT MANAGER TABS - Force full width */
+    .doc-manager-tabs {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 8px !important;
+    }
+    
+    .doc-manager-tabs .tab-btn {
+        width: 100% !important;
+        justify-content: center !important;
+        padding: 10px 16px !important;
+        font-size: 13px !important;
+    }
+
+    /* 9. PREVIEW SECTION - Force stacking */
+    .preview-toolbar {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 10px !important;
+        padding: 14px !important;
+    }
+    
+    .preview-actions {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 8px !important;
+    }
+    
+    .preview-actions .btn {
+        width: 100% !important;
+        justify-content: center !important;
+    }
+
+    /* 10. FOOTER - Force stacking */
+    .footer-bottom {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        gap: 10px !important;
+        text-align: center !important;
+    }
+    
+    .footer-links {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        gap: 6px !important;
+    }
+    
+    .footer-social {
+        display: flex !important;
+        justify-content: center !important;
+        gap: 8px !important;
+    }
+}
+
+/* ===== SMALL PHONES (480px and below) ===== */
+@media (max-width: 480px) {
+    /* Feature cards */
+    .main-features .feature-item {
+        padding: 12px 14px !important;
+        gap: 12px !important;
+    }
+    
+    .main-features .feature-item i {
+        font-size: 16px !important;
+        width: 24px !important;
+    }
+    
+    .main-features .feature-item span {
+        font-size: 13px !important;
+    }
+    
+    /* Stats */
+    .stats-container {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 12px !important;
+    }
+    
+    .stat-item .stat-number {
+        font-size: 18px !important;
+    }
+    
+    .stat-item .stat-label {
+        font-size: 10px !important;
+    }
+    
+    /* CV Cards */
+    .cv-type-card {
+        padding: 14px 12px !important;
+    }
+    
+    .cv-type-card .icon {
+        font-size: 26px !important;
+    }
+    
+    .cv-type-card h3 {
+        font-size: 15px !important;
+    }
+    
+    /* Form */
+    .form-container {
+        padding: 14px 10px !important;
+    }
+    
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        padding: 8px 10px !important;
+        font-size: 13px !important;
+    }
+}
+
+/* ===== EXTRA SMALL PHONES (360px and below) ===== */
+@media (max-width: 360px) {
+    /* Feature cards */
+    .main-features .feature-item {
+        padding: 10px 12px !important;
+        gap: 10px !important;
+    }
+    
+    .main-features .feature-item i {
+        font-size: 14px !important;
+        width: 20px !important;
+    }
+    
+    .main-features .feature-item span {
+        font-size: 12px !important;
+    }
+    
+    /* Stats */
+    .stats-container {
+        grid-template-columns: 1fr !important;
+        gap: 10px !important;
+    }
+    
+    /* CV Cards */
+    .cv-type-card {
+        padding: 12px 10px !important;
+    }
+    
+    .cv-type-card .icon {
+        font-size: 22px !important;
+    }
+    
+    .cv-type-card h3 {
+        font-size: 14px !important;
+    }
+    
+    .cv-type-card p {
+        font-size: 12px !important;
+    }
+}
