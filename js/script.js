@@ -232,7 +232,7 @@ var SKILLS = {
 };
 
 // ==========================================
-// CV UPLOAD & UPDATE - DIRECT FIX
+// CV UPLOAD & UPDATE - SIMPLE VERSION
 // ==========================================
 
 // Variables
@@ -252,10 +252,7 @@ function initCVUpload() {
     const removeBtn = document.getElementById('cvUploadRemove');
     const updateBtn = document.getElementById('cvUpdateBtn');
 
-    if (!dropzone || !fileInput) {
-        console.warn('⚠️ CV upload elements not found');
-        return;
-    }
+    if (!dropzone || !fileInput) return;
 
     // Click to upload
     dropzone.addEventListener('click', function() {
@@ -296,10 +293,9 @@ function initCVUpload() {
         });
     }
 
-    // Update button - DIRECT CALL
+    // Update button
     if (updateBtn) {
         updateBtn.addEventListener('click', function() {
-            console.log('🔄 Update button clicked!');
             updateCVWithAI();
         });
     }
@@ -344,17 +340,112 @@ function handleCVFile(file) {
 
     if (dropzone) dropzone.style.display = 'none';
 
-    // Store the file name as the person's name
+    // Get the file name without extension
     const nameWithoutExt = file.name.replace(/\.[^/.]+$/, '');
-    
-    // Generate content from the file
-    uploadedFileContent = generateCVContent(nameWithoutExt);
+    uploadedFileContent = nameWithoutExt;
 
     if (fileName) {
         fileName.innerHTML = '<i class="fas fa-check-circle" style="color: #22c55e;"></i> ' + file.name;
     }
     
+    // HIDE download section if it was showing
+    const downloadSection = document.getElementById('cvDownloadSection');
+    if (downloadSection) {
+        downloadSection.style.display = 'none';
+        downloadSection.classList.remove('show');
+    }
+    
     showNotification('✅ PDF uploaded successfully! Click "Update CV" to reformat.', 'success');
+}
+
+function clearUploadedFile() {
+    uploadedFileData = null;
+    uploadedFileContent = '';
+    const preview = document.getElementById('cvUploadPreview');
+    const dropzone = document.getElementById('cvUploadDropzone');
+    const fileInput = document.getElementById('cvFileInput');
+    const errorDiv = document.getElementById('cvUploadError');
+    const updateBtn = document.getElementById('cvUpdateBtn');
+    const downloadSection = document.getElementById('cvDownloadSection');
+    
+    if (preview) preview.style.display = 'none';
+    if (dropzone) dropzone.style.display = 'block';
+    if (fileInput) fileInput.value = '';
+    if (errorDiv) errorDiv.style.display = 'none';
+    if (downloadSection) {
+        downloadSection.style.display = 'none';
+        downloadSection.classList.remove('show');
+    }
+    if (updateBtn) {
+        updateBtn.disabled = false;
+        updateBtn.innerHTML = '<i class="fas fa-wand-magic-sparkles"></i> Update CV with AI';
+    }
+    const container = document.getElementById('cvPreviewContainer');
+    if (container) {
+        container.innerHTML = '';
+    }
+}
+
+// ==========================================
+// UPDATE CV WITH AI - SHOW DOWNLOAD BUTTONS
+// ==========================================
+
+function updateCVWithAI() {
+    console.log('🔄 Update CV button clicked!');
+    
+    if (!uploadedFileData) {
+        showNotification('⚠️ Please upload a PDF file first.', 'error');
+        return;
+    }
+
+    if (isProcessing) return;
+    isProcessing = true;
+
+    const updateBtn = document.getElementById('cvUpdateBtn');
+    const originalText = updateBtn.innerHTML;
+    updateBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+    updateBtn.disabled = true;
+
+    try {
+        // Get the file name
+        const name = uploadedFileContent || 'Professional';
+        
+        // Generate the CV content
+        const content = generateCVContent(name);
+        
+        // Store for download
+        window._updatedCVContent = content;
+        
+        // Display the CV in the preview container
+        const container = document.getElementById('cvPreviewContainer');
+        if (container) {
+            container.innerHTML = `
+                <div style="font-family: 'Times New Roman', Times, serif; max-width: 100%; margin: 0 auto; background: white; padding: 30px 25px; border: 1px solid #e0dbd3; border-radius: 8px; line-height: 1.5; overflow: hidden;">
+                    ${content}
+                </div>
+            `;
+        }
+        
+        // ===== SHOW THE DOWNLOAD BUTTONS =====
+        const downloadSection = document.getElementById('cvDownloadSection');
+        if (downloadSection) {
+            downloadSection.style.display = 'block';
+            downloadSection.classList.add('show');
+            console.log('✅ Download buttons shown!');
+        } else {
+            console.error('❌ cvDownloadSection not found!');
+        }
+        
+        showNotification('✅ CV updated successfully!', 'success');
+
+    } catch (error) {
+        console.error('❌ Error:', error);
+        showNotification('❌ Error: ' + error.message, 'error');
+    }
+
+    isProcessing = false;
+    updateBtn.innerHTML = originalText;
+    updateBtn.disabled = false;
 }
 
 function generateCVContent(name) {
@@ -399,112 +490,6 @@ function generateCVContent(name) {
             <p style="margin: 4px 0; font-size: 14px; line-height: 1.5; font-style: italic; color: #6b645a;">Available upon request.</p>
         </div>
     `;
-}
-
-function clearUploadedFile() {
-    uploadedFileData = null;
-    uploadedFileContent = '';
-    const preview = document.getElementById('cvUploadPreview');
-    const dropzone = document.getElementById('cvUploadDropzone');
-    const fileInput = document.getElementById('cvFileInput');
-    const errorDiv = document.getElementById('cvUploadError');
-    const updateBtn = document.getElementById('cvUpdateBtn');
-    
-    if (preview) preview.style.display = 'none';
-    if (dropzone) dropzone.style.display = 'block';
-    if (fileInput) fileInput.value = '';
-    if (errorDiv) errorDiv.style.display = 'none';
-    if (updateBtn) {
-        updateBtn.disabled = false;
-        updateBtn.innerHTML = '<i class="fas fa-wand-magic-sparkles"></i> Update CV with AI';
-    }
-    const container = document.getElementById('cvPreviewContainer');
-    if (container) {
-        container.innerHTML = '';
-    }
-}
-
-// ==========================================
-// UPDATE CV WITH AI - DIRECT DISPLAY
-// ==========================================
-
-function updateCVWithAI() {
-    console.log('🔄 updateCVWithAI called!');
-    
-    if (!uploadedFileData) {
-        showNotification('⚠️ Please upload a PDF file first.', 'error');
-        return;
-    }
-
-    if (isProcessing) return;
-    isProcessing = true;
-
-    const updateBtn = document.getElementById('cvUpdateBtn');
-    const originalText = updateBtn.innerHTML;
-    updateBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
-    updateBtn.disabled = true;
-
-    try {
-        // Get the file name
-        const fileName = uploadedFileData.name.replace(/\.[^/.]+$/, '');
-        
-        // Generate the CV content
-        const content = generateCVContent(fileName);
-        
-        // Store for download
-        window._updatedCVContent = content;
-        
-        // Display the CV with download buttons
-        displayUpdatedCV(content);
-        
-        showNotification('✅ CV updated successfully!', 'success');
-
-    } catch (error) {
-        console.error('❌ Error:', error);
-        showNotification('❌ Error: ' + error.message, 'error');
-    }
-
-    isProcessing = false;
-    updateBtn.innerHTML = originalText;
-    updateBtn.disabled = false;
-}
-
-// ==========================================
-// DISPLAY UPDATED CV WITH DOWNLOAD BUTTONS
-// ==========================================
-
-function displayUpdatedCV(content) {
-    console.log('📄 displayUpdatedCV called!');
-    
-    const container = document.getElementById('cvPreviewContainer');
-    if (!container) {
-        console.error('❌ Container not found!');
-        return;
-    }
-
-    // Build the HTML with download buttons
-    const html = `
-        <div style="font-family: 'Times New Roman', Times, serif; max-width: 100%; margin: 0 auto; background: white; padding: 30px 25px; border: 1px solid #e0dbd3; border-radius: 8px 8px 0 0; line-height: 1.5; overflow: hidden;">
-            ${content}
-        </div>
-        <div style="padding: 20px 25px; background: #faf8f4; border: 1px solid #e0dbd3; border-top: 3px solid #c9a84c; border-radius: 0 0 8px 8px; text-align: center;">
-            <p style="font-size: 14px; color: #22c55e; margin-bottom: 14px; font-weight: 600; font-family: 'Times New Roman', Times, serif;">
-                <i class="fas fa-check-circle"></i> Your CV has been updated successfully!
-            </p>
-            <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
-                <button onclick="downloadUpdatedCV('pdf')" style="padding: 12px 30px; font-size: 15px; background: #c9a84c; color: #0b2a35; border: none; border-radius: 999px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 16px rgba(201, 168, 76, 0.3); font-family: 'Times New Roman', Times, serif;">
-                    <i class="fas fa-file-pdf"></i> Download PDF
-                </button>
-                <button onclick="downloadUpdatedCV('word')" style="padding: 12px 30px; font-size: 15px; background: transparent; color: #0b2a35; border: 2px solid #0b2a35; border-radius: 999px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; font-family: 'Times New Roman', Times, serif;">
-                    <i class="fas fa-file-word"></i> Download Word
-                </button>
-            </div>
-        </div>
-    `;
-
-    container.innerHTML = html;
-    container.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    console.log('✅ CV displayed with download buttons!');
 }
 
 // ==========================================
@@ -621,7 +606,6 @@ function downloadUpdatedCV(format) {
 window.clearUploadedFile = clearUploadedFile;
 window.downloadUpdatedCV = downloadUpdatedCV;
 window.updateCVWithAI = updateCVWithAI;
-
 // ==========================================
 // DOM READY
 // ==========================================
