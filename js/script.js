@@ -246,16 +246,26 @@ var SKILLS = {
 // CV UPLOAD & UPDATE - PRODUCTION READY
 // ==========================================
 
-// Configure PDF.js worker
-pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-
 // Variables for uploaded file
 let uploadedFileData = null;
 let uploadedFileContent = '';
 let isProcessing = false;
+let pdfjsLoaded = false;
 
 // Initialize CV upload
 document.addEventListener('DOMContentLoaded', function() {
+    // Check if PDF.js is loaded
+    if (typeof pdfjsLib !== 'undefined') {
+        pdfjsLoaded = true;
+        try {
+            pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+            console.log('✅ PDF.js loaded successfully');
+        } catch (error) {
+            console.warn('⚠️ PDF.js worker error:', error);
+        }
+    } else {
+        console.warn('⚠️ PDF.js not loaded. Please check the CDN link.');
+    }
     initCVUpload();
 });
 
@@ -268,16 +278,22 @@ function initCVUpload() {
     const errorDiv = document.getElementById('cvUploadError');
     const errorMessage = document.getElementById('cvUploadErrorMessage');
 
-    if (!dropzone || !fileInput) return;
+    if (!dropzone || !fileInput) {
+        console.warn('⚠️ CV upload elements not found');
+        return;
+    }
 
     // Click to upload
     dropzone.addEventListener('click', function(e) {
         e.preventDefault();
+        e.stopPropagation();
         fileInput.click();
     });
 
     // File input change
     fileInput.addEventListener('change', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
         if (this.files && this.files.length > 0) {
             handleCVFile(this.files[0]);
         }
@@ -311,6 +327,7 @@ function initCVUpload() {
     if (removeBtn) {
         removeBtn.addEventListener('click', function(e) {
             e.preventDefault();
+            e.stopPropagation();
             clearUploadedFile();
         });
     }
@@ -319,6 +336,7 @@ function initCVUpload() {
     if (updateBtn) {
         updateBtn.addEventListener('click', function(e) {
             e.preventDefault();
+            e.stopPropagation();
             updateCVWithAI();
         });
     }
@@ -335,6 +353,12 @@ function handleCVFile(file) {
     // Reset states
     if (errorDiv) errorDiv.style.display = 'none';
     if (errorMessage) errorMessage.textContent = '';
+
+    // Check if file exists
+    if (!file) {
+        showCVError('❌ No file selected. Please choose a PDF file.');
+        return;
+    }
 
     // Check if PDF
     if (file.type !== 'application/pdf') {
@@ -367,14 +391,14 @@ function handleCVFile(file) {
     extractTextFromPDF(file).then(text => {
         uploadedFileContent = text;
         if (fileName) {
-            fileName.innerHTML = file.name + ' <span style="color: #22c55e; font-size: 12px;">✓ Extracted</span>';
+            fileName.innerHTML = '<i class="fas fa-check-circle" style="color: #22c55e;"></i> ' + file.name;
         }
         console.log('📄 PDF text extracted. Length:', text.length);
-        showNotification('PDF uploaded and text extracted successfully! Click "Update CV" to reformat.', 'success');
+        showNotification('✅ PDF uploaded and text extracted successfully! Click "Update CV" to reformat.', 'success');
     }).catch(error => {
         console.error('Error extracting text:', error);
-        showCVError('❌ Failed to extract text from PDF. Please try again.');
-        if (fileName) fileName.textContent = file.name + ' ❌ Extraction failed';
+        showCVError('❌ Failed to extract text from PDF: ' + error.message);
+        if (fileName) fileName.textContent = '❌ ' + file.name + ' - Extraction failed';
     });
 }
 
@@ -423,6 +447,16 @@ function clearUploadedFile() {
 // ==========================================
 
 async function extractTextFromPDF(file) {
+    // Check if PDF.js is loaded
+    if (typeof pdfjsLib === 'undefined') {
+        // Try to load PDF.js dynamically
+        try {
+            await loadPDFJS();
+        } catch (error) {
+            throw new Error('PDF.js library could not be loaded. Please check your internet connection.');
+        }
+    }
+
     try {
         const arrayBuffer = await file.arrayBuffer();
         const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
@@ -445,6 +479,32 @@ async function extractTextFromPDF(file) {
         console.error('PDF extraction error:', error);
         throw new Error('Failed to extract text from PDF: ' + error.message);
     }
+}
+
+// Load PDF.js dynamically if not already loaded
+function loadPDFJS() {
+    return new Promise((resolve, reject) => {
+        if (typeof pdfjsLib !== 'undefined') {
+            resolve();
+            return;
+        }
+        
+        const script = document.createElement('script');
+        script.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+        script.onload = function() {
+            try {
+                pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+                console.log('✅ PDF.js loaded dynamically');
+                resolve();
+            } catch (error) {
+                reject(error);
+            }
+        };
+        script.onerror = function() {
+            reject(new Error('Failed to load PDF.js library'));
+        };
+        document.head.appendChild(script);
+    });
 }
 
 function cleanExtractedText(text) {
@@ -484,13 +544,22 @@ async function updateCVWithAI() {
                 <div style="text-align: center; padding: 40px; background: white; border-radius: 8px; border: 1px solid #e0dbd3;">
                     <i class="fas fa-spinner fa-spin" style="font-size: 40px; color: #c9a84c;"></i>
                     <p style="margin-top: 16px; color: #6b645a; font-family: 'Times New Roman', Times, serif;">
-                        🔄 AI is reformatting your CV...
+                        <i class="fas fa-robot" style="color: #c9a84c;"></i> AI is reformatting your CV...
                     </p>
                     <p style="font-size: 13px; color: #8a8277; margin-top: 4px;">
-                        This may take a moment
+                        <i class="fas fa-clock"></i> This may take a moment
                     </p>
                 </div>
             `;
+        }
+
+        // Check if content was extracted
+        if (!uploadedFileContent || uploadedFileContent.length < 10) {
+            showNotification('⚠️ No text extracted from PDF. Please try uploading again.', 'error');
+            updateBtn.innerHTML = originalText;
+            updateBtn.disabled = false;
+            isProcessing = false;
+            return;
         }
 
         // Build the prompt
@@ -561,10 +630,10 @@ async function updateCVWithAI() {
                 <div style="text-align: center; padding: 40px; background: white; border-radius: 8px; border: 1px solid #fecaca;">
                     <i class="fas fa-exclamation-circle" style="font-size: 40px; color: #dc3545;"></i>
                     <p style="margin-top: 16px; color: #dc3545; font-family: 'Times New Roman', Times, serif;">
-                        Error updating CV: ${error.message}
+                        ❌ Error updating CV: ${error.message}
                     </p>
                     <button onclick="clearUploadedFile()" style="margin-top: 12px; padding: 8px 20px; background: #dc3545; color: white; border: none; border-radius: 999px; cursor: pointer; font-weight: 600;">
-                        Try Again
+                        <i class="fas fa-undo"></i> Try Again
                     </button>
                 </div>
             `;
@@ -747,7 +816,7 @@ function downloadUpdatedCV(format) {
         document.body.removeChild(link);
         setTimeout(() => URL.revokeObjectURL(link.href), 100);
 
-        showNotification('<i class="fa-fas-checkmark"></i> Word document downloaded successfully!', 'success');
+        showNotification('✅ Word document downloaded successfully!', 'success');
     }
 }
 
