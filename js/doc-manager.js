@@ -3,35 +3,7 @@
 // ============================================
 
 
-// ====================
-// PREVENT DEV TOOL
-// ===================
 
-//prevent right clicking//
-document.addEventListener('contextmenu', function(e) {
-    e.preventDefault();
-    return false;
-});
-
-//prevent keyboard shortcuts//
-document.addEventListener('keydown', function(e) {
-    if (e.key === 'F12') {
-        e.preventDefault();
-        return false;
-    }
-    if (e.ctrlKey && e.shiftKey && e.key === 'I') {
-        e.preventDefault();
-        return false;
-    }
-    if (e.ctrlKey && e.shiftKey && e.key === 'J'){
-        e.preventDefault();
-        return false;
-    }
-    if (e.ctrlKey && e.key === 'U') {
-        e.preventDefault();
-        return false;
-    }
-})  
 // ============================================
 // STATE MANAGEMENT
 // ============================================
