@@ -1423,9 +1423,11 @@ nav ul li.active a i {
 #cvPreviewContainer {
     background: var(--white);
     border-radius: var(--radius);
-    padding: 30px 40px;
+    padding: 20px;
     border: 1px solid var(--gray-200);
-    min-height: 500px;
+    min-height: 400px;
+    overflow: hidden;
+    max-width: 100%;
 }
 
 /* ============================================
@@ -2565,8 +2567,9 @@ nav ul li.active a i {
         transform: rotate(360deg);
     }
 }
+
 /* ============================================
-   GENERATED CV PREVIEW - MOBILE STYLES
+   GENERATED CV PREVIEW - STYLES
    ============================================ */
 
 /* Generic CV Preview */
@@ -2575,7 +2578,7 @@ nav ul li.active a i {
     max-width: 100%;
     margin: 0 auto;
     background: white;
-    padding: 30px 20px;
+    padding: 25px 20px;
     border: 1px solid #e0dbd3;
     border-radius: 8px;
     overflow: hidden;
@@ -2585,16 +2588,16 @@ nav ul li.active a i {
 #cvPreviewContainer .cv-generic .cv-header {
     text-align: center;
     border-bottom: 2px solid #0b2a35;
-    padding-bottom: 20px;
-    margin-bottom: 20px;
+    padding-bottom: 15px;
+    margin-bottom: 15px;
 }
 
 #cvPreviewContainer .cv-generic .cv-photo-wrapper {
-    width: 100px;
-    height: 100px;
+    width: 80px;
+    height: 80px;
     border-radius: 50%;
     overflow: hidden;
-    margin: 0 auto 15px;
+    margin: 0 auto 12px;
     border: 3px solid #c9a84c;
 }
 
@@ -2605,16 +2608,16 @@ nav ul li.active a i {
 }
 
 #cvPreviewContainer .cv-generic .cv-name-heading {
-    font-size: 28px;
+    font-size: 22px;
     font-weight: 700;
     color: #0b2a35;
-    margin: 0 0 4px 0;
+    margin: 0 0 2px 0;
     font-family: 'Times New Roman', Times, serif;
     letter-spacing: 1px;
 }
 
 #cvPreviewContainer .cv-generic .cv-job-title {
-    font-size: 18px;
+    font-size: 16px;
     color: #c9a84c;
     font-weight: 600;
     margin: 0;
@@ -2624,11 +2627,11 @@ nav ul li.active a i {
 #cvPreviewContainer .cv-generic .cv-contact-info {
     display: flex;
     justify-content: center;
-    gap: 20px;
+    gap: 12px;
     flex-wrap: wrap;
-    font-size: 13px;
+    font-size: 12px;
     color: #64748b;
-    margin-top: 8px;
+    margin-top: 6px;
     font-family: 'Times New Roman', Times, serif;
 }
 
@@ -2645,31 +2648,40 @@ nav ul li.active a i {
 }
 
 #cvPreviewContainer .cv-generic .cv-section {
-    margin-bottom: 20px;
+    margin-bottom: 12px;
+}
+
+#cvPreviewContainer .cv-generic .cv-section:last-child {
+    margin-bottom: 0;
 }
 
 #cvPreviewContainer .cv-generic .cv-section-title {
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 700;
     color: #0b2a35;
     text-transform: uppercase;
     letter-spacing: 1px;
     border-bottom: 2px solid #c9a84c;
-    padding-bottom: 6px;
-    margin-bottom: 10px;
+    padding-bottom: 4px;
+    margin-bottom: 6px;
     font-family: 'Times New Roman', Times, serif;
 }
 
 #cvPreviewContainer .cv-generic .cv-summary-text {
-    font-size: 14px;
+    font-size: 13px;
     color: #2a2520;
-    line-height: 1.8;
+    line-height: 1.7;
     font-family: 'Times New Roman', Times, serif;
     text-align: justify;
+    margin: 0;
 }
 
 #cvPreviewContainer .cv-generic .cv-exp-item {
-    margin-bottom: 12px;
+    margin-bottom: 10px;
+}
+
+#cvPreviewContainer .cv-generic .cv-exp-item:last-child {
+    margin-bottom: 0;
 }
 
 #cvPreviewContainer .cv-generic .cv-exp-header {
@@ -2681,65 +2693,70 @@ nav ul li.active a i {
 }
 
 #cvPreviewContainer .cv-generic .cv-exp-company {
-    font-size: 14px;
+    font-size: 13px;
     color: #0b2a35;
     font-family: 'Times New Roman', Times, serif;
 }
 
 #cvPreviewContainer .cv-generic .cv-exp-date {
-    font-size: 12px;
+    font-size: 11px;
     color: #6b645a;
     font-family: 'Times New Roman', Times, serif;
 }
 
 #cvPreviewContainer .cv-generic .cv-exp-desc-list {
-    padding-left: 20px;
-    margin-top: 4px;
-    font-size: 13px;
+    padding-left: 16px;
+    margin-top: 3px;
+    font-size: 12px;
     color: #2a2520;
-    line-height: 1.6;
+    line-height: 1.5;
     font-family: 'Times New Roman', Times, serif;
 }
 
 #cvPreviewContainer .cv-generic .cv-exp-desc-list li {
-    margin-bottom: 4px;
+    margin-bottom: 2px;
 }
 
 #cvPreviewContainer .cv-generic .cv-edu-item {
-    margin-bottom: 6px;
-    font-size: 14px;
+    margin-bottom: 4px;
+    font-size: 13px;
     color: #2a2520;
     font-family: 'Times New Roman', Times, serif;
+}
+
+#cvPreviewContainer .cv-generic .cv-edu-item:last-child {
+    margin-bottom: 0;
 }
 
 #cvPreviewContainer .cv-generic .cv-skills-list,
 #cvPreviewContainer .cv-generic .cv-languages-list,
 #cvPreviewContainer .cv-generic .cv-references-list {
-    padding-left: 20px;
-    margin-top: 6px;
-    font-size: 13px;
+    padding-left: 16px;
+    margin-top: 4px;
+    font-size: 12px;
     color: #2a2520;
-    line-height: 1.6;
+    line-height: 1.5;
     font-family: 'Times New Roman', Times, serif;
     column-count: 2;
-    column-gap: 30px;
+    column-gap: 20px;
 }
 
 #cvPreviewContainer .cv-generic .cv-skills-list li,
 #cvPreviewContainer .cv-generic .cv-languages-list li,
 #cvPreviewContainer .cv-generic .cv-references-list li {
-    margin-bottom: 4px;
+    margin-bottom: 2px;
 }
 
 #cvPreviewContainer .cv-generic .cv-references-text {
-    font-size: 14px;
+    font-size: 13px;
     color: #6b645a;
     font-style: italic;
     font-family: 'Times New Roman', Times, serif;
+    margin: 0;
 }
 
 /* ============================================
-   PROFESSIONAL CV PREVIEW - MOBILE STYLES
+   PROFESSIONAL CV PREVIEW
    ============================================ */
 
 #cvPreviewContainer .cv-professional {
@@ -2861,6 +2878,10 @@ nav ul li.active a i {
     margin-bottom: 20px;
 }
 
+#cvPreviewContainer .cv-professional .cv-section:last-child {
+    margin-bottom: 0;
+}
+
 #cvPreviewContainer .cv-professional .cv-section-title {
     color: #0b2a35;
     font-size: 14px;
@@ -2883,6 +2904,10 @@ nav ul li.active a i {
 
 #cvPreviewContainer .cv-professional .cv-exp-item {
     margin-bottom: 14px;
+}
+
+#cvPreviewContainer .cv-professional .cv-exp-item:last-child {
+    margin-bottom: 0;
 }
 
 #cvPreviewContainer .cv-professional .cv-exp-item .cv-exp-header {
@@ -2925,6 +2950,10 @@ nav ul li.active a i {
     font-family: 'Times New Roman', Times, serif;
 }
 
+#cvPreviewContainer .cv-professional .cv-edu-item:last-child {
+    margin-bottom: 0;
+}
+
 #cvPreviewContainer .cv-professional .cv-edu-item strong {
     color: #0b2a35;
 }
@@ -2941,128 +2970,465 @@ nav ul li.active a i {
 }
 
 /* ============================================
-   MOBILE RESPONSIVE - GENERATED CV
+   CV BUTTON CONTAINER
    ============================================ */
 
-@media (max-width: 768px) {
-    /* Generic CV Mobile */
-    #cvPreviewContainer .cv-generic {
-        padding: 20px 16px;
-    }
-    
-    #cvPreviewContainer .cv-generic .cv-name-heading {
-        font-size: 22px;
-    }
-    
-    #cvPreviewContainer .cv-generic .cv-job-title {
-        font-size: 16px;
-    }
-    
-    #cvPreviewContainer .cv-generic .cv-contact-info {
-        gap: 10px;
-        font-size: 12px;
-        flex-direction: column;
-        align-items: center;
-    }
-    
-    #cvPreviewContainer .cv-generic .cv-skills-list,
-    #cvPreviewContainer .cv-generic .cv-languages-list {
-        column-count: 1;
-        column-gap: 0;
-    }
-    
-    #cvPreviewContainer .cv-generic .cv-exp-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 2px;
-    }
-    
-    /* Professional CV Mobile */
-    #cvPreviewContainer .cv-professional .cv-prof-grid {
-        grid-template-columns: 1fr;
-        gap: 0;
-    }
-    
-    #cvPreviewContainer .cv-professional .cv-prof-sidebar {
-        padding: 20px 16px;
-        order: 2;
-    }
-    
-    #cvPreviewContainer .cv-professional .cv-prof-main {
-        padding: 20px 16px;
-        order: 1;
-    }
-    
-    #cvPreviewContainer .cv-professional .cv-photo-wrapper {
-        width: 90px;
-        height: 90px;
-    }
-    
-    #cvPreviewContainer .cv-professional .cv-prof-name {
-        font-size: 18px;
-    }
-    
-    #cvPreviewContainer .cv-professional .cv-prof-title {
-        font-size: 13px;
-    }
-    
-    #cvPreviewContainer .cv-professional .cv-exp-item .cv-exp-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 2px;
-    }
+#cvPreviewContainer .cv-button-container {
+    text-align: center;
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 2px solid #c9a84c;
 }
 
-@media (max-width: 480px) {
-    #cvPreviewContainer .cv-generic .cv-name-heading {
-        font-size: 18px;
-    }
-    
-    #cvPreviewContainer .cv-generic .cv-job-title {
-        font-size: 14px;
-    }
-    
-    #cvPreviewContainer .cv-generic .cv-photo-wrapper {
-        width: 70px;
-        height: 70px;
-    }
-    
-    #cvPreviewContainer .cv-generic .cv-summary-text {
-        font-size: 13px;
-    }
-    
-    #cvPreviewContainer .cv-professional .cv-photo-wrapper {
-        width: 70px;
-        height: 70px;
-    }
-    
-    #cvPreviewContainer .cv-professional .cv-prof-name {
-        font-size: 16px;
-    }
-    
-    #cvPreviewContainer .cv-professional .cv-exp-item .cv-exp-header strong {
-        font-size: 14px;
-    }
+#cvPreviewContainer .cv-generate-btn {
+    padding: 12px 28px;
+    font-size: 15px;
+    background: #c9a84c;
+    color: #0b2a35;
+    border: none;
+    border-radius: 999px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 24px rgba(201, 168, 76, 0.3);
+    font-family: 'Times New Roman', Times, serif;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
 }
 
-@media (max-width: 360px) {
-    #cvPreviewContainer .cv-generic .cv-name-heading {
-        font-size: 16px;
-    }
-    
-    #cvPreviewContainer .cv-generic .cv-photo-wrapper {
-        width: 60px;
-        height: 60px;
-    }
-    
-    #cvPreviewContainer .cv-professional .cv-photo-wrapper {
-        width: 60px;
-        height: 60px;
-    }
-    
-    #cvPreviewContainer .cv-professional .cv-prof-name {
-        font-size: 14px;
-    }
+#cvPreviewContainer .cv-generate-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 32px rgba(201, 168, 76, 0.4);
+}
+
+#cvPreviewContainer .cv-button-subtext {
+    font-size: 13px;
+    color: #6b645a;
+    margin-top: 6px;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+#cvPreviewContainer .cv-button-subtext i {
+    color: #c9a84c;
+}
+
+/* ============================================
+   LETTER CONTAINER
+   ============================================ */
+
+#letterContainer {
+    display: none;
+    margin-top: 20px;
+}
+
+#letterContainer .letter-wrapper {
+    font-family: 'Times New Roman', Times, serif;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px 30px;
+    background: white;
+    border: 1px solid #e0dbd3;
+    border-radius: 8px;
+}
+
+#letterContainer .letter-sender {
+    text-align: right;
+    margin-bottom: 20px;
+}
+
+#letterContainer .letter-sender-name {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0;
+    line-height: 1.8;
+}
+
+#letterContainer .letter-sender-line {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0;
+    line-height: 1.6;
+}
+
+#letterContainer .letter-date {
+    text-align: right;
+    margin-bottom: 30px;
+}
+
+#letterContainer .letter-date p {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0;
+    line-height: 1.6;
+}
+
+#letterContainer .letter-recipient {
+    margin-bottom: 30px;
+}
+
+#letterContainer .letter-recipient p {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0;
+    line-height: 1.6;
+}
+
+#letterContainer .letter-salutation {
+    margin-bottom: 12px;
+}
+
+#letterContainer .letter-salutation p {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0;
+}
+
+#letterContainer .letter-subject {
+    margin-bottom: 20px;
+}
+
+#letterContainer .letter-subject p {
+    font-size: 18px;
+    text-align: center;
+    font-weight: 800;
+    text-decoration: underline;
+    margin: 0;
+    text-transform: uppercase;
+}
+
+#letterContainer .letter-body {
+    font-size: 15px;
+    line-height: 1.8;
+    margin-bottom: 30px;
+}
+
+#letterContainer .letter-body p {
+    margin: 0 0 16px 0;
+    text-indent: 0;
+}
+
+#letterContainer .letter-closing {
+    margin-top: 30px;
+}
+
+#letterContainer .letter-closing p {
+    font-size: 15px;
+    margin: 0 0 4px 0;
+}
+
+#letterContainer .letter-signature {
+    margin: 12px 0 4px 0;
+}
+
+#letterContainer .letter-signature img {
+    max-width: 200px;
+    max-height: 80px;
+    display: block;
+}
+
+#letterContainer .letter-signature-space {
+    height: 30px;
+}
+
+#letterContainer .letter-signature-name {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 8px 0 0 0;
+}
+
+/* Letter Download Buttons */
+#letterContainer .letter-download-buttons {
+    text-align: center;
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid #e0dbd3;
+}
+
+#letterContainer .letter-download-buttons button {
+    padding: 10px 24px;
+    font-size: 14px;
+    border-radius: 999px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Times New Roman', Times, serif;
+    margin: 0 8px;
+}
+
+#letterContainer .letter-download-buttons .btn-pdf {
+    background: #c9a84c;
+    color: #0b2a35;
+    border: none;
+}
+
+#letterContainer .letter-download-buttons .btn-pdf:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(201, 168, 76, 0.3);
+}
+
+#letterContainer .letter-download-buttons .btn-word {
+    background: transparent;
+    color: #0b2a35;
+    border: 2px solid #0b2a35;
+}
+
+#letterContainer .letter-download-buttons .btn-word:hover {
+    background: #0b2a35;
+    color: white;
+}
+
+/* Letter Loading */
+#letterContainer .letter-loading {
+    text-align: center;
+    padding: 40px;
+}
+
+#letterContainer .letter-loading i {
+    font-size: 30px;
+    color: #c9a84c;
+}
+
+#letterContainer .letter-loading p {
+    margin-top: 10px;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+#letterContainer .letter-error {
+    color: #ef4444;
+    text-align: center;
+    padding: 20px;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+/* ============================================
+   LETTER DETAILS MODAL
+   ============================================ */
+
+.letter-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    backdrop-filter: blur(15px);
+}
+
+.letter-modal {
+    background: white;
+    border-radius: 16px;
+    padding: 40px;
+    max-width: 600px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.2);
+    position: relative;
+}
+
+.letter-modal-close {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: #6b645a;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 6px;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.letter-modal-close:hover {
+    background-color: #f0ede8;
+    color: #dc3545;
+}
+
+.letter-modal h2 {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 24px;
+    color: #0b2a35;
+    margin-bottom: 4px;
+    font-weight: 700;
+}
+
+.letter-modal h2 i {
+    color: #c9a84c;
+    margin-right: 10px;
+}
+
+.letter-modal-sub {
+    font-family: 'Times New Roman', Times, serif;
+    color: #6b645a;
+    font-size: 14px;
+    margin-bottom: 24px;
+}
+
+.letter-modal-sub i {
+    color: #c9a84c;
+}
+
+.letter-form-group {
+    margin-bottom: 16px;
+}
+
+.letter-form-group label {
+    font-family: 'Times New Roman', Times, serif;
+    font-weight: 700;
+    font-size: 14px;
+    color: #0b2a35;
+    display: block;
+    margin-bottom: 4px;
+}
+
+.letter-form-group label i {
+    color: #c9a84c;
+    margin-right: 6px;
+}
+
+.letter-form-group label .required {
+    color: #dc3545;
+}
+
+.letter-form-group label .optional {
+    color: #6b645a;
+    font-weight: 400;
+}
+
+.letter-form-group input,
+.letter-form-group textarea {
+    width: 100%;
+    padding: 10px 14px;
+    border: 2px solid #e0dbd3;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: 'Times New Roman', Times, serif;
+    background: #f4f2ec;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+}
+
+.letter-form-group input:focus,
+.letter-form-group textarea:focus {
+    border-color: #c9a84c;
+    background: white;
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(201, 168, 76, 0.12);
+}
+
+.letter-form-group textarea {
+    resize: vertical;
+}
+
+.letter-form-hint {
+    font-size: 12px;
+    color: #6b645a;
+    margin-top: 4px;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.letter-form-hint i {
+    color: #c9a84c;
+}
+
+/* Signature Upload */
+.letter-signature-upload {
+    border: 2px dashed #e0dbd3;
+    border-radius: 8px;
+    padding: 30px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: #faf8f4;
+}
+
+.letter-signature-upload:hover {
+    border-color: #c9a84c;
+}
+
+.letter-signature-upload i.fa-pen {
+    font-size: 32px;
+    color: #c9a84c;
+}
+
+.letter-signature-upload p {
+    font-family: 'Times New Roman', Times, serif;
+    color: #6b645a;
+    margin-top: 8px;
+}
+
+.letter-signature-upload .signature-hint {
+    font-size: 12px;
+}
+
+.letter-signature-upload #signaturePreview p {
+    color: #0b2a35;
+    margin-top: 8px;
+    font-weight: 600;
+}
+
+.letter-signature-upload #signaturePreview p i {
+    color: #22c55e;
+}
+
+.letter-signature-upload #signaturePreview img {
+    max-width: 200px;
+    max-height: 80px;
+}
+
+/* Modal Actions */
+.letter-modal-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+}
+
+.letter-modal-actions .btn-cancel {
+    padding: 10px 24px;
+    background: transparent;
+    color: #6b645a;
+    border: 2px solid #e0dbd3;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.letter-modal-actions .btn-cancel:hover {
+    background: #f0ede8;
+}
+
+.letter-modal-actions .btn-generate {
+    padding: 10px 32px;
+    background: #c9a84c;
+    color: #0b2a35;
+    border: none;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Times New Roman', Times, serif;
+    box-shadow: 0 8px 24px rgba(201, 168, 76, 0.3);
+}
+
+.letter-modal-actions .btn-generate:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 32px rgba(201, 168, 76, 0.4);
 }
 
 /* ============================================
@@ -4165,9 +4531,9 @@ nav ul li.active a i {
     #cvPreviewContainer {
         background: var(--white);
         border-radius: var(--radius);
-        padding: 20px 16px;
+        padding: 12px !important;
         border: 1px solid var(--gray-200);
-        min-height: 400px;
+        min-height: 300px !important;
         overflow: auto;
     }
 
@@ -4217,6 +4583,146 @@ nav ul li.active a i {
         align-items: flex-start;
         gap: 4px;
         flex-wrap: wrap;
+    }
+
+    /* CV Button Mobile */
+    #cvPreviewContainer .cv-generate-btn {
+        padding: 10px 20px !important;
+        font-size: 13px !important;
+        width: 100% !important;
+        max-width: 320px !important;
+        justify-content: center !important;
+        display: flex !important;
+        margin: 0 auto !important;
+    }
+    
+    #cvPreviewContainer .cv-button-subtext {
+        font-size: 12px !important;
+    }
+
+    /* Generic CV Mobile */
+    #cvPreviewContainer .cv-generic {
+        padding: 20px 16px !important;
+    }
+    
+    #cvPreviewContainer .cv-generic .cv-name-heading {
+        font-size: 20px !important;
+    }
+    
+    #cvPreviewContainer .cv-generic .cv-job-title {
+        font-size: 15px !important;
+    }
+    
+    #cvPreviewContainer .cv-generic .cv-contact-info {
+        gap: 8px;
+        font-size: 11px;
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    #cvPreviewContainer .cv-generic .cv-skills-list,
+    #cvPreviewContainer .cv-generic .cv-languages-list {
+        column-count: 1 !important;
+        column-gap: 0;
+    }
+    
+    #cvPreviewContainer .cv-generic .cv-exp-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 2px;
+    }
+
+    /* Professional CV Mobile */
+    #cvPreviewContainer .cv-professional .cv-prof-grid {
+        grid-template-columns: 1fr !important;
+        gap: 0 !important;
+    }
+    
+    #cvPreviewContainer .cv-professional .cv-prof-sidebar {
+        padding: 20px 16px !important;
+        order: 2 !important;
+    }
+    
+    #cvPreviewContainer .cv-professional .cv-prof-main {
+        padding: 20px 16px !important;
+        order: 1 !important;
+    }
+    
+    #cvPreviewContainer .cv-professional .cv-photo-wrapper {
+        width: 90px !important;
+        height: 90px !important;
+    }
+    
+    #cvPreviewContainer .cv-professional .cv-prof-name {
+        font-size: 18px !important;
+    }
+    
+    #cvPreviewContainer .cv-professional .cv-prof-title {
+        font-size: 13px !important;
+    }
+    
+    #cvPreviewContainer .cv-professional .cv-exp-item .cv-exp-header {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 2px !important;
+    }
+
+    /* Letter Container Mobile */
+    #letterContainer .letter-wrapper {
+        padding: 25px 18px !important;
+    }
+    
+    #letterContainer .letter-sender {
+        text-align: left !important;
+    }
+    
+    #letterContainer .letter-date {
+        text-align: left !important;
+    }
+    
+    #letterContainer .letter-subject p {
+        font-size: 15px !important;
+    }
+    
+    #letterContainer .letter-body {
+        font-size: 14px !important;
+    }
+
+    #letterContainer .letter-download-buttons {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 8px !important;
+        align-items: center !important;
+    }
+    
+    #letterContainer .letter-download-buttons button {
+        width: 100% !important;
+        max-width: 280px !important;
+        justify-content: center !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+        padding: 10px 20px !important;
+        margin: 0 !important;
+    }
+
+    /* Letter Modal Mobile */
+    .letter-modal {
+        padding: 25px 18px !important;
+        margin: 10px !important;
+    }
+    
+    .letter-modal h2 {
+        font-size: 20px !important;
+    }
+    
+    .letter-modal-actions {
+        flex-direction: column !important;
+    }
+    
+    .letter-modal-actions button {
+        width: 100% !important;
+        justify-content: center !important;
     }
 
     /* Footer */
@@ -4544,6 +5050,46 @@ nav ul li.active a i {
         font-size: 13px;
     }
 
+    #cvPreviewContainer .cv-generic .cv-name-heading {
+        font-size: 18px !important;
+    }
+    
+    #cvPreviewContainer .cv-generic .cv-job-title {
+        font-size: 14px !important;
+    }
+    
+    #cvPreviewContainer .cv-generic .cv-photo-wrapper {
+        width: 70px !important;
+        height: 70px !important;
+    }
+    
+    #cvPreviewContainer .cv-generic .cv-summary-text {
+        font-size: 12px !important;
+    }
+
+    #cvPreviewContainer .cv-generate-btn {
+        padding: 8px 16px !important;
+        font-size: 12px !important;
+        max-width: 100% !important;
+    }
+    
+    #cvPreviewContainer .cv-button-subtext {
+        font-size: 11px !important;
+    }
+
+    #cvPreviewContainer .cv-professional .cv-photo-wrapper {
+        width: 70px !important;
+        height: 70px !important;
+    }
+    
+    #cvPreviewContainer .cv-professional .cv-prof-name {
+        font-size: 16px !important;
+    }
+    
+    #cvPreviewContainer .cv-professional .cv-exp-item .cv-exp-header strong {
+        font-size: 14px !important;
+    }
+
     .footer {
         padding: 24px 14px 12px;
     }
@@ -4584,8 +5130,8 @@ nav ul li.active a i {
         font-size: 12px;
     }
     #cvPreviewContainer {
-        padding: 16px 12px;
-        min-height: 300px;
+        padding: 8px !important;
+        min-height: 250px !important;
     }
     #letterPreviewContainer {
         padding: 16px 12px;
@@ -4662,6 +5208,24 @@ nav ul li.active a i {
         width: 20px;
         height: 20px;
         font-size: 9px;
+    }
+
+    #cvPreviewContainer .cv-generic .cv-name-heading {
+        font-size: 16px !important;
+    }
+    
+    #cvPreviewContainer .cv-generic .cv-photo-wrapper {
+        width: 60px !important;
+        height: 60px !important;
+    }
+
+    #cvPreviewContainer .cv-professional .cv-photo-wrapper {
+        width: 60px !important;
+        height: 60px !important;
+    }
+    
+    #cvPreviewContainer .cv-professional .cv-prof-name {
+        font-size: 14px !important;
     }
 }
 

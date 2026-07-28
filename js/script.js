@@ -15,7 +15,35 @@ function refreshAOS() {
     }
 }
 
+// ==========================================
+// PREVENT DEV TOOLS
+// ==========================================
 
+// Prevent right-click
+document.addEventListener('contextmenu', function(e) {
+    e.preventDefault();
+    return false;
+});
+
+// Prevent keyboard shortcuts for dev tools
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'F12') {
+        e.preventDefault();
+        return false;
+    }
+    if (e.ctrlKey && e.shiftKey && e.key === 'I') {
+        e.preventDefault();
+        return false;
+    }
+    if (e.ctrlKey && e.shiftKey && e.key === 'J') {
+        e.preventDefault();
+        return false;
+    }
+    if (e.ctrlKey && e.key === 'u') {
+        e.preventDefault();
+        return false;
+    }
+});
 
 // ============================================
 // HAMBURGER MENU TOGGLE
@@ -696,54 +724,35 @@ function validateDuplicateSchools() {
     
     return !hasDuplicate;
 }
+
+// ==========================================
 // VALIDATE DUPLICATE QUALIFICATIONS
+// ==========================================
 function validateDuplicateQualifications() {
-    // Get ALL qualification select dropdowns on the page
-    // These are all the <select class="edu-qualification"> elements
     var qualificationSelects = document.querySelectorAll('.edu-qualification');
-    
-    // Array to store qualification values we've already seen
     var qualificationValues = [];
-    
-    // Flag to track if we found any duplicates
     var hasDuplicate = false;
 
-    // Loop through each qualification select dropdown
     qualificationSelects.forEach(function(selectElement) {
-        // Get the selected value and remove extra spaces
         var selectedValue = selectElement.value.trim();
-        
-        // Only check if a value is selected (not empty)
         if (selectedValue) {
-            // Check if this qualification was already selected in another entry
             if (qualificationValues.indexOf(selectedValue) !== -1) {
-                // DUPLICATE FOUND!
-                
-                // 1. Add error class to highlight the select in red
                 selectElement.classList.add('error');
-                
-                // 2. Find the error message element for this specific select
-                //    It's inside the same .form-group container
                 var errorElement = selectElement.closest('.form-group').querySelector('.field-error');
-                
-                // 3. Show the error message
                 if (errorElement) {
                     errorElement.textContent = 'Duplicate qualification! You have already selected "' + selectedValue + '"';
                     errorElement.classList.add('show');
                 }
-                
-                // 4. Mark that we found a duplicate
                 hasDuplicate = true;
             } else {
-                // NOT a duplicate - add this qualification to our tracking list
                 qualificationValues.push(selectedValue);
             }
         }
     });
     
-    // Return true if duplicates were found, false if not
     return hasDuplicate;
 }
+
 // ==========================================
 // EDUCATION ENTRIES
 // ==========================================
@@ -1061,7 +1070,6 @@ async function generateCVWithAI() {
         var prompt = buildCVPrompt(data);
         console.log('Prompt built successfully');
 
-        // Build messages for the API
         var messages = [
             {
                 role: 'system',
@@ -1073,7 +1081,6 @@ async function generateCVWithAI() {
             }
         ];
 
-        // Call our backend API (not OpenRouter directly)
         var response = await fetch(API_URL, {
             method: 'POST',
             headers: {
@@ -1353,27 +1360,15 @@ function displayGeneratedCV(generatedText, data) {
         <div id="cvContent">
             ${cvHtml}
         </div>
-        <div style="text-align: center; margin-top: 30px; padding: 20px; border-top: 2px solid #c9a84c;">
-            <button onclick="generateApplicationLetter()" style="
-                padding: 14px 36px;
-                font-size: 16px;
-                background: #c9a84c;
-                color: #0b2a35;
-                border: none;
-                border-radius: 999px;
-                font-weight: 700;
-                cursor: pointer;
-                transition: all 0.3s ease;
-                box-shadow: 0 8px 24px rgba(201,168,76,0.3);
-                font-family: 'Times New Roman', Times, serif;
-            ">
+        <div class="cv-button-container">
+            <button class="cv-generate-btn" onclick="generateApplicationLetter()">
                 <i class="fas fa-envelope"></i> Generate Application Letter from CV
             </button>
-            <p style="font-size: 13px; color: #6b645a; margin-top: 8px; font-family: 'Times New Roman', Times, serif;">
+            <p class="cv-button-subtext">
                 <i class="fas fa-info-circle"></i> Create a professional application letter based on this CV
             </p>
         </div>
-        <div id="letterContainer" style="display:none; margin-top: 30px;"></div>
+        <div id="letterContainer"></div>
     `;
 
     container.innerHTML = fullHtml;
@@ -1385,6 +1380,7 @@ function displayGeneratedCV(generatedText, data) {
     }
     setTimeout(refreshAOS, 100);
 }
+
 // ==========================================
 // RENDER GENERIC CV - WITH CLASSES
 // ==========================================
@@ -1393,7 +1389,6 @@ function renderGenericCV(summary, experience, education, skills, languages, refe
     var photo = data.photo || '';
 
     var html = '';
-    // Use classes instead of inline styles
     html += '<div class="cv-generic">';
     
     html += '<div class="cv-header">';
@@ -1506,7 +1501,6 @@ function renderProfessionalCV(summary, experience, education, skills, languages,
     html += '<div class="cv-professional">';
     html += '<div class="cv-prof-grid">';
     
-    // Sidebar
     html += '<div class="cv-prof-sidebar">';
     if (photo) {
         html += '<div class="cv-photo-wrapper">';
@@ -1544,7 +1538,6 @@ function renderProfessionalCV(summary, experience, education, skills, languages,
     }
     html += '</div>';
 
-    // Main content
     html += '<div class="cv-prof-main">';
 
     if (summary) {
@@ -1659,70 +1652,78 @@ function formatLetter(content, data) {
     
     var html = '';
     
-    html += '<div style="font-family: \'Times New Roman\', Times, serif; max-width: 800px; margin: 0 auto; padding: 60px 50px; background: white;">';
+    html += '<div class="letter-wrapper">';
     
-    html += '<div style="text-align: right; margin-bottom: 20px;">';
-    html += '<p style="font-size: 16px; font-weight: 600; color: #000000; margin: 0; font-family: \'Times New Roman\', Times, serif; line-height: 1.8;">' + (p.fullName || 'Your Name') + '</p>';
+    html += '<div class="letter-sender">';
+    html += '<p class="letter-sender-name">' + (p.fullName || 'Your Name') + '</p>';
     
     var addressLines = senderAddress.split('\n').filter(function(line) { return line.trim(); });
     addressLines.forEach(function(line) {
-        html += '<p style="font-size: 16px; font-weight: 600; color: #000000; margin: 0; font-family: \'Times New Roman\', Times, serif; line-height: 1.6;">' + line.trim() + '</p>';
+        html += '<p class="letter-sender-line">' + line.trim() + '</p>';
     });
     
-    html += '<p style="font-size: 16px; font-weight: 600; color: #000000; margin: 0; font-family: \'Times New Roman\', Times, serif; line-height: 1.6;">' + (p.phone || '') + '</p>';
-    html += '<p style="font-size: 16px; font-weight: 600; color: #000000; margin: 0; font-family: \'Times New Roman\', Times, serif; line-height: 1.6;">' + (p.email || '') + '</p>';
+    html += '<p class="letter-sender-line">' + (p.phone || '') + '</p>';
+    html += '<p class="letter-sender-line">' + (p.email || '') + '</p>';
     html += '</div>';
     
-    html += '<div style="text-align: right; margin-bottom: 30px;">';
-    html += '<p style="font-size: 16px; font-weight: 600; color: #000000; margin: 0; font-family: \'Times New Roman\', Times, serif; line-height: 1.6;">' + date + '</p>';
+    html += '<div class="letter-date">';
+    html += '<p>' + date + '</p>';
     html += '</div>';
     
-    html += '<div style="margin-bottom: 30px;">';
-    html += '<p style="font-size: 16px; font-weight: 600; color: #000000; margin: 0; font-family: \'Times New Roman\', Times, serif; line-height: 1.6;">The Human Resource Manager</p>';
-    html += '<p style="font-size: 16px; font-weight: 600; color: #000000; margin: 0; font-family: \'Times New Roman\', Times, serif; line-height: 1.6;">' + companyName + '</p>';
+    html += '<div class="letter-recipient">';
+    html += '<p>The Human Resource Manager</p>';
+    html += '<p>' + companyName + '</p>';
     
     var companyLines = companyAddress.split('\n').filter(function(line) { return line.trim(); });
     companyLines.forEach(function(line) {
-        html += '<p style="font-size: 16px; font-weight: 600; color: #000000; margin: 0; font-family: \'Times New Roman\', Times, serif; line-height: 1.6;">' + line.trim() + '</p>';
+        html += '<p>' + line.trim() + '</p>';
     });
-    
     html += '</div>';
     
-    html += '<div style="margin-bottom: 12px;">';
-    html += '<p style="font-size: 16px; font-weight: 600; color: #000000; margin: 0; font-family: \'Times New Roman\', Times, serif;">Dear Sir/Madam,</p>';
+    html += '<div class="letter-salutation">';
+    html += '<p>Dear Sir/Madam,</p>';
     html += '</div>';
     
-    html += '<div style="margin-bottom: 20px;">';
-    html += '<p style="font-size: 18px; color: #000000; text-align: center; font-weight: 800; text-decoration: underline; font-family: \'Times New Roman\', Times, serif; margin: 0; text-transform: uppercase;"><strong>RE:</strong> APPLICATION FOR THE POSITION OF ' + position.toUpperCase() + '</p>';
+    html += '<div class="letter-subject">';
+    html += '<p><strong>RE:</strong> APPLICATION FOR THE POSITION OF ' + position.toUpperCase() + '</p>';
     html += '</div>';
     
-    html += '<div style="font-size: 15px; color: #000000; line-height: 1.8; font-family: \'Times New Roman\', Times, serif; margin-bottom: 30px;">';
+    html += '<div class="letter-body">';
     
     var paragraphs = cleanContent.split('\n').filter(function(p) { return p.trim(); });
     
     if (paragraphs.length === 0) {
-        html += '<p style="margin: 0 0 16px 0; text-indent: 0;">I am writing to express my strong interest in the ' + position + ' position at ' + companyName + '. With my qualifications and experience, I am confident that I would be an excellent addition to your team.</p>';
-        html += '<p style="margin: 0 0 16px 0; text-indent: 0;">I look forward to the opportunity to discuss how my skills and experience align with your needs. Thank you for considering my application.</p>';
+        html += '<p>I am writing to express my strong interest in the ' + position + ' position at ' + companyName + '. With my qualifications and experience, I am confident that I would be an excellent addition to your team.</p>';
+        html += '<p>I look forward to the opportunity to discuss how my skills and experience align with your needs. Thank you for considering my application.</p>';
     } else {
         paragraphs.forEach(function(p) {
-            html += '<p style="margin: 0 0 16px 0; text-indent: 0;">' + p.trim() + '</p>';
+            html += '<p>' + p.trim() + '</p>';
         });
     }
     
     html += '</div>';
     
-    html += '<div style="margin-top: 30px;">';
-    html += '<p style="font-size: 15px; color: #000000; margin: 0 0 4px 0; font-family: \'Times New Roman\', Times, serif;">Yours faithfully,</p>';
+    html += '<div class="letter-closing">';
+    html += '<p>Yours faithfully,</p>';
     
     if (signature) {
-        html += '<div style="margin: 12px 0 4px 0;">';
-        html += '<img src="' + signature + '" alt="Signature" style="max-width: 200px; max-height: 80px; display: block;">';
+        html += '<div class="letter-signature">';
+        html += '<img src="' + signature + '" alt="Signature">';
         html += '</div>';
     } else {
-        html += '<div style="height: 30px;"></div>';
+        html += '<div class="letter-signature-space"></div>';
     }
     
-    html += '<p style="font-size: 18px; font-weight: 700; color: #000000; margin: 8px 0 0 0; font-family: \'Times New Roman\', Times, serif;">' + p.fullName + '</p>';
+    html += '<p class="letter-signature-name">' + p.fullName + '</p>';
+    html += '</div>';
+    
+    html += '<div class="letter-download-buttons">';
+    html += '<button class="btn-pdf" onclick="downloadLetter(\'pdf\')">';
+    html += '<i class="fas fa-file-pdf"></i> Download PDF';
+    html += '</button>';
+    html += '<button class="btn-word" onclick="downloadLetter(\'word\')">';
+    html += '<i class="fas fa-file-word"></i> Download Word';
+    html += '</button>';
     html += '</div>';
     
     html += '</div>';
@@ -1771,6 +1772,7 @@ function buildLetterPrompt(data) {
 
     return prompt;
 }
+
 // ==========================================
 // GENERATE APPLICATION LETTER
 // ==========================================
@@ -1782,248 +1784,89 @@ async function generateApplicationLetter() {
 
     var modal = document.createElement('div');
     modal.id = 'letterDetailsModal';
-    modal.style.cssText = `
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: rgba(0,0,0,0.5);
-        z-index: 9999;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 20px;
-        backdrop-filter: blur(15px);
-    `;
+    modal.className = 'letter-modal-overlay';
     
     modal.innerHTML = `
-        <div style="
-            background: white;
-            border-radius: 16px;
-            padding: 40px;
-            max-width: 600px;
-            width: 100%;
-            max-height: 90vh;
-            overflow-y: auto;
-            box-shadow: 0 24px 80px rgba(0,0,0,0.2);
-            position: relative;
-        ">
-            <button onclick="closeLetterDetailsModal()" style="
-                position: absolute;
-                top: 12px;
-                right: 16px;
-                background: none;
-                border: none;
-                font-size: 20px;
-                color: #6b645a;
-                cursor: pointer;
-                transition: all 0.3s ease;
-                padding: 6px;
-                border-radius: 50%;
-                width: 36px;
-                height: 36px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            " 
-            onmouseover="this.style.backgroundColor='#f0ede8'; this.style.color='#dc3545'"
-            onmouseout="this.style.backgroundColor='transparent'; this.style.color='#6b645a'">
+        <div class="letter-modal">
+            <button class="letter-modal-close" onclick="closeLetterDetailsModal()">
                 <i class="fas fa-times"></i>
             </button>
             
-            <h2 style="
-                font-family: 'Times New Roman', Times, serif;
-                font-size: 24px;
-                color: #0b2a35;
-                margin-bottom: 4px;
-                font-weight: 700;
-            ">
-                <i class="fas fa-envelope" style="color: #c9a84c; margin-right: 10px;"></i>
+            <h2>
+                <i class="fas fa-envelope"></i>
                 Application Letter Details
             </h2>
-            <p style="
-                font-family: 'Times New Roman', Times, serif;
-                color: #6b645a;
-                font-size: 14px;
-                margin-bottom: 24px;
-            ">
-                <i class="fas fa-info-circle" style="color: #c9a84c;"></i>
+            <p class="letter-modal-sub">
+                <i class="fas fa-info-circle"></i>
                 Please provide the required information for the application letter
             </p>
             
             <form id="letterDetailsForm" onsubmit="event.preventDefault(); submitLetterDetails();">
                 
-                <div style="margin-bottom: 16px;">
-                    <label style="
-                        font-family: 'Times New Roman', Times, serif;
-                        font-weight: 700;
-                        font-size: 14px;
-                        color: #0b2a35;
-                        display: block;
-                        margin-bottom: 4px;
-                    ">
-                        <i class="fas fa-home" style="color: #c9a84c; margin-right: 6px;"></i>
-                        Your Address / P.O Box <span style="color: #dc3545;">*</span>
+                <div class="letter-form-group">
+                    <label>
+                        <i class="fas fa-home"></i>
+                        Your Address / P.O Box <span class="required">*</span>
                     </label>
-                    <textarea id="letterSenderAddress" name="senderAddress" rows="3" placeholder="P.O. Box 12345-00100&#10;Nairobi, Kenya" style="
-                        width: 100%;
-                        padding: 10px 14px;
-                        border: 2px solid #e0dbd3;
-                        border-radius: 8px;
-                        font-size: 14px;
-                        font-family: 'Times New Roman', Times, serif;
-                        background: #f4f2ec;
-                        transition: all 0.3s ease;
-                        resize: vertical;
-                    " required>${lastGeneratedData.personal.address || ''}</textarea>
-                    <p style="font-size: 12px; color: #6b645a; margin-top: 4px; font-family: 'Times New Roman', Times, serif;">
-                        <i class="fas fa-info-circle" style="color: #c9a84c;"></i>
+                    <textarea id="letterSenderAddress" name="senderAddress" rows="3" placeholder="P.O. Box 12345-00100&#10;Nairobi, Kenya" required>${lastGeneratedData.personal.address || ''}</textarea>
+                    <p class="letter-form-hint">
+                        <i class="fas fa-info-circle"></i>
                         Format: P.O. Box [Number]-[Postal Code], [City] (One line per detail)
                     </p>
                 </div>
                 
-                <div style="margin-bottom: 16px;">
-                    <label style="
-                        font-family: 'Times New Roman', Times, serif;
-                        font-weight: 700;
-                        font-size: 14px;
-                        color: #0b2a35;
-                        display: block;
-                        margin-bottom: 4px;
-                    ">
-                        <i class="fas fa-building" style="color: #c9a84c; margin-right: 6px;"></i>
-                        Company Name <span style="color: #dc3545;">*</span>
+                <div class="letter-form-group">
+                    <label>
+                        <i class="fas fa-building"></i>
+                        Company Name <span class="required">*</span>
                     </label>
-                    <input type="text" id="letterCompanyName" name="companyName" placeholder="e.g. Tech Solutions Ltd" style="
-                        width: 100%;
-                        padding: 10px 14px;
-                        border: 2px solid #e0dbd3;
-                        border-radius: 8px;
-                        font-size: 14px;
-                        font-family: 'Times New Roman', Times, serif;
-                        background: #f4f2ec;
-                        transition: all 0.3s ease;
-                    " required>
+                    <input type="text" id="letterCompanyName" name="companyName" placeholder="e.g. Tech Solutions Ltd" required>
                 </div>
                 
-                <div style="margin-bottom: 16px;">
-                    <label style="
-                        font-family: 'Times New Roman', Times, serif;
-                        font-weight: 700;
-                        font-size: 14px;
-                        color: #0b2a35;
-                        display: block;
-                        margin-bottom: 4px;
-                    ">
-                        <i class="fas fa-location-dot" style="color: #c9a84c; margin-right: 6px;"></i>
-                        Company Address / P.O Box <span style="color: #dc3545;">*</span>
+                <div class="letter-form-group">
+                    <label>
+                        <i class="fas fa-location-dot"></i>
+                        Company Address / P.O Box <span class="required">*</span>
                     </label>
-                    <textarea id="letterCompanyAddress" name="companyAddress" rows="2" placeholder="P.O. Box 12345-00100&#10;Nairobi, Kenya" style="
-                        width: 100%;
-                        padding: 10px 14px;
-                        border: 2px solid #e0dbd3;
-                        border-radius: 8px;
-                        font-size: 14px;
-                        font-family: 'Times New Roman', Times, serif;
-                        background: #f4f2ec;
-                        transition: all 0.3s ease;
-                        resize: vertical;
-                    " required></textarea>
-                    <p style="font-size: 12px; color: #6b645a; margin-top: 4px; font-family: 'Times New Roman', Times, serif;">
-                        <i class="fas fa-info-circle" style="color: #c9a84c;"></i>
+                    <textarea id="letterCompanyAddress" name="companyAddress" rows="2" placeholder="P.O. Box 12345-00100&#10;Nairobi, Kenya" required></textarea>
+                    <p class="letter-form-hint">
+                        <i class="fas fa-info-circle"></i>
                         Format: P.O. Box [Number]-[Postal Code], [City] (One line per detail)
                     </p>
                 </div>
                 
-                <div style="margin-bottom: 16px;">
-                    <label style="
-                        font-family: 'Times New Roman', Times, serif;
-                        font-weight: 700;
-                        font-size: 14px;
-                        color: #0b2a35;
-                        display: block;
-                        margin-bottom: 4px;
-                    ">
-                        <i class="fas fa-briefcase" style="color: #c9a84c; margin-right: 6px;"></i>
-                        Position Applying For <span style="color: #dc3545;">*</span>
+                <div class="letter-form-group">
+                    <label>
+                        <i class="fas fa-briefcase"></i>
+                        Position Applying For <span class="required">*</span>
                     </label>
-                    <input type="text" id="letterPosition" name="position" placeholder="e.g. Senior Software Developer" style="
-                        width: 100%;
-                        padding: 10px 14px;
-                        border: 2px solid #e0dbd3;
-                        border-radius: 8px;
-                        font-size: 14px;
-                        font-family: 'Times New Roman', Times, serif;
-                        background: #f4f2ec;
-                        transition: all 0.3s ease;
-                    " required>
+                    <input type="text" id="letterPosition" name="position" placeholder="e.g. Senior Software Developer" required>
                 </div>
                 
-                <div style="margin-bottom: 20px;">
-                    <label style="
-                        font-family: 'Times New Roman', Times, serif;
-                        font-weight: 700;
-                        font-size: 14px;
-                        color: #0b2a35;
-                        display: block;
-                        margin-bottom: 4px;
-                    ">
-                        <i class="fas fa-pen" style="color: #c9a84c; margin-right: 6px;"></i>
-                        Upload Signature <span style="color: #6b645a;">(Optional)</span>
+                <div class="letter-form-group">
+                    <label>
+                        <i class="fas fa-pen"></i>
+                        Upload Signature <span class="optional">(Optional)</span>
                     </label>
-                    <div id="signatureUploadArea" style="
-                        border: 2px dashed #e0dbd3;
-                        border-radius: 8px;
-                        padding: 30px;
-                        text-align: center;
-                        cursor: pointer;
-                        transition: all 0.3s ease;
-                        background: #faf8f4;
-                    ">
+                    <div id="signatureUploadArea" class="letter-signature-upload">
                         <input type="file" id="signatureInput" accept="image/*" style="display:none;">
                         <div id="signaturePlaceholder">
-                            <i class="fas fa-pen" style="font-size: 32px; color: #c9a84c;"></i>
-                            <p style="font-family: 'Times New Roman', Times, serif; color: #6b645a; margin-top: 8px;">Click to upload signature (Optional)</p>
-                            <p style="font-family: 'Times New Roman', Times, serif; color: #6b645a; font-size: 12px;">White background recommended</p>
+                            <i class="fas fa-pen"></i>
+                            <p>Click to upload signature (Optional)</p>
+                            <p class="signature-hint">White background recommended</p>
                         </div>
                         <div id="signaturePreview" style="display:none;">
-                            <img id="signatureImg" src="" alt="Signature" style="max-width: 200px; max-height: 80px;">
-                            <p style="font-family: 'Times New Roman', Times, serif; color: #0b2a35; margin-top: 8px; font-weight: 600;">
-                                <i class="fas fa-check-circle" style="color: #22c55e;"></i> Signature uploaded
-                            </p>
+                            <img id="signatureImg" src="" alt="Signature">
+                            <p><i class="fas fa-check-circle"></i> Signature uploaded</p>
                         </div>
                     </div>
                 </div>
                 
-                <div style="display: flex; gap: 12px; justify-content: flex-end;">
-                    <button type="button" onclick="closeLetterDetailsModal()" style="
-                        padding: 10px 24px;
-                        background: transparent;
-                        color: #6b645a;
-                        border: 2px solid #e0dbd3;
-                        border-radius: 999px;
-                        font-weight: 700;
-                        font-size: 14px;
-                        cursor: pointer;
-                        transition: all 0.3s ease;
-                        font-family: 'Times New Roman', Times, serif;
-                    ">
+                <div class="letter-modal-actions">
+                    <button type="button" class="btn-cancel" onclick="closeLetterDetailsModal()">
                         <i class="fas fa-times"></i> Cancel
                     </button>
-                    <button type="submit" style="
-                        padding: 10px 32px;
-                        background: #c9a84c;
-                        color: #0b2a35;
-                        border: none;
-                        border-radius: 999px;
-                        font-weight: 700;
-                        font-size: 14px;
-                        cursor: pointer;
-                        transition: all 0.3s ease;
-                        font-family: 'Times New Roman', Times, serif;
-                        box-shadow: 0 8px 24px rgba(201,168,76,0.3);
-                    ">
+                    <button type="submit" class="btn-generate">
                         <i class="fas fa-wand-magic-sparkles"></i> Generate Letter
                     </button>
                 </div>
@@ -2066,13 +1909,13 @@ async function generateApplicationLetter() {
         });
     }
 }
+
 // ==========================================
 // SUBMIT LETTER DETAILS
 // ==========================================
 async function submitLetterDetails() {
     console.log('🔍 Submit Letter Details called');
     
-    // Get the form element
     var form = document.getElementById('letterDetailsForm');
     if (!form) {
         console.error('❌ Form not found!');
@@ -2080,16 +1923,13 @@ async function submitLetterDetails() {
         return;
     }
     
-    // Get values directly from the form using FormData
     var formData = new FormData(form);
     
-    // Log all form data
     console.log('📋 FormData entries:');
     for (var pair of formData.entries()) {
         console.log(pair[0] + ': ' + pair[1]);
     }
     
-    // Get values from FormData
     var senderAddress = formData.get('senderAddress') || '';
     var companyName = formData.get('companyName') || '';
     var companyAddress = formData.get('companyAddress') || '';
@@ -2103,7 +1943,6 @@ async function submitLetterDetails() {
         position: position 
     });
     
-    // ALSO try getting by ID as fallback
     var senderAddressEl = document.getElementById('letterSenderAddress');
     var companyNameEl = document.getElementById('letterCompanyName');
     var companyAddressEl = document.getElementById('letterCompanyAddress');
@@ -2121,13 +1960,11 @@ async function submitLetterDetails() {
         positionById: positionById 
     });
     
-    // Use the values from FormData (they should have the actual user input)
     var finalSenderAddress = senderAddress || senderAddressById;
     var finalCompanyName = companyName || companyNameById;
     var finalCompanyAddress = companyAddress || companyAddressById;
     var finalPosition = position || positionById;
     
-    // Trim values
     finalSenderAddress = finalSenderAddress.trim();
     finalCompanyName = finalCompanyName.trim();
     finalCompanyAddress = finalCompanyAddress.trim();
@@ -2140,7 +1977,6 @@ async function submitLetterDetails() {
         finalPosition: finalPosition 
     });
     
-    // Validation
     if (!finalSenderAddress || finalSenderAddress === '') {
         showNotification('Please enter your address/P.O Box.', 'error');
         console.warn('❌ Missing: senderAddress');
@@ -2182,7 +2018,7 @@ async function submitLetterDetails() {
     }
     
     letterContainer.style.display = 'block';
-    letterContainer.innerHTML = '<div style="text-align: center; padding: 40px;"><i class="fas fa-spinner fa-spin" style="font-size: 30px; color: #c9a84c;"></i><p style="margin-top: 10px; font-family: \'Times New Roman\', Times, serif;">Generating your application letter...</p></div>';
+    letterContainer.innerHTML = '<div class="letter-loading"><i class="fas fa-spinner fa-spin"></i><p>Generating your application letter...</p></div>';
     
     try {
         var prompt = buildLetterPrompt(data);
@@ -2229,23 +2065,11 @@ async function submitLetterDetails() {
         var formattedLetter = formatLetter(letterContent, data);
         letterContainer.innerHTML = formattedLetter;
         
-        var downloadButtons = `
-            <div style="text-align: center; margin-top: 20px; padding-top: 16px; border-top: 1px solid #e0dbd3;">
-                <button onclick="downloadLetter('pdf')" style="padding: 10px 24px; font-size: 14px; background: #c9a84c; color: #0b2a35; border: none; border-radius: 999px; font-weight: 700; cursor: pointer; transition: all 0.3s ease; font-family: 'Times New Roman', Times, serif; margin: 0 8px;">
-                    <i class="fas fa-file-pdf"></i> Download PDF
-                </button>
-                <button onclick="downloadLetter('word')" style="padding: 10px 24px; font-size: 14px; background: transparent; color: #0b2a35; border: 2px solid #0b2a35; border-radius: 999px; font-weight: 700; cursor: pointer; transition: all 0.3s ease; font-family: 'Times New Roman', Times, serif; margin: 0 8px;">
-                    <i class="fas fa-file-word"></i> Download Word
-                </button>
-            </div>
-        `;
-        letterContainer.innerHTML += downloadButtons;
-        
         showNotification('Application Letter Generated successfully!', 'success');
         
     } catch (error) {
         console.error('❌ Error generating letter:', error);
-        letterContainer.innerHTML = '<p style="color: #ef4444; text-align: center; padding: 20px; font-family: \'Times New Roman\', Times, serif;">Error generating letter. Please try again.</p>';
+        letterContainer.innerHTML = '<p class="letter-error">Error generating letter. Please try again.</p>';
         showNotification('Error: ' + error.message, 'error');
     }
 }
@@ -2268,12 +2092,12 @@ function downloadLetter(format) {
     var letterContainer = document.getElementById('letterContainer');
     if (!letterContainer) return;
     
-    var letterDiv = letterContainer.querySelector('div[style*="font-family: \'Times New Roman\'"]');
+    var letterDiv = letterContainer.querySelector('.letter-wrapper');
     var content = '';
     
     if (letterDiv) {
         var clone = letterDiv.cloneNode(true);
-        var buttonDivs = clone.querySelectorAll('div[style*="text-align: center"][style*="margin-top"]');
+        var buttonDivs = clone.querySelectorAll('.letter-download-buttons');
         buttonDivs.forEach(function(btn) {
             btn.remove();
         });
@@ -2281,7 +2105,7 @@ function downloadLetter(format) {
     } else {
         var tempDiv = document.createElement('div');
         tempDiv.innerHTML = letterContainer.innerHTML;
-        var allButtons = tempDiv.querySelectorAll('div[style*="text-align: center"][style*="margin-top"]');
+        var allButtons = tempDiv.querySelectorAll('.letter-download-buttons');
         allButtons.forEach(function(btn) {
             btn.remove();
         });
@@ -2297,12 +2121,12 @@ function downloadLetter(format) {
             return;
         }
         
-        win.document.write('<!DOCTYPE html><html><head><title>' + title + ' - Application Letter</title><meta charset="utf-8"><style>* { margin: 0; padding: 0; box-sizing: border-box; } body { background: white; font-family: \'Times New Roman\', Times, serif; line-height: 1.5; color: #000000; padding: 40px; } @page { margin: 1.5cm; size: A4; } @media print { body { padding: 0; } }</style></head><body>' + content + '<script>window.onload = function() { setTimeout(function() { window.print(); }, 500); }<\/script></body></html>');
+        win.document.write('<!DOCTYPE html><html><head><title>' + title + ' - Application Letter</title><meta charset="utf-8"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"><style>* { margin: 0; padding: 0; box-sizing: border-box; } body { background: white; font-family: \'Times New Roman\', Times, serif; line-height: 1.5; color: #000000; padding: 40px; } @page { margin: 1.5cm; size: A4; } @media print { body { padding: 0; } } .letter-wrapper { max-width: 800px; margin: 0 auto; padding: 60px 50px; background: white; } .letter-sender { text-align: right; margin-bottom: 20px; } .letter-sender-name { font-size: 16px; font-weight: 600; margin: 0; line-height: 1.8; } .letter-sender-line { font-size: 16px; font-weight: 600; margin: 0; line-height: 1.6; } .letter-date { text-align: right; margin-bottom: 30px; } .letter-date p { font-size: 16px; font-weight: 600; margin: 0; line-height: 1.6; } .letter-recipient { margin-bottom: 30px; } .letter-recipient p { font-size: 16px; font-weight: 600; margin: 0; line-height: 1.6; } .letter-salutation { margin-bottom: 12px; } .letter-salutation p { font-size: 16px; font-weight: 600; margin: 0; } .letter-subject { margin-bottom: 20px; } .letter-subject p { font-size: 18px; text-align: center; font-weight: 800; text-decoration: underline; margin: 0; text-transform: uppercase; } .letter-body { font-size: 15px; line-height: 1.8; margin-bottom: 30px; } .letter-body p { margin: 0 0 16px 0; text-indent: 0; } .letter-closing { margin-top: 30px; } .letter-closing p { font-size: 15px; margin: 0 0 4px 0; } .letter-signature { margin: 12px 0 4px 0; } .letter-signature img { max-width: 200px; max-height: 80px; display: block; } .letter-signature-space { height: 30px; } .letter-signature-name { font-size: 18px; font-weight: 700; margin: 8px 0 0 0; } .letter-download-buttons { display: none; }</style></head><body>' + content + '<script>window.onload = function() { setTimeout(function() { window.print(); }, 500); }<\/script></body></html>');
         win.document.close();
         
     } else if (format === 'word') {
-        var doc = '<!DOCTYPE html><html xmlns:o=\'urn:schemas-microsoft-com:office:office\' xmlns:w=\'urn:schemas-microsoft-com:office:word\' xmlns=\'http://www.w3.org/TR/REC-html40\'><head><meta charset="utf-8"><title>' + title + ' - Application Letter</title><!--[if gte mso 9]><xml><w:WordDocument><w:View>Print</w:View><w:Zoom>100</w:Zoom></w:WordDocument></xml><![endif]--><style>* { margin: 0; padding: 0; box-sizing: border-box; } body { background: white; font-family: \'Times New Roman\', Times, serif; line-height: 1.5; color: #000000; padding: 40px; } @page { margin: 1.5cm; } </style></head><body>' + content + '</body></html>';
-        
+        var doc = '<!DOCTYPE html><html xmlns:o=\'urn:schemas-microsoft-com:office:office\' xmlns:w=\'urn:schemas-microsoft-com:office:word\' xmlns=\'http://www.w3.org/TR/REC-html40\'><head><meta charset="utf-8"><title>' + title + ' - Application Letter</title><!--[if gte mso 9]><xml><w:WordDocument><w:View>Print</w:View><w:Zoom>100</w:Zoom></w:WordDocument></xml><![endif]--><style>* { margin: 0; padding: 0; box-sizing: border-box; } body { background: white; font-family: \'Times New Roman\', Times, serif; line-height: 1.5; color: #000000; padding: 40px; } @page { margin: 1.5cm; } .letter-wrapper { max-width: 800px; margin: 0 auto; padding: 60px 50px; background: white; } .letter-sender { text-align: right; margin-bottom: 20px; } .letter-sender-name { font-size: 16px; font-weight: 600; margin: 0; line-height: 1.8; } .letter-sender-line { font-size: 16px; font-weight: 600; margin: 0; line-height: 1.6; } .letter-date { text-align: right; margin-bottom: 30px; } .letter-date p { font-size: 16px; font-weight: 600; margin: 0; line-height: 1.6; } .letter-recipient { margin-bottom: 30px; } .letter-recipient p { font-size: 16px; font-weight: 600; margin: 0; line-height: 1.6; } .letter-salutation { margin-bottom: 12px; } .letter-salutation p { font-size: 16px; font-weight: 600; margin: 0; } .letter-subject { margin-bottom: 20px; } .letter-subject p { font-size: 18px; text-align: center; font-weight: 800; text-decoration: underline; margin: 0; text-transform: uppercase; } .letter-body { font-size: 15px; line-height: 1.8; margin-bottom: 30px; } .letter-body p { margin: 0 0 16px 0; text-indent: 0; } .letter-closing { margin-top: 30px; } .letter-closing p { font-size: 15px; margin: 0 0 4px 0; } .letter-signature { margin: 12px 0 4px 0; } .letter-signature img { max-width: 200px; max-height: 80px; display: block; } .letter-signature-space { height: 30px; } .letter-signature-name { font-size: 18px; font-weight: 700; margin: 8px 0 0 0; }</style></head><body>' + content + '</body></html>';
+
         var blob = new Blob([doc], { type: 'application/msword;charset=utf-8' });
         var link = document.createElement('a');
         link.href = URL.createObjectURL(blob);
@@ -2326,24 +2150,24 @@ function downloadCV(format) {
         return;
     }
 
-    var cvDiv = container.querySelector('div[style*="font-family: \'Times New Roman\'"]');
+    var cvDiv = container.querySelector('.cv-generic') || container.querySelector('.cv-professional');
     var content = '';
     
     if (cvDiv) {
         var clone = cvDiv.cloneNode(true);
-        var buttonDivs = clone.querySelectorAll('div[style*="text-align: center"][style*="margin-top"]');
+        var buttonDivs = clone.querySelectorAll('.cv-button-container');
         buttonDivs.forEach(function(btn) {
             btn.remove();
         });
-        var letterContainer = clone.querySelector('#letterContainer');
-        if (letterContainer) {
-            letterContainer.remove();
+        var letterCont = clone.querySelector('#letterContainer');
+        if (letterCont) {
+            letterCont.remove();
         }
         content = clone.outerHTML;
     } else {
         var tempDiv = document.createElement('div');
         tempDiv.innerHTML = container.innerHTML;
-        var allButtons = tempDiv.querySelectorAll('div[style*="text-align: center"][style*="margin-top"]');
+        var allButtons = tempDiv.querySelectorAll('.cv-button-container');
         allButtons.forEach(function(btn) {
             btn.remove();
         });
