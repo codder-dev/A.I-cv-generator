@@ -593,6 +593,8 @@ async function updateCVWithAI() {
             return;
         }
 
+        // Store and display
+        window._updatedCVContent = updatedCV;
         displayUpdatedCV(updatedCV);
         showNotification('✅ CV updated successfully!', 'success');
 
@@ -650,6 +652,10 @@ function cleanAIResponse(response) {
     return response;
 }
 
+// ==========================================
+// DISPLAY UPDATED CV WITH DOWNLOAD BUTTONS
+// ==========================================
+
 function displayUpdatedCV(content) {
     const container = document.getElementById('cvPreviewContainer');
     if (!container) {
@@ -659,6 +665,7 @@ function displayUpdatedCV(content) {
 
     console.log('📄 Displaying updated CV. Content length:', content.length);
 
+    // Format the content
     let formattedContent = content;
     
     if (!content.includes('<') && !content.includes('>')) {
@@ -678,19 +685,52 @@ function displayUpdatedCV(content) {
         }).join('');
     }
 
+    // Build the full HTML with visible download buttons
     const fullHtml = `
-        <div style="font-family: 'Times New Roman', Times, serif; max-width: 100%; margin: 0 auto; background: white; padding: 30px 25px; border: 1px solid #e0dbd3; border-radius: 8px; line-height: 1.5; overflow: hidden;">
+        <!-- UPDATED CV CONTENT -->
+        <div style="font-family: 'Times New Roman', Times, serif; max-width: 100%; margin: 0 auto; background: white; padding: 30px 25px; border: 1px solid #e0dbd3; border-radius: 8px 8px 0 0; line-height: 1.5; overflow: hidden;">
             ${formattedContent}
         </div>
-        <div style="margin-top: 25px; padding-top: 20px; border-top: 2px solid #c9a84c; text-align: center;">
-            <p style="font-size: 14px; color: #6b645a; margin-bottom: 12px; font-family: 'Times New Roman', Times, serif;">
-                <i class="fas fa-check-circle" style="color: #22c55e;"></i> Your CV has been updated successfully!
+        
+        <!-- DOWNLOAD BUTTONS - ALWAYS VISIBLE -->
+        <div style="margin-top: 0; padding: 20px 25px; background: #faf8f4; border: 1px solid #e0dbd3; border-top: 2px solid #c9a84c; border-radius: 0 0 8px 8px; text-align: center;">
+            <p style="font-size: 14px; color: #22c55e; margin-bottom: 14px; font-family: 'Times New Roman', Times, serif; font-weight: 600;">
+                <i class="fas fa-check-circle"></i> Your CV has been updated successfully!
             </p>
             <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
-                <button onclick="downloadUpdatedCV('pdf')" style="padding: 12px 28px; font-size: 15px; background: #c9a84c; color: #0b2a35; border: none; border-radius: 999px; font-weight: 700; cursor: pointer; transition: all 0.3s ease; font-family: 'Times New Roman', Times, serif; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 16px rgba(201, 168, 76, 0.3);">
+                <button onclick="downloadUpdatedCV('pdf')" style="
+                    padding: 12px 30px; 
+                    font-size: 15px; 
+                    background: #c9a84c; 
+                    color: #0b2a35; 
+                    border: none; 
+                    border-radius: 999px; 
+                    font-weight: 700; 
+                    cursor: pointer; 
+                    transition: all 0.3s ease; 
+                    font-family: 'Times New Roman', Times, serif; 
+                    display: inline-flex; 
+                    align-items: center; 
+                    gap: 8px; 
+                    box-shadow: 0 4px 16px rgba(201, 168, 76, 0.3);
+                ">
                     <i class="fas fa-file-pdf"></i> Download PDF
                 </button>
-                <button onclick="downloadUpdatedCV('word')" style="padding: 12px 28px; font-size: 15px; background: transparent; color: #0b2a35; border: 2px solid #0b2a35; border-radius: 999px; font-weight: 700; cursor: pointer; transition: all 0.3s ease; font-family: 'Times New Roman', Times, serif; display: inline-flex; align-items: center; gap: 8px;">
+                <button onclick="downloadUpdatedCV('word')" style="
+                    padding: 12px 30px; 
+                    font-size: 15px; 
+                    background: transparent; 
+                    color: #0b2a35; 
+                    border: 2px solid #0b2a35; 
+                    border-radius: 999px; 
+                    font-weight: 700; 
+                    cursor: pointer; 
+                    transition: all 0.3s ease; 
+                    font-family: 'Times New Roman', Times, serif; 
+                    display: inline-flex; 
+                    align-items: center; 
+                    gap: 8px;
+                ">
                     <i class="fas fa-file-word"></i> Download Word
                 </button>
             </div>
@@ -699,8 +739,7 @@ function displayUpdatedCV(content) {
 
     container.innerHTML = fullHtml;
     container.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    window._updatedCVContent = content;
-    console.log('✅ Updated CV displayed successfully!');
+    console.log('✅ Updated CV displayed successfully with download buttons!');
 }
 
 // ==========================================
@@ -719,8 +758,6 @@ function downloadUpdatedCV(format) {
     const nameInput = document.getElementById('fullName');
     const name = nameInput?.value?.trim() || 'Updated_CV';
     const fileName = name.replace(/\s+/g, '_');
-
-    console.log('📄 File name:', fileName);
 
     if (format === 'pdf') {
         const win = window.open('', '_blank');
@@ -829,7 +866,6 @@ function downloadUpdatedCV(format) {
 window.clearUploadedFile = clearUploadedFile;
 window.downloadUpdatedCV = downloadUpdatedCV;
 window.updateCVWithAI = updateCVWithAI;
-
 // ==========================================
 // DOM READY
 // ==========================================
