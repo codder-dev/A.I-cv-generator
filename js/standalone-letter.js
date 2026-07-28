@@ -2,35 +2,7 @@
 // STANDALONE APPLICATION LETTER GENERATOR
 // ==========================================
 
-// =======================
-//PREVENT DEV TOOLS//
-// =======================
 
-//prevent right clicking//
-document.addEventListener('contextmenu', function(e) {
-    e.preventDefault();
-    return false;
-});
-
-//prevent keyboard shortcuts//
-document.addEventListener('keydown', function(e) {
-    if (e.ctrlKey === 'F12') {
-        e.preventDefault();
-        return false;
-    }
-    if (e.ctrlKey && e.shiftKey === 'I') {
-        e.preventDefault();
-        return false;
-    }
-    if (e.ctrlKey && e.shiftKey === 'J') {
-        e.preventDefault();
-        return false;
-    }
-    if (e.ctrlKey && e.key === 'U') {
-        e.preventDefault();
-        return false;
-    }
-});
 
 // ==========================================
 // API URL DETECTION
