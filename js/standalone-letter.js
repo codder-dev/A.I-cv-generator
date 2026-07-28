@@ -40,7 +40,7 @@ var API_URL = '';
 if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
     API_URL = '/api/generate-cv';
 } else if (window.location.hostname.includes('github.io')) {
-    API_URL = 'https://a-i-cv-generator-3qfbft222-quixote.vercel.app/api/generate-cv';
+    API_URL = 'https://a-i-cv-generator.vercel.app/api/generate-cv';
 } else {
     API_URL = '/api/generate-cv';
 }
@@ -62,7 +62,7 @@ console.log('🌐 Standalone API URL:', API_URL);
         // ===== DOM Elements =====
         const form = document.getElementById('letterForm');
         if (!form) {
-            console.warn('⚠️ Letter form not found!');
+            console.warn('Letter form not found!');
             return;
         }
 

@@ -226,7 +226,7 @@ if (window.location.hostname === 'localhost' || window.location.hostname === '12
     API_URL = '/api/generate-cv';
 } else if (window.location.hostname.includes('github.io')) {
     // GitHub Pages - use Vercel API
-    API_URL = 'https://a-i-cv-generator-3qfbft222-quixote.vercel.app/api/generate-cv';
+    API_URL = 'https://a-i-cv-generator.vercel.app/api/generate-cv';
 } else {
     // Production on Vercel - use relative path
     API_URL = '/api/generate-cv';
@@ -1716,7 +1716,7 @@ function formatLetter(content, data) {
     html += '</div>';
     
     html += '<div style="margin-bottom: 20px;">';
-    html += '<p style="font-size: 18px; color: #070707; text-align: center; font-weight: 800; text-decoration: underline; font-family: \'Times New Roman\', Times, serif; margin: 0; text-transform: uppercase;"><strong>RE:</strong> APPLICATION FOR THE POSITION OF ' + position.toUpperCase() + '</p>';
+    html += '<p style="font-size: 18px; color: #000000; text-align: center; font-weight: 800; text-decoration: underline; font-family: \'Times New Roman\', Times, serif; margin: 0; text-transform: uppercase;"><strong>RE:</strong> APPLICATION FOR THE POSITION OF ' + position.toUpperCase() + '</p>';
     html += '</div>';
     
     html += '<div style="font-size: 15px; color: #000000; line-height: 1.8; font-family: \'Times New Roman\', Times, serif; margin-bottom: 30px;">';
@@ -1818,7 +1818,7 @@ async function generateApplicationLetter() {
         align-items: center;
         justify-content: center;
         padding: 20px;
-        backdrop-filter: blur(4px);
+        backdrop-filter: blur(15px);
     `;
     
     modal.innerHTML = `
