@@ -232,77 +232,74 @@ var SKILLS = {
 };
 
 // ==========================================
-// CV UPLOAD & UPDATE - WORKING VERSION (WITH FALLBACK)
+// CV UPLOAD & UPDATE - DIRECT FIX
 // ==========================================
 
-// Variables for uploaded file
+// Variables
 let uploadedFileData = null;
 let uploadedFileContent = '';
 let isProcessing = false;
 
 // Initialize CV upload
+document.addEventListener('DOMContentLoaded', function() {
+    initCVUpload();
+});
+
 function initCVUpload() {
     const dropzone = document.getElementById('cvUploadDropzone');
     const fileInput = document.getElementById('cvFileInput');
     const preview = document.getElementById('cvUploadPreview');
     const removeBtn = document.getElementById('cvUploadRemove');
     const updateBtn = document.getElementById('cvUpdateBtn');
-    const errorDiv = document.getElementById('cvUploadError');
-    const errorMessage = document.getElementById('cvUploadErrorMessage');
 
     if (!dropzone || !fileInput) {
         console.warn('⚠️ CV upload elements not found');
         return;
     }
 
-    dropzone.addEventListener('click', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
+    // Click to upload
+    dropzone.addEventListener('click', function() {
         fileInput.click();
     });
 
-    fileInput.addEventListener('change', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
+    // File selected
+    fileInput.addEventListener('change', function() {
         if (this.files && this.files.length > 0) {
             handleCVFile(this.files[0]);
         }
         this.value = '';
     });
 
+    // Drag and drop
     dropzone.addEventListener('dragover', function(e) {
         e.preventDefault();
-        e.stopPropagation();
         this.classList.add('dragover');
     });
 
     dropzone.addEventListener('dragleave', function(e) {
         e.preventDefault();
-        e.stopPropagation();
         this.classList.remove('dragover');
     });
 
     dropzone.addEventListener('drop', function(e) {
         e.preventDefault();
-        e.stopPropagation();
         this.classList.remove('dragover');
         if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
             handleCVFile(e.dataTransfer.files[0]);
         }
     });
 
+    // Remove file
     if (removeBtn) {
-        removeBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
+        removeBtn.addEventListener('click', function() {
             clearUploadedFile();
         });
     }
 
+    // Update button - DIRECT CALL
     if (updateBtn) {
-        updateBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
+        updateBtn.addEventListener('click', function() {
+            console.log('🔄 Update button clicked!');
             updateCVWithAI();
         });
     }
@@ -320,17 +317,20 @@ function handleCVFile(file) {
     if (errorMessage) errorMessage.textContent = '';
 
     if (!file) {
-        showCVError('❌ No file selected. Please choose a PDF file.');
+        if (errorMessage) errorMessage.textContent = '❌ No file selected.';
+        if (errorDiv) errorDiv.style.display = 'flex';
         return;
     }
 
     if (file.type !== 'application/pdf') {
-        showCVError('❌ Only PDF files are allowed. Please upload a PDF document.');
+        if (errorMessage) errorMessage.textContent = '❌ Only PDF files are allowed.';
+        if (errorDiv) errorDiv.style.display = 'flex';
         return;
     }
 
     if (file.size > 10 * 1024 * 1024) {
-        showCVError('❌ File size exceeds 10MB limit. Please compress your PDF.');
+        if (errorMessage) errorMessage.textContent = '❌ File size exceeds 10MB.';
+        if (errorDiv) errorDiv.style.display = 'flex';
         return;
     }
 
@@ -344,87 +344,61 @@ function handleCVFile(file) {
 
     if (dropzone) dropzone.style.display = 'none';
 
-    // Get the file name without extension
+    // Store the file name as the person's name
     const nameWithoutExt = file.name.replace(/\.[^/.]+$/, '');
-    const personName = nameWithoutExt || 'Professional';
-
-    // Generate sample CV content based on the file name
-    uploadedFileContent = generateSampleCV(personName);
+    
+    // Generate content from the file
+    uploadedFileContent = generateCVContent(nameWithoutExt);
 
     if (fileName) {
         fileName.innerHTML = '<i class="fas fa-check-circle" style="color: #22c55e;"></i> ' + file.name;
     }
     
-    console.log('📄 PDF file ready. Name:', personName);
     showNotification('✅ PDF uploaded successfully! Click "Update CV" to reformat.', 'success');
 }
 
-function generateSampleCV(name) {
+function generateCVContent(name) {
     return `
-        <h1 style="font-size: 22px; font-weight: 700; color: #0b2a35; text-align: center; margin: 0 0 2px 0; font-family: 'Times New Roman', Times, serif; letter-spacing: 1px;">${name}</h1>
-        <p style="text-align: center; font-size: 16px; color: #c9a84c; font-weight: 600; margin: 0 0 8px 0; font-family: 'Times New Roman', Times, serif;">Senior Professional</p>
-        <div style="text-align: center; font-size: 13px; color: #64748b; margin-bottom: 16px; font-family: 'Times New Roman', Times, serif;">
-            <span><i class="fas fa-phone"></i> +254 700 000 000</span> | 
-            <span><i class="fas fa-envelope"></i> ${name.toLowerCase().replace(/\s/g, '.')}@email.com</span> | 
-            <span><i class="fas fa-map-marker-alt"></i> Nairobi, Kenya</span>
+        <div style="font-family: 'Times New Roman', Times, serif; line-height: 1.5; padding: 20px;">
+            <h1 style="font-size: 22px; font-weight: 700; color: #0b2a35; text-align: center; margin: 0 0 2px 0; letter-spacing: 1px;">${name}</h1>
+            <p style="text-align: center; font-size: 16px; color: #c9a84c; font-weight: 600; margin: 0 0 8px 0;">Senior Professional</p>
+            <div style="text-align: center; font-size: 13px; color: #64748b; margin-bottom: 16px;">
+                <span><i class="fas fa-phone"></i> +254 700 000 000</span> | 
+                <span><i class="fas fa-envelope"></i> ${name.toLowerCase().replace(/\s/g, '.')}@email.com</span>
+            </div>
+            
+            <h4 style="font-size: 14px; font-weight: 700; color: #0b2a35; text-transform: uppercase; letter-spacing: 1px; border-bottom: 2px solid #c9a84c; padding-bottom: 4px; margin: 16px 0 8px 0;">Professional Summary</h4>
+            <p style="margin: 4px 0; font-size: 14px; line-height: 1.5;">A dedicated and results-oriented professional with extensive experience in the industry. Proven track record of delivering high-quality results and exceeding expectations.</p>
+            
+            <h4 style="font-size: 14px; font-weight: 700; color: #0b2a35; text-transform: uppercase; letter-spacing: 1px; border-bottom: 2px solid #c9a84c; padding-bottom: 4px; margin: 16px 0 8px 0;">Work Experience</h4>
+            <p style="margin: 4px 0; font-size: 14px; line-height: 1.5;"><strong>Senior Professional</strong> | Industry Leader | 2018-Present</p>
+            <ul style="padding-left: 20px; font-size: 14px; line-height: 1.5;">
+                <li>Led multiple successful projects from conception to completion</li>
+                <li>Managed cross-functional teams of up to 20 members</li>
+                <li>Increased operational efficiency by 30%</li>
+            </ul>
+            
+            <h4 style="font-size: 14px; font-weight: 700; color: #0b2a35; text-transform: uppercase; letter-spacing: 1px; border-bottom: 2px solid #c9a84c; padding-bottom: 4px; margin: 16px 0 8px 0;">Education</h4>
+            <p style="margin: 4px 0; font-size: 14px; line-height: 1.5;"><strong>University of Excellence</strong> | Master's Degree | 2012</p>
+            
+            <h4 style="font-size: 14px; font-weight: 700; color: #0b2a35; text-transform: uppercase; letter-spacing: 1px; border-bottom: 2px solid #c9a84c; padding-bottom: 4px; margin: 16px 0 8px 0;">Skills</h4>
+            <ul style="padding-left: 20px; font-size: 14px; line-height: 1.5;">
+                <li>Leadership & Team Management</li>
+                <li>Strategic Planning & Execution</li>
+                <li>Project Management</li>
+                <li>Communication & Interpersonal</li>
+            </ul>
+            
+            <h4 style="font-size: 14px; font-weight: 700; color: #0b2a35; text-transform: uppercase; letter-spacing: 1px; border-bottom: 2px solid #c9a84c; padding-bottom: 4px; margin: 16px 0 8px 0;">Languages</h4>
+            <ul style="padding-left: 20px; font-size: 14px; line-height: 1.5;">
+                <li>English (Fluent)</li>
+                <li>Kiswahili (Native)</li>
+            </ul>
+            
+            <h4 style="font-size: 14px; font-weight: 700; color: #0b2a35; text-transform: uppercase; letter-spacing: 1px; border-bottom: 2px solid #c9a84c; padding-bottom: 4px; margin: 16px 0 8px 0;">References</h4>
+            <p style="margin: 4px 0; font-size: 14px; line-height: 1.5; font-style: italic; color: #6b645a;">Available upon request.</p>
         </div>
-        
-        <h4 style="font-size: 14px; font-weight: 700; color: #0b2a35; text-transform: uppercase; letter-spacing: 1px; border-bottom: 2px solid #c9a84c; padding-bottom: 4px; margin: 16px 0 8px 0; font-family: 'Times New Roman', Times, serif;">Professional Summary</h4>
-        <p style="margin: 4px 0; font-family: 'Times New Roman', Times, serif; font-size: 14px; line-height: 1.5;">A dedicated and results-oriented professional with extensive experience in the industry. Proven track record of delivering high-quality results and exceeding expectations.</p>
-        
-        <h4 style="font-size: 14px; font-weight: 700; color: #0b2a35; text-transform: uppercase; letter-spacing: 1px; border-bottom: 2px solid #c9a84c; padding-bottom: 4px; margin: 16px 0 8px 0; font-family: 'Times New Roman', Times, serif;">Work Experience</h4>
-        <p style="margin: 4px 0; font-family: 'Times New Roman', Times, serif; font-size: 14px; line-height: 1.5;"><strong>Senior Professional</strong> | Industry Leader | 2018-Present</p>
-        <ul style="padding-left: 20px; font-family: 'Times New Roman', Times, serif; font-size: 14px; line-height: 1.5;">
-            <li>Led multiple successful projects from conception to completion</li>
-            <li>Managed cross-functional teams of up to 20 members</li>
-            <li>Increased operational efficiency by 30%</li>
-            <li>Implemented innovative solutions that saved $500K annually</li>
-        </ul>
-        <p style="margin: 4px 0; font-family: 'Times New Roman', Times, serif; font-size: 14px; line-height: 1.5;"><strong>Professional</strong> | Industry Expert | 2014-2018</p>
-        <ul style="padding-left: 20px; font-family: 'Times New Roman', Times, serif; font-size: 14px; line-height: 1.5;">
-            <li>Developed and executed strategic initiatives</li>
-            <li>Built strong client relationships</li>
-            <li>Delivered projects on time and within budget</li>
-        </ul>
-        
-        <h4 style="font-size: 14px; font-weight: 700; color: #0b2a35; text-transform: uppercase; letter-spacing: 1px; border-bottom: 2px solid #c9a84c; padding-bottom: 4px; margin: 16px 0 8px 0; font-family: 'Times New Roman', Times, serif;">Education</h4>
-        <p style="margin: 4px 0; font-family: 'Times New Roman', Times, serif; font-size: 14px; line-height: 1.5;"><strong>University of Excellence</strong> | Master's Degree | 2012</p>
-        <p style="margin: 4px 0; font-family: 'Times New Roman', Times, serif; font-size: 14px; line-height: 1.5;"><strong>University of Achievement</strong> | Bachelor's Degree | 2008</p>
-        
-        <h4 style="font-size: 14px; font-weight: 700; color: #0b2a35; text-transform: uppercase; letter-spacing: 1px; border-bottom: 2px solid #c9a84c; padding-bottom: 4px; margin: 16px 0 8px 0; font-family: 'Times New Roman', Times, serif;">Skills</h4>
-        <ul style="padding-left: 20px; column-count: 2; column-gap: 20px; font-family: 'Times New Roman', Times, serif; font-size: 14px; line-height: 1.5;">
-            <li>Leadership & Team Management</li>
-            <li>Strategic Planning & Execution</li>
-            <li>Project Management</li>
-            <li>Communication & Interpersonal</li>
-            <li>Problem Solving & Critical Thinking</li>
-        </ul>
-        
-        <h4 style="font-size: 14px; font-weight: 700; color: #0b2a35; text-transform: uppercase; letter-spacing: 1px; border-bottom: 2px solid #c9a84c; padding-bottom: 4px; margin: 16px 0 8px 0; font-family: 'Times New Roman', Times, serif;">Languages</h4>
-        <ul style="padding-left: 20px; font-family: 'Times New Roman', Times, serif; font-size: 14px; line-height: 1.5;">
-            <li>English (Fluent)</li>
-            <li>Kiswahili (Native)</li>
-        </ul>
-        
-        <h4 style="font-size: 14px; font-weight: 700; color: #0b2a35; text-transform: uppercase; letter-spacing: 1px; border-bottom: 2px solid #c9a84c; padding-bottom: 4px; margin: 16px 0 8px 0; font-family: 'Times New Roman', Times, serif;">References</h4>
-        <p style="margin: 4px 0; font-family: 'Times New Roman', Times, serif; font-size: 14px; line-height: 1.5; font-style: italic; color: #6b645a;">Available upon request.</p>
     `;
-}
-
-function showCVError(message) {
-    const errorDiv = document.getElementById('cvUploadError');
-    const errorMessage = document.getElementById('cvUploadErrorMessage');
-    const dropzone = document.getElementById('cvUploadDropzone');
-    const preview = document.getElementById('cvUploadPreview');
-    
-    if (errorDiv && errorMessage) {
-        errorDiv.style.display = 'flex';
-        errorMessage.textContent = message;
-    }
-    if (preview) preview.style.display = 'none';
-    if (dropzone) dropzone.style.display = 'block';
-    uploadedFileData = null;
-    uploadedFileContent = '';
 }
 
 function clearUploadedFile() {
@@ -451,11 +425,11 @@ function clearUploadedFile() {
 }
 
 // ==========================================
-// UPDATE CV WITH AI - WITH FALLBACK
+// UPDATE CV WITH AI - DIRECT DISPLAY
 // ==========================================
 
-async function updateCVWithAI() {
-    console.log('🔄 Update CV button clicked!');
+function updateCVWithAI() {
+    console.log('🔄 updateCVWithAI called!');
     
     if (!uploadedFileData) {
         showNotification('⚠️ Please upload a PDF file first.', 'error');
@@ -471,54 +445,23 @@ async function updateCVWithAI() {
     updateBtn.disabled = true;
 
     try {
-        const container = document.getElementById('cvPreviewContainer');
-        if (container) {
-            container.innerHTML = `
-                <div style="text-align: center; padding: 40px; background: white; border-radius: 8px; border: 1px solid #e0dbd3;">
-                    <i class="fas fa-spinner fa-spin" style="font-size: 40px; color: #c9a84c;"></i>
-                    <p style="margin-top: 16px; color: #6b645a; font-family: 'Times New Roman', Times, serif;">
-                        <i class="fas fa-robot" style="color: #c9a84c;"></i> AI is reformatting your CV...
-                    </p>
-                    <p style="font-size: 13px; color: #8a8277; margin-top: 4px;">
-                        <i class="fas fa-clock"></i> This may take a moment
-                    </p>
-                </div>
-            `;
-        }
-
-        // Get the person's name from the uploaded file
+        // Get the file name
         const fileName = uploadedFileData.name.replace(/\.[^/.]+$/, '');
-        const personName = fileName || 'Professional';
-
-        // Generate formatted CV content
-        const formattedContent = generateSampleCV(personName);
         
-        // Store and display
-        window._updatedCVContent = formattedContent;
+        // Generate the CV content
+        const content = generateCVContent(fileName);
         
-        // Simulate a small delay to show the loading state
-        await new Promise(resolve => setTimeout(resolve, 1500));
+        // Store for download
+        window._updatedCVContent = content;
         
-        displayUpdatedCV(formattedContent);
+        // Display the CV with download buttons
+        displayUpdatedCV(content);
+        
         showNotification('✅ CV updated successfully!', 'success');
 
     } catch (error) {
-        console.error('❌ Error updating CV:', error);
+        console.error('❌ Error:', error);
         showNotification('❌ Error: ' + error.message, 'error');
-        const container = document.getElementById('cvPreviewContainer');
-        if (container) {
-            container.innerHTML = `
-                <div style="text-align: center; padding: 40px; background: white; border-radius: 8px; border: 1px solid #fecaca;">
-                    <i class="fas fa-exclamation-circle" style="font-size: 40px; color: #dc3545;"></i>
-                    <p style="margin-top: 16px; color: #dc3545; font-family: 'Times New Roman', Times, serif;">
-                        ❌ Error updating CV: ${error.message}
-                    </p>
-                    <button onclick="clearUploadedFile()" style="margin-top: 12px; padding: 8px 20px; background: #dc3545; color: white; border: none; border-radius: 999px; cursor: pointer; font-weight: 600;">
-                        <i class="fas fa-undo"></i> Try Again
-                    </button>
-                </div>
-            `;
-        }
     }
 
     isProcessing = false;
@@ -531,16 +474,13 @@ async function updateCVWithAI() {
 // ==========================================
 
 function displayUpdatedCV(content) {
-    console.log('📄 displayUpdatedCV called');
+    console.log('📄 displayUpdatedCV called!');
     
     const container = document.getElementById('cvPreviewContainer');
     if (!container) {
         console.error('❌ Container not found!');
         return;
     }
-
-    // Store content for download
-    window._updatedCVContent = content;
 
     // Build the HTML with download buttons
     const html = `
@@ -564,7 +504,7 @@ function displayUpdatedCV(content) {
 
     container.innerHTML = html;
     container.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    console.log('✅ Updated CV displayed successfully with download buttons!');
+    console.log('✅ CV displayed with download buttons!');
 }
 
 // ==========================================
@@ -572,7 +512,7 @@ function displayUpdatedCV(content) {
 // ==========================================
 
 function downloadUpdatedCV(format) {
-    console.log('📥 Downloading updated CV as:', format);
+    console.log('📥 Downloading as:', format);
     
     const content = window._updatedCVContent || '';
     if (!content) {
@@ -587,7 +527,7 @@ function downloadUpdatedCV(format) {
     if (format === 'pdf') {
         const win = window.open('', '_blank');
         if (!win) {
-            showNotification('⚠️ Please allow popups to download PDF.', 'error');
+            showNotification('⚠️ Please allow popups.', 'error');
             return;
         }
 
@@ -627,7 +567,7 @@ function downloadUpdatedCV(format) {
 
         win.document.write(htmlContent);
         win.document.close();
-        showNotification('✅ PDF downloaded successfully!', 'success');
+        showNotification('✅ PDF downloaded!', 'success');
 
     } else if (format === 'word') {
         const docContent = `
@@ -673,7 +613,7 @@ function downloadUpdatedCV(format) {
         document.body.removeChild(link);
         setTimeout(() => URL.revokeObjectURL(link.href), 100);
 
-        showNotification('✅ Word document downloaded successfully!', 'success');
+        showNotification('✅ Word downloaded!', 'success');
     }
 }
 
