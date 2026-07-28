@@ -1385,55 +1385,55 @@ function displayGeneratedCV(generatedText, data) {
     }
     setTimeout(refreshAOS, 100);
 }
-
 // ==========================================
-// RENDER GENERIC CV
+// RENDER GENERIC CV - WITH CLASSES
 // ==========================================
 function renderGenericCV(summary, experience, education, skills, languages, references, data) {
     var p = data.personal;
     var photo = data.photo || '';
 
     var html = '';
-    html += '<div style="font-family: \'Times New Roman\', Times, serif; max-width: 900px; margin: 0 auto; background: white; padding: 40px; border: 1px solid #e0dbd3; border-radius: 8px;">';
+    // Use classes instead of inline styles
+    html += '<div class="cv-generic">';
     
-    html += '<div style="text-align: center; border-bottom: 2px solid #0b2a35; padding-bottom: 20px; margin-bottom: 20px;">';
+    html += '<div class="cv-header">';
     if (photo) {
-        html += '<div style="width: 100px; height: 100px; border-radius: 50%; overflow: hidden; margin: 0 auto 15px; border: 3px solid #c9a84c;">';
-        html += '<img src="' + photo + '" alt="' + p.fullName + '" style="width: 100%; height: 100%; object-fit: cover;">';
+        html += '<div class="cv-photo-wrapper">';
+        html += '<img src="' + photo + '" alt="' + p.fullName + '" class="cv-photo-img">';
         html += '</div>';
     }
-    html += '<h1 style="font-size: 28px; font-weight: 700; color: #0b2a35; margin: 0 0 4px 0; font-family: \'Times New Roman\', Times, serif; letter-spacing: 1px;">' + (p.fullName || 'Your Name') + '</h1>';
-    html += '<p style="font-size: 18px; color: #c9a84c; font-weight: 600; margin: 0; font-family: \'Times New Roman\', Times, serif;">' + (p.jobTitle || 'Professional') + '</p>';
-    html += '<div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; font-size: 13px; color: #64748b; margin-top: 8px; font-family: \'Times New Roman\', Times, serif;">';
+    html += '<h1 class="cv-name-heading">' + (p.fullName || 'Your Name') + '</h1>';
+    html += '<p class="cv-job-title">' + (p.jobTitle || 'Professional') + '</p>';
+    html += '<div class="cv-contact-info">';
     if (p.email) html += '<span><i class="fas fa-envelope"></i> ' + p.email + '</span>';
     if (p.phone) html += '<span><i class="fas fa-phone"></i> ' + p.phone + '</span>';
     if (p.address) html += '<span><i class="fas fa-map-marker-alt"></i> ' + p.address + '</span>';
     html += '</div></div>';
 
-    html += '<div style="line-height: 1.5; font-family: \'Times New Roman\', Times, serif; color: #2a2520;">';
+    html += '<div class="cv-body">';
 
     if (summary) {
-        html += '<div style="margin-bottom: 20px;">';
-        html += '<h3 style="font-size: 14px; font-weight: 700; color: #0b2a35; text-transform: uppercase; letter-spacing: 1px; border-bottom: 2px solid #c9a84c; padding-bottom: 6px; margin-bottom: 10px; font-family: \'Times New Roman\', Times, serif;">PROFESSIONAL SUMMARY</h3>';
-        html += '<p style="font-size: 14px; color: #2a2520; line-height: 1.8; font-family: \'Times New Roman\', Times, serif; text-align: justify;">' + summary + '</p>';
+        html += '<div class="cv-section">';
+        html += '<h3 class="cv-section-title">PROFESSIONAL SUMMARY</h3>';
+        html += '<p class="cv-summary-text">' + summary + '</p>';
         html += '</div>';
     }
 
     if (experience && experience.length > 0 && experience[0].title) {
-        html += '<div style="margin-bottom: 20px;">';
-        html += '<h3 style="font-size: 14px; font-weight: 700; color: #0b2a35; text-transform: uppercase; letter-spacing: 1px; border-bottom: 2px solid #c9a84c; padding-bottom: 6px; margin-bottom: 10px; font-family: \'Times New Roman\', Times, serif;">WORK EXPERIENCE</h3>';
+        html += '<div class="cv-section">';
+        html += '<h3 class="cv-section-title">WORK EXPERIENCE</h3>';
         experience.forEach(function(e) {
-            html += '<div style="margin-bottom: 12px;">';
-            html += '<div style="display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap;">';
-            html += '<strong style="font-size: 14px; color: #0b2a35; font-family: \'Times New Roman\', Times, serif;">' + (e.company || 'Company') + ' | ' + (e.title || 'Position') + '</strong>';
-            if (e.date) html += '<span style="font-size: 12px; color: #6b645a; font-family: \'Times New Roman\', Times, serif;">' + e.date + '</span>';
+            html += '<div class="cv-exp-item">';
+            html += '<div class="cv-exp-header">';
+            html += '<strong class="cv-exp-company">' + (e.company || 'Company') + ' | ' + (e.title || 'Position') + '</strong>';
+            if (e.date) html += '<span class="cv-exp-date">' + e.date + '</span>';
             html += '</div>';
             if (e.description) {
                 var descLines = e.description.split('\n');
-                html += '<ul style="padding-left: 20px; margin-top: 4px; font-size: 13px; color: #2a2520; line-height: 1.6; font-family: \'Times New Roman\', Times, serif;">';
+                html += '<ul class="cv-exp-desc-list">';
                 descLines.forEach(function(line) {
                     if (line.trim()) {
-                        html += '<li style="margin-bottom: 4px;">' + line.trim() + '</li>';
+                        html += '<li>' + line.trim() + '</li>';
                     }
                 });
                 html += '</ul>';
@@ -1444,10 +1444,10 @@ function renderGenericCV(summary, experience, education, skills, languages, refe
     }
 
     if (education && education.length > 0) {
-        html += '<div style="margin-bottom: 20px;">';
-        html += '<h3 style="font-size: 14px; font-weight: 700; color: #0b2a35; text-transform: uppercase; letter-spacing: 1px; border-bottom: 2px solid #c9a84c; padding-bottom: 6px; margin-bottom: 10px; font-family: \'Times New Roman\', Times, serif;">EDUCATION</h3>';
+        html += '<div class="cv-section">';
+        html += '<h3 class="cv-section-title">EDUCATION</h3>';
         education.forEach(function(e) {
-            html += '<div style="margin-bottom: 6px; font-size: 14px; color: #2a2520; font-family: \'Times New Roman\', Times, serif;">';
+            html += '<div class="cv-edu-item">';
             html += '<strong>' + (e.school || 'Institution') + '</strong> | ' + (e.qualification || 'Qualification');
             if (e.field && e.field.trim()) html += ' in ' + e.field;
             if (e.year) html += ' | ' + e.year;
@@ -1457,38 +1457,38 @@ function renderGenericCV(summary, experience, education, skills, languages, refe
     }
 
     if (skills && skills.length > 0) {
-        html += '<div style="margin-bottom: 20px;">';
-        html += '<h3 style="font-size: 14px; font-weight: 700; color: #0b2a35; text-transform: uppercase; letter-spacing: 1px; border-bottom: 2px solid #c9a84c; padding-bottom: 6px; margin-bottom: 10px; font-family: \'Times New Roman\', Times, serif;">SKILLS</h3>';
-        html += '<ul style="padding-left: 20px; margin-top: 6px; font-size: 13px; color: #2a2520; line-height: 1.6; font-family: \'Times New Roman\', Times, serif; column-count: 2; column-gap: 30px;">';
+        html += '<div class="cv-section">';
+        html += '<h3 class="cv-section-title">SKILLS</h3>';
+        html += '<ul class="cv-skills-list">';
         skills.forEach(function(s) {
-            html += '<li style="margin-bottom: 4px;">' + s + '</li>';
+            html += '<li>' + s + '</li>';
         });
         html += '</ul></div>';
     }
 
-    html += '<div style="margin-bottom: 20px;">';
-    html += '<h3 style="font-size: 14px; font-weight: 700; color: #0b2a35; text-transform: uppercase; letter-spacing: 1px; border-bottom: 2px solid #c9a84c; padding-bottom: 6px; margin-bottom: 10px; font-family: \'Times New Roman\', Times, serif;">LANGUAGES</h3>';
-    html += '<ul style="padding-left: 20px; margin-top: 6px; font-size: 14px; color: #2a2520; font-family: \'Times New Roman\', Times, serif;">';
+    html += '<div class="cv-section">';
+    html += '<h3 class="cv-section-title">LANGUAGES</h3>';
+    html += '<ul class="cv-languages-list">';
     if (languages && languages.length > 0) {
         languages.forEach(function(l) {
-            html += '<li style="margin-bottom: 4px;">' + l + '</li>';
+            html += '<li>' + l + '</li>';
         });
     } else {
-        html += '<li style="margin-bottom: 4px;">English (Fluent)</li>';
-        html += '<li style="margin-bottom: 4px;">Kiswahili (Native)</li>';
+        html += '<li>English (Fluent)</li>';
+        html += '<li>Kiswahili (Native)</li>';
     }
     html += '</ul></div>';
 
-    html += '<div>';
-    html += '<h3 style="font-size: 14px; font-weight: 700; color: #0b2a35; text-transform: uppercase; letter-spacing: 1px; border-bottom: 2px solid #c9a84c; padding-bottom: 6px; margin-bottom: 10px; font-family: \'Times New Roman\', Times, serif;">REFERENCES</h3>';
+    html += '<div class="cv-section">';
+    html += '<h3 class="cv-section-title">REFERENCES</h3>';
     if (references && references.length > 0 && references[0].name) {
-        html += '<ul style="padding-left: 20px; font-size: 14px; color: #2a2520; font-family: \'Times New Roman\', Times, serif;">';
+        html += '<ul class="cv-references-list">';
         references.forEach(function(r) {
-            html += '<li style="margin-bottom: 4px;">' + r.name + (r.details ? ' - ' + r.details : '') + '</li>';
+            html += '<li>' + r.name + (r.details ? ' - ' + r.details : '') + '</li>';
         });
         html += '</ul>';
     } else {
-        html += '<p style="font-size: 14px; color: #6b645a; font-style: italic; font-family: \'Times New Roman\', Times, serif;">Available upon request.</p>';
+        html += '<p class="cv-references-text">Available upon request.</p>';
     }
     html += '</div></div></div>';
 
@@ -1496,78 +1496,79 @@ function renderGenericCV(summary, experience, education, skills, languages, refe
 }
 
 // ==========================================
-// RENDER PROFESSIONAL CV
+// RENDER PROFESSIONAL CV - WITH CLASSES
 // ==========================================
 function renderProfessionalCV(summary, experience, education, skills, languages, references, data) {
     var p = data.personal;
     var photo = data.photo || '';
 
     var html = '';
-    html += '<div style="font-family: \'Times New Roman\', Times, serif; max-width: 1000px; margin: 0 auto; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.08); border: 1px solid #e0dbd3;">';
-    html += '<div style="display: grid; grid-template-columns: 1fr 2.5fr; gap: 0; min-height: 500px;">';
+    html += '<div class="cv-professional">';
+    html += '<div class="cv-prof-grid">';
     
-    html += '<div style="background: #0b2a35; color: white; padding: 30px 24px; font-family: \'Times New Roman\', Times, serif;">';
-
+    // Sidebar
+    html += '<div class="cv-prof-sidebar">';
     if (photo) {
-        html += '<div style="width: 120px; height: 120px; border-radius: 50%; overflow: hidden; margin: 0 auto 20px; border: 3px solid #c9a84c;">';
-        html += '<img src="' + photo + '" alt="' + p.fullName + '" style="width: 100%; height: 100%; object-fit: cover;">';
+        html += '<div class="cv-photo-wrapper">';
+        html += '<img src="' + photo + '" alt="' + p.fullName + '" class="cv-photo-img">';
         html += '</div>';
     }
-    html += '<h2 style="font-size: 20px; font-weight: 700; text-align: center; color: white; margin-bottom: 2px; font-family: \'Times New Roman\', Times, serif;">' + (p.fullName || 'Your Name') + '</h2>';
-    html += '<p style="text-align: center; color: #c9a84c; font-weight: 600; font-size: 14px; margin-bottom: 20px; font-family: \'Times New Roman\', Times, serif;">' + (p.jobTitle || 'Professional') + '</p>';
+    html += '<h2 class="cv-prof-name">' + (p.fullName || 'Your Name') + '</h2>';
+    html += '<p class="cv-prof-title">' + (p.jobTitle || 'Professional') + '</p>';
 
-    html += '<div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 16px; margin-bottom: 16px;">';
-    html += '<h4 style="color: #c9a84c; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; font-family: \'Times New Roman\', Times, serif;">CONTACT</h4>';
-    if (p.email) html += '<div style="font-size: 13px; color: rgba(255,255,255,0.8); margin-bottom: 4px; font-family: \'Times New Roman\', Times, serif; word-break: break-all;"><i class="fas fa-envelope" style="width: 18px;"></i> ' + p.email + '</div>';
-    if (p.phone) html += '<div style="font-size: 13px; color: rgba(255,255,255,0.8); margin-bottom: 4px; font-family: \'Times New Roman\', Times, serif;"><i class="fas fa-phone" style="width: 18px;"></i> ' + p.phone + '</div>';
-    if (p.address) html += '<div style="font-size: 13px; color: rgba(255,255,255,0.8); font-family: \'Times New Roman\', Times, serif;"><i class="fas fa-map-marker-alt" style="width: 18px;"></i> ' + p.address + '</div>';
+    html += '<div class="cv-prof-contact">';
+    html += '<h4>CONTACT</h4>';
+    if (p.email) html += '<div><i class="fas fa-envelope"></i> ' + p.email + '</div>';
+    if (p.phone) html += '<div><i class="fas fa-phone"></i> ' + p.phone + '</div>';
+    if (p.address) html += '<div><i class="fas fa-map-marker-alt"></i> ' + p.address + '</div>';
     html += '</div>';
 
     if (skills && skills.length > 0) {
-        html += '<div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 16px; margin-bottom: 16px;">';
-        html += '<h4 style="color: #c9a84c; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; font-family: \'Times New Roman\', Times, serif;">SKILLS</h4>';
-        html += '<ul style="padding-left: 20px; margin: 0; font-size: 13px; color: rgba(255,255,255,0.8); font-family: \'Times New Roman\', Times, serif;">';
+        html += '<div class="cv-prof-skills">';
+        html += '<h4>SKILLS</h4>';
+        html += '<ul>';
         skills.forEach(function(s) {
-            html += '<li style="margin-bottom: 4px;">' + s + '</li>';
+            html += '<li>' + s + '</li>';
         });
         html += '</ul></div>';
     }
 
     if (languages && languages.length > 0) {
-        html += '<div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 16px;">';
-        html += '<h4 style="color: #c9a84c; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; font-family: \'Times New Roman\', Times, serif;">LANGUAGES</h4>';
-        html += '<ul style="padding-left: 20px; margin: 0; font-size: 13px; color: rgba(255,255,255,0.8); font-family: \'Times New Roman\', Times, serif;">';
+        html += '<div class="cv-prof-languages">';
+        html += '<h4>LANGUAGES</h4>';
+        html += '<ul>';
         languages.forEach(function(l) {
-            html += '<li style="margin-bottom: 4px;">' + l + '</li>';
+            html += '<li>' + l + '</li>';
         });
         html += '</ul></div>';
     }
     html += '</div>';
 
-    html += '<div style="padding: 30px 28px; line-height: 1.5; font-family: \'Times New Roman\', Times, serif; color: #2a2520;">';
+    // Main content
+    html += '<div class="cv-prof-main">';
 
     if (summary) {
-        html += '<div style="margin-bottom: 20px;">';
-        html += '<h4 style="color: #0b2a35; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; border-bottom: 2px solid #c9a84c; padding-bottom: 6px; margin-bottom: 10px; font-family: \'Times New Roman\', Times, serif;">PROFESSIONAL SUMMARY</h4>';
-        html += '<p style="font-size: 14px; color: #2a2520; line-height: 1.8; font-family: \'Times New Roman\', Times, serif; text-align: justify;">' + summary + '</p>';
+        html += '<div class="cv-section">';
+        html += '<h4 class="cv-section-title">PROFESSIONAL SUMMARY</h4>';
+        html += '<p class="cv-summary-text">' + summary + '</p>';
         html += '</div>';
     }
 
     if (experience && experience.length > 0 && experience[0].title) {
-        html += '<div style="margin-bottom: 20px;">';
-        html += '<h4 style="color: #0b2a35; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; border-bottom: 2px solid #c9a84c; padding-bottom: 6px; margin-bottom: 12px; font-family: \'Times New Roman\', Times, serif;">WORK EXPERIENCE</h4>';
+        html += '<div class="cv-section">';
+        html += '<h4 class="cv-section-title">WORK EXPERIENCE</h4>';
         experience.forEach(function(e) {
-            html += '<div style="margin-bottom: 14px;">';
-            html += '<div style="display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap;">';
-            html += '<strong style="font-size: 15px; color: #0b2a35; font-family: \'Times New Roman\', Times, serif;">' + (e.company || 'Company') + ' | ' + (e.title || 'Position') + '</strong>';
-            if (e.date) html += '<span style="font-size: 13px; color: #6b645a; font-family: \'Times New Roman\', Times, serif;">' + e.date + '</span>';
+            html += '<div class="cv-exp-item">';
+            html += '<div class="cv-exp-header">';
+            html += '<strong>' + (e.company || 'Company') + ' | ' + (e.title || 'Position') + '</strong>';
+            if (e.date) html += '<span>' + e.date + '</span>';
             html += '</div>';
             if (e.description) {
                 var descLines = e.description.split('\n');
-                html += '<ul style="padding-left: 20px; margin-top: 4px; font-size: 13px; color: #2a2520; line-height: 1.5; font-family: \'Times New Roman\', Times, serif;">';
+                html += '<ul>';
                 descLines.forEach(function(line) {
                     if (line.trim()) {
-                        html += '<li style="margin-bottom: 4px;">' + line.trim() + '</li>';
+                        html += '<li>' + line.trim() + '</li>';
                     }
                 });
                 html += '</ul>';
@@ -1578,10 +1579,10 @@ function renderProfessionalCV(summary, experience, education, skills, languages,
     }
 
     if (education && education.length > 0) {
-        html += '<div style="margin-bottom: 16px;">';
-        html += '<h4 style="color: #0b2a35; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; border-bottom: 2px solid #c9a84c; padding-bottom: 6px; margin-bottom: 10px; font-family: \'Times New Roman\', Times, serif;">EDUCATION</h4>';
+        html += '<div class="cv-section">';
+        html += '<h4 class="cv-section-title">EDUCATION</h4>';
         education.forEach(function(e) {
-            html += '<div style="margin-bottom: 8px; font-size: 14px; color: #2a2520; font-family: \'Times New Roman\', Times, serif;">';
+            html += '<div class="cv-edu-item">';
             html += '<strong>' + (e.school || 'Institution') + '</strong> | ' + (e.qualification || 'Qualification');
             if (e.field && e.field.trim()) html += ' in ' + e.field;
             if (e.year) html += ' | ' + e.year;
@@ -1590,16 +1591,16 @@ function renderProfessionalCV(summary, experience, education, skills, languages,
         html += '</div>';
     }
 
-    html += '<div>';
-    html += '<h4 style="color: #0b2a35; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; border-bottom: 2px solid #c9a84c; padding-bottom: 6px; margin-bottom: 10px; font-family: \'Times New Roman\', Times, serif;">REFERENCES</h4>';
+    html += '<div class="cv-section">';
+    html += '<h4 class="cv-section-title">REFERENCES</h4>';
     if (references && references.length > 0 && references[0].name) {
-        html += '<ul style="padding-left: 20px; font-size: 14px; color: #2a2520; font-family: \'Times New Roman\', Times, serif;">';
+        html += '<ul>';
         references.forEach(function(r) {
-            html += '<li style="margin-bottom: 4px;">' + r.name + (r.details ? ' - ' + r.details : '') + '</li>';
+            html += '<li>' + r.name + (r.details ? ' - ' + r.details : '') + '</li>';
         });
         html += '</ul>';
     } else {
-        html += '<p style="font-size: 14px; color: #6b645a; font-style: italic; font-family: \'Times New Roman\', Times, serif;">Available upon request.</p>';
+        html += '<p>Available upon request.</p>';
     }
     html += '</div></div></div></div>';
 

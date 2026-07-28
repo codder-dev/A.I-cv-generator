@@ -2565,6 +2565,505 @@ nav ul li.active a i {
         transform: rotate(360deg);
     }
 }
+/* ============================================
+   GENERATED CV PREVIEW - MOBILE STYLES
+   ============================================ */
+
+/* Generic CV Preview */
+#cvPreviewContainer .cv-generic {
+    font-family: 'Times New Roman', Times, serif;
+    max-width: 100%;
+    margin: 0 auto;
+    background: white;
+    padding: 30px 20px;
+    border: 1px solid #e0dbd3;
+    border-radius: 8px;
+    overflow: hidden;
+    word-wrap: break-word;
+}
+
+#cvPreviewContainer .cv-generic .cv-header {
+    text-align: center;
+    border-bottom: 2px solid #0b2a35;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+}
+
+#cvPreviewContainer .cv-generic .cv-photo-wrapper {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin: 0 auto 15px;
+    border: 3px solid #c9a84c;
+}
+
+#cvPreviewContainer .cv-generic .cv-photo-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+#cvPreviewContainer .cv-generic .cv-name-heading {
+    font-size: 28px;
+    font-weight: 700;
+    color: #0b2a35;
+    margin: 0 0 4px 0;
+    font-family: 'Times New Roman', Times, serif;
+    letter-spacing: 1px;
+}
+
+#cvPreviewContainer .cv-generic .cv-job-title {
+    font-size: 18px;
+    color: #c9a84c;
+    font-weight: 600;
+    margin: 0;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+#cvPreviewContainer .cv-generic .cv-contact-info {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    font-size: 13px;
+    color: #64748b;
+    margin-top: 8px;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+#cvPreviewContainer .cv-generic .cv-contact-info span {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+#cvPreviewContainer .cv-generic .cv-body {
+    line-height: 1.5;
+    font-family: 'Times New Roman', Times, serif;
+    color: #2a2520;
+}
+
+#cvPreviewContainer .cv-generic .cv-section {
+    margin-bottom: 20px;
+}
+
+#cvPreviewContainer .cv-generic .cv-section-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #0b2a35;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 2px solid #c9a84c;
+    padding-bottom: 6px;
+    margin-bottom: 10px;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+#cvPreviewContainer .cv-generic .cv-summary-text {
+    font-size: 14px;
+    color: #2a2520;
+    line-height: 1.8;
+    font-family: 'Times New Roman', Times, serif;
+    text-align: justify;
+}
+
+#cvPreviewContainer .cv-generic .cv-exp-item {
+    margin-bottom: 12px;
+}
+
+#cvPreviewContainer .cv-generic .cv-exp-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+#cvPreviewContainer .cv-generic .cv-exp-company {
+    font-size: 14px;
+    color: #0b2a35;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+#cvPreviewContainer .cv-generic .cv-exp-date {
+    font-size: 12px;
+    color: #6b645a;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+#cvPreviewContainer .cv-generic .cv-exp-desc-list {
+    padding-left: 20px;
+    margin-top: 4px;
+    font-size: 13px;
+    color: #2a2520;
+    line-height: 1.6;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+#cvPreviewContainer .cv-generic .cv-exp-desc-list li {
+    margin-bottom: 4px;
+}
+
+#cvPreviewContainer .cv-generic .cv-edu-item {
+    margin-bottom: 6px;
+    font-size: 14px;
+    color: #2a2520;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+#cvPreviewContainer .cv-generic .cv-skills-list,
+#cvPreviewContainer .cv-generic .cv-languages-list,
+#cvPreviewContainer .cv-generic .cv-references-list {
+    padding-left: 20px;
+    margin-top: 6px;
+    font-size: 13px;
+    color: #2a2520;
+    line-height: 1.6;
+    font-family: 'Times New Roman', Times, serif;
+    column-count: 2;
+    column-gap: 30px;
+}
+
+#cvPreviewContainer .cv-generic .cv-skills-list li,
+#cvPreviewContainer .cv-generic .cv-languages-list li,
+#cvPreviewContainer .cv-generic .cv-references-list li {
+    margin-bottom: 4px;
+}
+
+#cvPreviewContainer .cv-generic .cv-references-text {
+    font-size: 14px;
+    color: #6b645a;
+    font-style: italic;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+/* ============================================
+   PROFESSIONAL CV PREVIEW - MOBILE STYLES
+   ============================================ */
+
+#cvPreviewContainer .cv-professional {
+    font-family: 'Times New Roman', Times, serif;
+    max-width: 100%;
+    margin: 0 auto;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e0dbd3;
+}
+
+#cvPreviewContainer .cv-professional .cv-prof-grid {
+    display: grid;
+    grid-template-columns: 1fr 2.5fr;
+    gap: 0;
+    min-height: 500px;
+}
+
+#cvPreviewContainer .cv-professional .cv-prof-sidebar {
+    background: #0b2a35;
+    color: white;
+    padding: 30px 24px;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+#cvPreviewContainer .cv-professional .cv-photo-wrapper {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin: 0 auto 20px;
+    border: 3px solid #c9a84c;
+}
+
+#cvPreviewContainer .cv-professional .cv-photo-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+#cvPreviewContainer .cv-professional .cv-prof-name {
+    font-size: 20px;
+    font-weight: 700;
+    text-align: center;
+    color: white;
+    margin-bottom: 2px;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+#cvPreviewContainer .cv-professional .cv-prof-title {
+    text-align: center;
+    color: #c9a84c;
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 20px;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+#cvPreviewContainer .cv-professional .cv-prof-contact {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 16px;
+    margin-bottom: 16px;
+}
+
+#cvPreviewContainer .cv-professional .cv-prof-contact h4,
+#cvPreviewContainer .cv-professional .cv-prof-skills h4,
+#cvPreviewContainer .cv-professional .cv-prof-languages h4 {
+    color: #c9a84c;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+#cvPreviewContainer .cv-professional .cv-prof-contact div {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 4px;
+    font-family: 'Times New Roman', Times, serif;
+    word-break: break-all;
+}
+
+#cvPreviewContainer .cv-professional .cv-prof-contact div i {
+    width: 18px;
+}
+
+#cvPreviewContainer .cv-professional .cv-prof-skills,
+#cvPreviewContainer .cv-professional .cv-prof-languages {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 16px;
+    margin-bottom: 16px;
+}
+
+#cvPreviewContainer .cv-professional .cv-prof-skills ul,
+#cvPreviewContainer .cv-professional .cv-prof-languages ul {
+    padding-left: 20px;
+    margin: 0;
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.8);
+    font-family: 'Times New Roman', Times, serif;
+}
+
+#cvPreviewContainer .cv-professional .cv-prof-skills ul li,
+#cvPreviewContainer .cv-professional .cv-prof-languages ul li {
+    margin-bottom: 4px;
+}
+
+#cvPreviewContainer .cv-professional .cv-prof-main {
+    padding: 30px 28px;
+    line-height: 1.5;
+    font-family: 'Times New Roman', Times, serif;
+    color: #2a2520;
+}
+
+#cvPreviewContainer .cv-professional .cv-section {
+    margin-bottom: 20px;
+}
+
+#cvPreviewContainer .cv-professional .cv-section-title {
+    color: #0b2a35;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 700;
+    border-bottom: 2px solid #c9a84c;
+    padding-bottom: 6px;
+    margin-bottom: 10px;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+#cvPreviewContainer .cv-professional .cv-summary-text {
+    font-size: 14px;
+    color: #2a2520;
+    line-height: 1.8;
+    font-family: 'Times New Roman', Times, serif;
+    text-align: justify;
+}
+
+#cvPreviewContainer .cv-professional .cv-exp-item {
+    margin-bottom: 14px;
+}
+
+#cvPreviewContainer .cv-professional .cv-exp-item .cv-exp-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+#cvPreviewContainer .cv-professional .cv-exp-item .cv-exp-header strong {
+    font-size: 15px;
+    color: #0b2a35;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+#cvPreviewContainer .cv-professional .cv-exp-item .cv-exp-header span {
+    font-size: 13px;
+    color: #6b645a;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+#cvPreviewContainer .cv-professional .cv-exp-item ul {
+    padding-left: 20px;
+    margin-top: 4px;
+    font-size: 13px;
+    color: #2a2520;
+    line-height: 1.5;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+#cvPreviewContainer .cv-professional .cv-exp-item ul li {
+    margin-bottom: 4px;
+}
+
+#cvPreviewContainer .cv-professional .cv-edu-item {
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: #2a2520;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+#cvPreviewContainer .cv-professional .cv-edu-item strong {
+    color: #0b2a35;
+}
+
+#cvPreviewContainer .cv-professional .cv-section ul {
+    padding-left: 20px;
+    font-size: 14px;
+    color: #2a2520;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+#cvPreviewContainer .cv-professional .cv-section ul li {
+    margin-bottom: 4px;
+}
+
+/* ============================================
+   MOBILE RESPONSIVE - GENERATED CV
+   ============================================ */
+
+@media (max-width: 768px) {
+    /* Generic CV Mobile */
+    #cvPreviewContainer .cv-generic {
+        padding: 20px 16px;
+    }
+    
+    #cvPreviewContainer .cv-generic .cv-name-heading {
+        font-size: 22px;
+    }
+    
+    #cvPreviewContainer .cv-generic .cv-job-title {
+        font-size: 16px;
+    }
+    
+    #cvPreviewContainer .cv-generic .cv-contact-info {
+        gap: 10px;
+        font-size: 12px;
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    #cvPreviewContainer .cv-generic .cv-skills-list,
+    #cvPreviewContainer .cv-generic .cv-languages-list {
+        column-count: 1;
+        column-gap: 0;
+    }
+    
+    #cvPreviewContainer .cv-generic .cv-exp-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 2px;
+    }
+    
+    /* Professional CV Mobile */
+    #cvPreviewContainer .cv-professional .cv-prof-grid {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+    
+    #cvPreviewContainer .cv-professional .cv-prof-sidebar {
+        padding: 20px 16px;
+        order: 2;
+    }
+    
+    #cvPreviewContainer .cv-professional .cv-prof-main {
+        padding: 20px 16px;
+        order: 1;
+    }
+    
+    #cvPreviewContainer .cv-professional .cv-photo-wrapper {
+        width: 90px;
+        height: 90px;
+    }
+    
+    #cvPreviewContainer .cv-professional .cv-prof-name {
+        font-size: 18px;
+    }
+    
+    #cvPreviewContainer .cv-professional .cv-prof-title {
+        font-size: 13px;
+    }
+    
+    #cvPreviewContainer .cv-professional .cv-exp-item .cv-exp-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 2px;
+    }
+}
+
+@media (max-width: 480px) {
+    #cvPreviewContainer .cv-generic .cv-name-heading {
+        font-size: 18px;
+    }
+    
+    #cvPreviewContainer .cv-generic .cv-job-title {
+        font-size: 14px;
+    }
+    
+    #cvPreviewContainer .cv-generic .cv-photo-wrapper {
+        width: 70px;
+        height: 70px;
+    }
+    
+    #cvPreviewContainer .cv-generic .cv-summary-text {
+        font-size: 13px;
+    }
+    
+    #cvPreviewContainer .cv-professional .cv-photo-wrapper {
+        width: 70px;
+        height: 70px;
+    }
+    
+    #cvPreviewContainer .cv-professional .cv-prof-name {
+        font-size: 16px;
+    }
+    
+    #cvPreviewContainer .cv-professional .cv-exp-item .cv-exp-header strong {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 360px) {
+    #cvPreviewContainer .cv-generic .cv-name-heading {
+        font-size: 16px;
+    }
+    
+    #cvPreviewContainer .cv-generic .cv-photo-wrapper {
+        width: 60px;
+        height: 60px;
+    }
+    
+    #cvPreviewContainer .cv-professional .cv-photo-wrapper {
+        width: 60px;
+        height: 60px;
+    }
+    
+    #cvPreviewContainer .cv-professional .cv-prof-name {
+        font-size: 14px;
+    }
+}
 
 /* ============================================
    RESPONSIVE - MOBILE FIRST
