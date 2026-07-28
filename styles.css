@@ -5368,6 +5368,78 @@ nav ul li.active a i {
         font-size: 11px !important;
     }
 }
+/* ============================================
+   FIX: MAIN FEATURES ON MOBILE
+   ============================================ */
+
+@media (max-width: 768px) {
+    /* Fix main features grid - stack vertically */
+    .main-features {
+        grid-template-columns: 1fr !important;
+        gap: 12px !important;
+    }
+    
+    .main-features .feature-item {
+        padding: 14px 16px !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        gap: 14px !important;
+    }
+    
+    .main-features .feature-item i {
+        font-size: 18px !important;
+        width: 30px !important;
+        flex-shrink: 0 !important;
+    }
+    
+    .main-features .feature-item span {
+        font-size: 14px !important;
+        line-height: 1.4 !important;
+    }
+    
+    /* Fix main content padding */
+    .main-content {
+        padding: 30px 16px !important;
+    }
+    
+    .main-content-inner {
+        grid-template-columns: 1fr !important;
+        gap: 30px !important;
+    }
+    
+    .main-text h2 {
+        font-size: 24px !important;
+        line-height: 1.2 !important;
+    }
+    
+    .main-text p {
+        font-size: 14px !important;
+        max-width: 100% !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .main-features .feature-item {
+        padding: 12px 14px !important;
+    }
+    
+    .main-features .feature-item i {
+        font-size: 16px !important;
+        width: 26px !important;
+    }
+    
+    .main-features .feature-item span {
+        font-size: 13px !important;
+    }
+    
+    .main-text h2 {
+        font-size: 20px !important;
+    }
+    
+    .main-text p {
+        font-size: 13px !important;
+    }
+}
 
 /* ============================================
    ACCESSIBILITY & UTILITY
