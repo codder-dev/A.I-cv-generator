@@ -1210,200 +1210,70 @@ nav ul li.active a i {
     background: rgba(201, 168, 76, 0.05);
 }
 /* ============================================
-   CV UPLOAD & UPDATE SECTION
+   CV DOWNLOAD SECTION
    ============================================ */
 
-.cv-upload-section {
-    margin-bottom: 30px;
-}
-
-.cv-upload-container {
-    background: var(--white);
-    border-radius: var(--radius-lg);
-    padding: 30px;
-    box-shadow: var(--shadow-md);
-    border: 1px solid var(--gray-200);
-}
-
-.cv-upload-header {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    margin-bottom: 20px;
-}
-
-.cv-upload-icon {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    background: rgba(201, 168, 76, 0.12);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-}
-
-.cv-upload-icon i {
-    font-size: 22px;
-    color: var(--gold);
-}
-
-.cv-upload-title h3 {
-    font-size: 18px;
-    font-weight: 700;
-    color: var(--primary);
-    font-family: var(--font-heading);
-    margin-bottom: 2px;
-}
-
-.cv-upload-title h3 i {
-    color: var(--gold);
-    margin-right: 8px;
-}
-
-.cv-upload-title p {
-    font-size: 14px;
-    color: var(--gray-500);
-    margin: 0;
-}
-
-.cv-upload-title p i {
-    color: var(--gold);
-    margin-right: 6px;
-}
-
-.cv-upload-area {
-    margin-top: 4px;
-}
-
-.cv-upload-dropzone {
-    border: 2px dashed var(--gray-300);
-    border-radius: var(--radius);
-    padding: 50px 20px;
-    text-align: center;
-    cursor: pointer;
-    transition: var(--transition);
-    background: var(--off-white);
-}
-
-.cv-upload-dropzone:hover {
-    border-color: var(--gold);
-    background: rgba(201, 168, 76, 0.03);
-}
-
-.cv-upload-dropzone.dragover {
-    border-color: var(--gold);
-    background: rgba(201, 168, 76, 0.08);
-}
-
-.cv-upload-dropzone i {
-    font-size: 48px;
-    color: var(--gold);
-    margin-bottom: 12px;
-}
-
-.cv-upload-dropzone h4 {
-    font-size: 16px;
-    font-weight: 600;
-    color: var(--primary);
-    margin-bottom: 4px;
-}
-
-.cv-upload-dropzone h4 i {
-    font-size: 16px;
-    color: var(--gold);
-    margin-right: 6px;
-}
-
-.cv-upload-dropzone p {
-    font-size: 13px;
-    color: var(--gray-500);
-}
-
-.cv-upload-dropzone p i {
-    font-size: 12px;
-    color: var(--gold);
-    margin-right: 4px;
-}
-
-.cv-upload-preview {
+.cv-download-section {
     display: none;
-    border: 2px solid var(--gray-200);
-    border-radius: var(--radius);
+    margin-top: 20px;
     padding: 20px;
-    background: var(--off-white);
+    background: #faf8f4;
+    border-radius: 12px;
+    border: 2px solid #c9a84c;
+    text-align: center;
+    animation: fadeInUp 0.5s ease;
 }
 
-.cv-upload-preview .cv-upload-file-info {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    margin-bottom: 16px;
-    padding-bottom: 16px;
-    border-bottom: 1px solid var(--gray-200);
-}
-
-.cv-upload-preview .cv-upload-file-info i {
-    font-size: 32px;
-    color: var(--gold);
-}
-
-.cv-upload-preview .cv-upload-file-info .file-name {
-    font-weight: 600;
-    font-size: 14px;
-    color: var(--gray-700);
+.cv-download-section.show {
     display: block;
 }
 
-.cv-upload-preview .cv-upload-file-info .file-size {
-    font-size: 12px;
-    color: var(--gray-500);
-}
-
-.cv-upload-preview .cv-upload-remove {
-    background: none;
-    border: none;
-    color: var(--gray-400);
-    cursor: pointer;
-    font-size: 18px;
-    padding: 4px 8px;
-    border-radius: 6px;
-    transition: var(--transition);
-    margin-left: auto;
-}
-
-.cv-upload-preview .cv-upload-remove:hover {
-    color: #dc3545;
-    background: #fff5f5;
-}
-
-.cv-upload-actions {
-    display: flex;
-    gap: 12px;
-}
-
-.cv-upload-actions .btn {
-    flex: 1;
-    justify-content: center;
-}
-
-.cv-upload-error {
-    background: #fff5f5;
-    border: 1px solid #fecaca;
-    border-radius: var(--radius);
-    padding: 12px 16px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    color: #dc3545;
+.cv-download-section p {
     font-size: 14px;
-    font-weight: 500;
+    color: #22c55e;
+    margin-bottom: 14px;
+    font-weight: 600;
+    font-family: 'Times New Roman', Times, serif;
 }
 
-.cv-upload-error i {
-    font-size: 18px;
-    color: #dc3545;
+.cv-download-section .btn-download-pdf,
+.cv-download-section .btn-download-word {
+    padding: 12px 30px;
+    font-size: 15px;
+    border-radius: 999px;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Times New Roman', Times, serif;
+    transition: all 0.3s ease;
 }
+
+.cv-download-section .btn-download-pdf {
+    background: #c9a84c;
+    color: #0b2a35;
+    border: none;
+    box-shadow: 0 4px 16px rgba(201, 168, 76, 0.3);
+}
+
+.cv-download-section .btn-download-pdf:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(201, 168, 76, 0.4);
+}
+
+.cv-download-section .btn-download-word {
+    background: transparent;
+    color: #0b2a35;
+    border: 2px solid #0b2a35;
+}
+
+.cv-download-section .btn-download-word:hover {
+    background: #0b2a35;
+    color: white;
+    transform: translateY(-2px);
+}
+
 
 
 
@@ -4039,6 +3909,20 @@ nav ul li.active a i {
         width: 100% !important;
     }
 }
+@media (max-width: 768px) {
+    .cv-download-section {
+        padding: 16px !important;
+    }
+    
+    .cv-download-section .btn-download-pdf,
+    .cv-download-section .btn-download-word {
+        width: 100% !important;
+        justify-content: center !important;
+        padding: 10px 20px !important;
+        font-size: 13px !important;
+    }
+}
+
 /* ===== MOBILE (768px) - EVERYTHING STACKS ===== */
 @media (max-width: 768px) {
     
