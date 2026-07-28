@@ -3428,6 +3428,7 @@ nav ul li.active a i {
     transform: translateY(-2px);
     box-shadow: 0 12px 32px rgba(201, 168, 76, 0.4);
 }
+
 /* ============================================
    WHY CHOOSE US - FIXED FOR MOBILE
    ============================================ */
@@ -3529,7 +3530,252 @@ nav ul li.active a i {
 }
 
 /* ============================================
-   MOBILE RESPONSIVENESS - FINAL FIX
+   WHY CHOOSE US - MOBILE RESPONSIVE
+   ============================================ */
+
+@media (max-width: 768px) {
+    .why-choose-section {
+        padding: 30px 16px !important;
+    }
+    
+    .why-choose-header h2 {
+        font-size: 26px !important;
+    }
+    
+    .why-choose-header p {
+        font-size: 15px !important;
+        padding: 0 10px !important;
+    }
+    
+    .why-choose-grid {
+        grid-template-columns: 1fr !important;
+        gap: 16px !important;
+    }
+    
+    .why-choose-card {
+        padding: 20px 16px !important;
+        width: 100% !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .why-choose-header h2 {
+        font-size: 22px !important;
+    }
+    
+    .why-choose-card {
+        padding: 16px 14px !important;
+    }
+    
+    .why-choose-card h3 {
+        font-size: 16px !important;
+    }
+    
+    .why-choose-card p {
+        font-size: 13px !important;
+    }
+}
+
+/* ============================================
+   CAROUSEL - MOBILE RESPONSIVE FIX
+   ============================================ */
+
+/* Tablets & Small Laptops (1024px and below) */
+@media (max-width: 1024px) {
+    .hero-carousel {
+        height: 80vh;
+        min-height: 500px;
+    }
+    .carousel-slide .carousel-image {
+        height: 80vh;
+    }
+    .carousel-caption h1 {
+        font-size: 40px;
+    }
+    .carousel-caption p {
+        font-size: 16px;
+    }
+    .hero-buttons {
+        bottom: 25%;
+    }
+}
+
+/* Tablets & Large Phones (768px and below) */
+@media (max-width: 768px) {
+    .hero-carousel {
+        height: 70vh !important;
+        min-height: 400px !important;
+        margin-top: 64px !important;
+    }
+    
+    .carousel-slide .carousel-image {
+        height: 100% !important;
+        object-fit: cover !important;
+    }
+    
+    .carousel-caption {
+        top: 35% !important;
+        left: 5% !important;
+        right: 5% !important;
+        transform: translateY(-50%) !important;
+        max-width: 100% !important;
+        padding: 0 10px !important;
+    }
+    
+    .carousel-caption .badge {
+        font-size: 10px !important;
+        padding: 4px 14px !important;
+        margin-bottom: 10px !important;
+    }
+    
+    .carousel-caption h1 {
+        font-size: 26px !important;
+        line-height: 1.2 !important;
+        margin-bottom: 8px !important;
+    }
+    
+    .carousel-caption p {
+        font-size: 14px !important;
+        max-width: 100% !important;
+        line-height: 1.5 !important;
+    }
+    
+    .carousel-controls {
+        padding: 0 12px !important;
+    }
+    
+    .carousel-controls .prev,
+    .carousel-controls .next {
+        width: 36px !important;
+        height: 36px !important;
+        font-size: 14px !important;
+    }
+    
+    .carousel-indicators {
+        bottom: 20px !important;
+        gap: 6px !important;
+    }
+    
+    .carousel-indicators .indicator {
+        width: 24px !important;
+        height: 2px !important;
+    }
+    
+    .carousel-indicators .indicator.active {
+        width: 34px !important;
+    }
+    
+    .hero-buttons {
+        bottom: 15% !important;
+        left: 5% !important;
+        right: 5% !important;
+        gap: 8px !important;
+    }
+    
+    .hero-buttons .btn-primary,
+    .hero-buttons .btn-secondary,
+    .hero-buttons .btn-prysec {
+        padding: 10px 18px !important;
+        font-size: 12px !important;
+        width: 100% !important;
+        justify-content: center !important;
+        gap: 6px !important;
+        text-align: center !important;
+    }
+}
+
+/* Small Phones (480px and below) */
+@media (max-width: 480px) {
+    .hero-carousel {
+        height: 65vh !important;
+        min-height: 350px !important;
+        margin-top: 58px !important;
+    }
+    
+    .carousel-caption {
+        top: 30% !important;
+    }
+    
+    .carousel-caption .badge {
+        font-size: 9px !important;
+        padding: 3px 10px !important;
+        margin-bottom: 6px !important;
+    }
+    
+    .carousel-caption h1 {
+        font-size: 22px !important;
+    }
+    
+    .carousel-caption p {
+        font-size: 13px !important;
+    }
+    
+    .carousel-controls .prev,
+    .carousel-controls .next {
+        width: 30px !important;
+        height: 30px !important;
+        font-size: 12px !important;
+    }
+    
+    .carousel-indicators .indicator {
+        width: 18px !important;
+        height: 2px !important;
+    }
+    
+    .carousel-indicators .indicator.active {
+        width: 26px !important;
+    }
+    
+    .hero-buttons {
+        bottom: 12% !important;
+        gap: 6px !important;
+    }
+    
+    .hero-buttons .btn-primary,
+    .hero-buttons .btn-secondary,
+    .hero-buttons .btn-prysec {
+        padding: 8px 14px !important;
+        font-size: 11px !important;
+    }
+}
+
+/* Extra Small Phones (360px and below) */
+@media (max-width: 360px) {
+    .hero-carousel {
+        height: 60vh !important;
+        min-height: 300px !important;
+    }
+    
+    .carousel-caption h1 {
+        font-size: 18px !important;
+    }
+    
+    .carousel-caption p {
+        font-size: 12px !important;
+    }
+    
+    .carousel-caption .badge {
+        font-size: 8px !important;
+        padding: 2px 8px !important;
+    }
+    
+    .carousel-controls .prev,
+    .carousel-controls .next {
+        width: 26px !important;
+        height: 26px !important;
+        font-size: 10px !important;
+    }
+    
+    .hero-buttons .btn-primary,
+    .hero-buttons .btn-secondary,
+    .hero-buttons .btn-prysec {
+        padding: 6px 12px !important;
+        font-size: 10px !important;
+    }
+}
+
+/* ============================================
+   MOBILE RESPONSIVENESS - MAIN
    ============================================ */
 
 /* ===== TABLET (1024px) ===== */
@@ -3540,9 +3786,6 @@ nav ul li.active a i {
     }
     .logo-container h1 {
         font-size: 22px;
-    }
-    .carousel-caption h1 {
-        font-size: 40px;
     }
     .main-text h2 {
         font-size: 32px;
@@ -3625,75 +3868,6 @@ nav ul li.active a i {
     }
     .navbar-overlay.active {
         display: block !important;
-    }
-
-    /* ----- HERO CAROUSEL ----- */
-    .hero-carousel {
-        height: 55vh !important;
-        min-height: 300px !important;
-        margin-top: 64px !important;
-    }
-    .carousel-slide .carousel-image {
-        height: 100% !important;
-        object-fit: cover !important;
-    }
-    .carousel-caption {
-        top: 30% !important;
-        left: 5% !important;
-        right: 5% !important;
-        transform: translateY(-50%) !important;
-        max-width: 100% !important;
-        padding: 0 10px !important;
-    }
-    .carousel-caption .badge {
-        font-size: 10px !important;
-        padding: 4px 12px !important;
-        margin-bottom: 8px !important;
-    }
-    .carousel-caption h1 {
-        font-size: 22px !important;
-        line-height: 1.2 !important;
-        margin-bottom: 8px !important;
-    }
-    .carousel-caption p {
-        font-size: 13px !important;
-        max-width: 100% !important;
-        line-height: 1.5 !important;
-    }
-    .carousel-controls {
-        padding: 0 10px !important;
-    }
-    .carousel-controls .prev,
-    .carousel-controls .next {
-        width: 30px !important;
-        height: 30px !important;
-        font-size: 12px !important;
-    }
-    .carousel-indicators {
-        bottom: 15px !important;
-        gap: 6px !important;
-    }
-    .carousel-indicators .indicator {
-        width: 18px !important;
-        height: 2px !important;
-    }
-    .carousel-indicators .indicator.active {
-        width: 28px !important;
-    }
-    .hero-buttons {
-        bottom: 12% !important;
-        left: 5% !important;
-        right: 5% !important;
-        gap: 8px !important;
-    }
-    .hero-buttons .btn-primary,
-    .hero-buttons .btn-secondary,
-    .hero-buttons .btn-prysec {
-        padding: 10px 18px !important;
-        font-size: 12px !important;
-        width: 100% !important;
-        justify-content: center !important;
-        gap: 6px !important;
     }
 
     /* ===== MAIN CONTENT - STACKS ===== */
@@ -4214,33 +4388,6 @@ nav ul li.active a i {
 
 /* ===== SMALL PHONES (480px) ===== */
 @media (max-width: 480px) {
-    .hero-carousel {
-        height: 50vh !important;
-        min-height: 260px !important;
-    }
-    .carousel-caption h1 {
-        font-size: 18px !important;
-    }
-    .carousel-caption p {
-        font-size: 12px !important;
-    }
-    .carousel-caption .badge {
-        font-size: 9px !important;
-        padding: 3px 10px !important;
-        margin-bottom: 6px !important;
-    }
-    .carousel-controls .prev,
-    .carousel-controls .next {
-        width: 26px !important;
-        height: 26px !important;
-        font-size: 10px !important;
-    }
-    .hero-buttons .btn-primary,
-    .hero-buttons .btn-secondary,
-    .hero-buttons .btn-prysec {
-        padding: 8px 14px !important;
-        font-size: 11px !important;
-    }
     .main-text h2 {
         font-size: 20px !important;
     }
@@ -4304,20 +4451,6 @@ nav ul li.active a i {
 
 /* ===== EXTRA SMALL PHONES (360px) ===== */
 @media (max-width: 360px) {
-    .hero-carousel {
-        height: 45vh !important;
-        min-height: 220px !important;
-    }
-    .carousel-caption h1 {
-        font-size: 16px !important;
-    }
-    .carousel-caption p {
-        font-size: 11px !important;
-    }
-    .carousel-caption .badge {
-        font-size: 8px !important;
-        padding: 2px 8px !important;
-    }
     .main-text h2 {
         font-size: 18px !important;
     }
@@ -4447,53 +4580,5 @@ textarea:focus-visible {
     }
     .page-header-content h1 .highlight {
         color: var(--gold-dark);
-    }
-}
-
-
-/* ============================================
-   WHY CHOOSE US - MOBILE RESPONSIVE
-   ============================================ */
-
-@media (max-width: 768px) {
-    .why-choose-section {
-        padding: 30px 16px !important;
-    }
-    
-    .why-choose-header h2 {
-        font-size: 26px !important;
-    }
-    
-    .why-choose-header p {
-        font-size: 15px !important;
-        padding: 0 10px !important;
-    }
-    
-    .why-choose-grid {
-        grid-template-columns: 1fr !important;
-        gap: 16px !important;
-    }
-    
-    .why-choose-card {
-        padding: 20px 16px !important;
-        width: 100% !important;
-    }
-}
-
-@media (max-width: 480px) {
-    .why-choose-header h2 {
-        font-size: 22px !important;
-    }
-    
-    .why-choose-card {
-        padding: 16px 14px !important;
-    }
-    
-    .why-choose-card h3 {
-        font-size: 16px !important;
-    }
-    
-    .why-choose-card p {
-        font-size: 13px !important;
     }
 }
