@@ -720,7 +720,54 @@ function validateDuplicateSchools() {
     
     return !hasDuplicate;
 }
+// VALIDATE DUPLICATE QUALIFICATIONS
+function validateDuplicateQualifications() {
+    // Get ALL qualification select dropdowns on the page
+    // These are all the <select class="edu-qualification"> elements
+    var qualificationSelects = document.querySelectorAll('.edu-qualification');
+    
+    // Array to store qualification values we've already seen
+    var qualificationValues = [];
+    
+    // Flag to track if we found any duplicates
+    var hasDuplicate = false;
 
+    // Loop through each qualification select dropdown
+    qualificationSelects.forEach(function(selectElement) {
+        // Get the selected value and remove extra spaces
+        var selectedValue = selectElement.value.trim();
+        
+        // Only check if a value is selected (not empty)
+        if (selectedValue) {
+            // Check if this qualification was already selected in another entry
+            if (qualificationValues.indexOf(selectedValue) !== -1) {
+                // DUPLICATE FOUND!
+                
+                // 1. Add error class to highlight the select in red
+                selectElement.classList.add('error');
+                
+                // 2. Find the error message element for this specific select
+                //    It's inside the same .form-group container
+                var errorElement = selectElement.closest('.form-group').querySelector('.field-error');
+                
+                // 3. Show the error message
+                if (errorElement) {
+                    errorElement.textContent = 'Duplicate qualification! You have already selected "' + selectedValue + '"';
+                    errorElement.classList.add('show');
+                }
+                
+                // 4. Mark that we found a duplicate
+                hasDuplicate = true;
+            } else {
+                // NOT a duplicate - add this qualification to our tracking list
+                qualificationValues.push(selectedValue);
+            }
+        }
+    });
+    
+    // Return true if duplicates were found, false if not
+    return hasDuplicate;
+}
 // ==========================================
 // EDUCATION ENTRIES
 // ==========================================
