@@ -3430,12 +3430,42 @@ nav ul li.active a i {
 }
 
 /* ============================================
-   RESPONSIVE - MOBILE FIXES
+   MOBILE RESPONSIVENESS - EVERYTHING STACKS
    ============================================ */
 
-/* Mobile (768px and below) */
+/* ===== DESKTOP TO TABLET (1024px) ===== */
+@media (max-width: 1024px) {
+    .navbar {
+        padding: 14px 28px;
+        min-height: 74px;
+    }
+    .logo-container h1 {
+        font-size: 22px;
+    }
+    .carousel-caption h1 {
+        font-size: 40px;
+    }
+    .main-text h2 {
+        font-size: 32px;
+    }
+    .page-header-content h1 {
+        font-size: 36px;
+    }
+    .stats-container {
+        gap: 24px;
+    }
+    .generator-container {
+        padding: 30px 28px 60px;
+    }
+    .cv-type-selector {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* ===== TABLET TO PHONE (768px) ===== */
 @media (max-width: 768px) {
-    /* ===== NAVBAR ===== */
+    
+    /* ----- NAVBAR ----- */
     .navbar {
         padding: 12px 16px !important;
         min-height: 64px !important;
@@ -3448,7 +3478,7 @@ nav ul li.active a i {
         font-size: 18px !important;
     }
 
-    /* ===== HAMBURGER ===== */
+    /* ----- HAMBURGER ----- */
     .hamburger {
         display: flex !important;
         width: 26px !important;
@@ -3458,7 +3488,7 @@ nav ul li.active a i {
         height: 2.5px !important;
     }
 
-    /* ===== NAVIGATION ===== */
+    /* ----- NAVIGATION SLIDE-IN ----- */
     nav {
         position: fixed !important;
         top: 0 !important;
@@ -3494,13 +3524,11 @@ nav ul li.active a i {
         font-size: 16px !important;
         width: 24px !important;
     }
-
-    /* ===== OVERLAY ===== */
     .navbar-overlay.active {
         display: block !important;
     }
 
-    /* ===== HERO CAROUSEL ===== */
+    /* ----- HERO CAROUSEL ----- */
     .hero-carousel {
         height: 55vh !important;
         min-height: 300px !important;
@@ -3569,13 +3597,16 @@ nav ul li.active a i {
         gap: 6px !important;
     }
 
-    /* ===== MAIN CONTENT ===== */
+    /* ----- MAIN CONTENT - STACKS VERTICALLY ----- */
     .main-content {
         padding: 30px 16px !important;
     }
     .main-content-inner {
-        grid-template-columns: 1fr !important;
-        gap: 30px !important;
+        display: block !important;
+    }
+    .main-text {
+        width: 100% !important;
+        margin-bottom: 25px !important;
     }
     .main-text h2 {
         font-size: 22px !important;
@@ -3590,32 +3621,50 @@ nav ul li.active a i {
         padding: 4px 12px !important;
         margin-bottom: 10px !important;
     }
-
-    /* ===== MAIN FEATURES ===== */
-    .main-features {
-        grid-template-columns: 1fr !important;
-        gap: 10px !important;
-        margin: 16px 0 !important;
+    .main-visual {
+        width: 100% !important;
     }
-    .main-features .feature-item {
-        padding: 12px 14px !important;
-        gap: 12px !important;
-    }
-    .main-features .feature-item i {
-        font-size: 16px !important;
-        width: 24px !important;
-    }
-    .main-features .feature-item span {
-        font-size: 13px !important;
-    }
-
-    /* ===== VISUAL CARD ===== */
     .visual-card {
         max-width: 100% !important;
         padding: 16px !important;
     }
 
-    /* ===== STATS ===== */
+    /* ----- FEATURE CARDS - STACKS VERTICALLY ----- */
+    .main-features {
+        display: block !important;
+        width: 100% !important;
+        margin: 16px 0 !important;
+    }
+    .main-features .feature-item {
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        gap: 14px !important;
+        padding: 14px 16px !important;
+        margin-bottom: 12px !important;
+        background: var(--white) !important;
+        border-radius: var(--radius) !important;
+        border: 1px solid var(--gray-200) !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+    .main-features .feature-item:last-child {
+        margin-bottom: 0 !important;
+    }
+    .main-features .feature-item i {
+        font-size: 18px !important;
+        width: 30px !important;
+        flex-shrink: 0 !important;
+        color: var(--gold) !important;
+    }
+    .main-features .feature-item span {
+        font-size: 14px !important;
+        line-height: 1.4 !important;
+        color: var(--gray-700) !important;
+        flex: 1 !important;
+    }
+
+    /* ----- STATS - STACKS ----- */
     .stats-container {
         grid-template-columns: 1fr 1fr !important;
         gap: 16px !important;
@@ -3627,7 +3676,7 @@ nav ul li.active a i {
         font-size: 11px !important;
     }
 
-    /* ===== PAGE HEADERS ===== */
+    /* ----- PAGE HEADERS ----- */
     .generate-header {
         padding: 70px 16px 24px !important;
         margin-top: 64px !important;
@@ -3640,34 +3689,43 @@ nav ul li.active a i {
         padding: 0 10px !important;
     }
 
-    /* ===== GENERATOR ===== */
-    .generator-container {
-        padding: 16px 12px 30px !important;
-    }
+    /* ----- CV TYPE CARDS - STACKS ----- */
     .cv-type-selector {
-        grid-template-columns: 1fr !important;
-        gap: 10px !important;
+        display: block !important;
     }
     .cv-type-card {
-        padding: 16px 12px !important;
+        width: 100% !important;
+        margin-bottom: 12px !important;
+        padding: 18px 16px !important;
+        box-sizing: border-box !important;
+    }
+    .cv-type-card:last-child {
+        margin-bottom: 0 !important;
     }
     .cv-type-card .icon {
-        font-size: 28px !important;
+        font-size: 30px !important;
     }
     .cv-type-card h3 {
-        font-size: 15px !important;
+        font-size: 16px !important;
     }
     .cv-type-card p {
-        font-size: 12px !important;
+        font-size: 13px !important;
     }
 
-    /* ===== FORM ===== */
+    /* ----- FORM - STACKS ----- */
     .form-container {
         padding: 16px 12px !important;
     }
     .form-grid {
-        grid-template-columns: 1fr !important;
-        gap: 12px !important;
+        display: block !important;
+    }
+    .form-grid .full-width {
+        display: block !important;
+        width: 100% !important;
+    }
+    .form-group {
+        width: 100% !important;
+        margin-bottom: 14px !important;
     }
     .form-container .form-section h3 {
         font-size: 18px !important;
@@ -3696,8 +3754,11 @@ nav ul li.active a i {
         font-size: 13px !important;
     }
     .entry-item .entry-grid {
-        grid-template-columns: 1fr !important;
-        gap: 10px !important;
+        display: block !important;
+    }
+    .entry-item .entry-grid .form-group {
+        width: 100% !important;
+        margin-bottom: 12px !important;
     }
     .entry-item {
         padding: 12px 12px !important;
@@ -3729,23 +3790,20 @@ nav ul li.active a i {
         justify-content: center !important;
     }
 
-    /* ===== SUMMARY BOX ===== */
-    .summary-box #summaryContent .summary-item {
-        flex-direction: column !important;
-        gap: 2px !important;
-        padding: 6px 0 !important;
-    }
-    .summary-box #summaryContent .summary-value {
-        text-align: left !important;
-    }
-
-    /* ===== LETTER GENERATOR ===== */
+    /* ----- LETTER FORM - STACKS ----- */
     .letter-form-container {
         padding: 16px 12px !important;
     }
     .letter-form-container .form-grid {
-        grid-template-columns: 1fr !important;
-        gap: 12px !important;
+        display: block !important;
+    }
+    .letter-form-container .form-grid .full-width {
+        display: block !important;
+        width: 100% !important;
+    }
+    .letter-form-container .form-group {
+        width: 100% !important;
+        margin-bottom: 14px !important;
     }
     .letter-progress {
         flex-wrap: wrap !important;
@@ -3777,12 +3835,17 @@ nav ul li.active a i {
         min-height: 250px !important;
     }
 
-    /* ===== DOCUMENT MANAGER ===== */
+    /* ----- DOCUMENT MANAGER - STACKS ----- */
+    .doc-manager-tabs {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 8px !important;
+    }
     .doc-manager-tabs .tab-btn {
-        flex: 1 !important;
-        font-size: 11px !important;
-        padding: 6px 10px !important;
-        text-align: center !important;
+        width: 100% !important;
+        justify-content: center !important;
+        padding: 10px 16px !important;
+        font-size: 13px !important;
     }
     .doc-manager-content {
         padding: 16px 12px !important;
@@ -3797,13 +3860,19 @@ nav ul li.active a i {
         font-size: 14px !important;
     }
     .doc-file-item {
+        display: flex !important;
         flex-direction: column !important;
         align-items: flex-start !important;
-        gap: 6px !important;
-        padding: 10px 12px !important;
+        gap: 8px !important;
+        padding: 12px 14px !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
     }
     .doc-file-item .file-info {
         width: 100% !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 12px !important;
     }
     .doc-file-item .file-info i {
         font-size: 18px !important;
@@ -3813,7 +3882,9 @@ nav ul li.active a i {
     }
     .doc-file-item .file-actions {
         width: 100% !important;
+        display: flex !important;
         justify-content: flex-end !important;
+        gap: 8px !important;
     }
     .doc-action-buttons {
         flex-direction: column !important;
@@ -3839,14 +3910,11 @@ nav ul li.active a i {
         gap: 8px !important;
     }
 
-    /* ===== MODAL ===== */
+    /* ----- MODAL - STACKS ----- */
     .doc-modal {
         padding: 16px !important;
         margin: 8px !important;
         max-width: 95% !important;
-    }
-    .doc-modal h2 {
-        font-size: 17px !important;
     }
     .doc-modal .modal-actions {
         flex-direction: column !important;
@@ -3860,9 +3928,6 @@ nav ul li.active a i {
         padding: 20px 16px !important;
         margin: 10px !important;
     }
-    .letter-modal h2 {
-        font-size: 20px !important;
-    }
     .letter-modal-actions {
         flex-direction: column !important;
         gap: 8px !important;
@@ -3872,18 +3937,7 @@ nav ul li.active a i {
         justify-content: center !important;
     }
 
-    /* ===== NOTIFICATIONS ===== */
-    .cv-notification,
-    .doc-notification {
-        top: 70px !important;
-        right: 10px !important;
-        left: 10px !important;
-        max-width: none !important;
-        padding: 12px 16px !important;
-        font-size: 12px !important;
-    }
-
-    /* ===== PREVIEW ===== */
+    /* ----- PREVIEW - STACKS ----- */
     .preview-toolbar {
         flex-direction: column !important;
         align-items: stretch !important;
@@ -3905,7 +3959,7 @@ nav ul li.active a i {
         min-height: 250px !important;
     }
 
-    /* ===== CV GENERATE BUTTON ===== */
+    /* ----- CV GENERATE BUTTON ----- */
     #cvPreviewContainer .cv-generate-btn {
         padding: 8px 16px !important;
         font-size: 12px !important;
@@ -3919,7 +3973,7 @@ nav ul li.active a i {
         font-size: 11px !important;
     }
 
-    /* ===== GENERIC CV ===== */
+    /* ----- GENERIC CV - STACKS ----- */
     #cvPreviewContainer .cv-generic {
         padding: 16px 12px !important;
     }
@@ -3949,11 +4003,8 @@ nav ul li.active a i {
         align-items: flex-start !important;
         gap: 2px !important;
     }
-    #cvPreviewContainer .cv-generic .cv-summary-text {
-        font-size: 12px !important;
-    }
 
-    /* ===== PROFESSIONAL CV ===== */
+    /* ----- PROFESSIONAL CV - STACKS ----- */
     #cvPreviewContainer .cv-professional .cv-prof-grid {
         grid-template-columns: 1fr !important;
         gap: 0 !important;
@@ -3984,11 +4035,8 @@ nav ul li.active a i {
     #cvPreviewContainer .cv-professional .cv-exp-item .cv-exp-header strong {
         font-size: 14px !important;
     }
-    #cvPreviewContainer .cv-professional .cv-exp-item .cv-exp-header span {
-        font-size: 12px !important;
-    }
 
-    /* ===== LETTER CONTAINER ===== */
+    /* ----- LETTER CONTAINER - STACKS ----- */
     #letterContainer .letter-wrapper {
         padding: 20px 14px !important;
     }
@@ -4018,12 +4066,27 @@ nav ul li.active a i {
         margin: 0 !important;
     }
 
-    /* ===== FOOTER ===== */
+    /* ----- SUMMARY BOX - STACKS ----- */
+    .summary-box #summaryContent .summary-item {
+        flex-direction: column !important;
+        gap: 2px !important;
+        padding: 6px 0 !important;
+    }
+    .summary-box #summaryContent .summary-value {
+        text-align: left !important;
+    }
+
+    /* ----- FOOTER - STACKS ----- */
     .footer {
         padding: 24px 16px 12px !important;
     }
     .footer-brand {
         font-size: 18px !important;
+    }
+    .footer-links {
+        flex-direction: column !important;
+        align-items: center !important;
+        gap: 6px !important;
     }
     .footer-links a {
         font-size: 11px !important;
@@ -4034,14 +4097,29 @@ nav ul li.active a i {
         gap: 8px !important;
         text-align: center !important;
     }
+    .footer-social {
+        justify-content: center !important;
+        gap: 8px !important;
+    }
     .footer-social a {
         width: 30px !important;
         height: 30px !important;
         font-size: 12px !important;
     }
+
+    /* ----- NOTIFICATIONS ----- */
+    .cv-notification,
+    .doc-notification {
+        top: 70px !important;
+        right: 10px !important;
+        left: 10px !important;
+        max-width: none !important;
+        padding: 12px 16px !important;
+        font-size: 12px !important;
+    }
 }
 
-/* Small Phones (480px and below) */
+/* ===== SMALL PHONES (480px) ===== */
 @media (max-width: 480px) {
     .hero-carousel {
         height: 50vh !important;
@@ -4077,20 +4155,34 @@ nav ul li.active a i {
         font-size: 13px !important;
     }
     .main-features .feature-item {
-        padding: 10px 12px !important;
+        padding: 12px 14px !important;
+        gap: 12px !important;
     }
     .main-features .feature-item i {
-        font-size: 14px !important;
-        width: 20px !important;
+        font-size: 16px !important;
+        width: 24px !important;
     }
     .main-features .feature-item span {
-        font-size: 12px !important;
+        font-size: 13px !important;
+    }
+    .stats-container {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 12px !important;
+    }
+    .stat-item .stat-number {
+        font-size: 18px !important;
+    }
+    .stat-item .stat-label {
+        font-size: 10px !important;
     }
     .page-header-content h1 {
         font-size: 22px !important;
     }
     .cv-type-card .icon {
-        font-size: 24px !important;
+        font-size: 26px !important;
+    }
+    .cv-type-card h3 {
+        font-size: 15px !important;
     }
     .form-container .form-section h3 {
         font-size: 16px !important;
@@ -4109,12 +4201,15 @@ nav ul li.active a i {
     #cvPreviewContainer .cv-professional .cv-prof-name {
         font-size: 14px !important;
     }
+    #docSplitPreviewContent .doc-split-grid {
+        grid-template-columns: 1fr !important;
+    }
     .footer-brand {
         font-size: 16px !important;
     }
 }
 
-/* Extra Small Phones (360px and below) */
+/* ===== EXTRA SMALL PHONES (360px) ===== */
 @media (max-width: 360px) {
     .hero-carousel {
         height: 45vh !important;
@@ -4137,17 +4232,31 @@ nav ul li.active a i {
         font-size: 12px !important;
     }
     .main-features .feature-item {
-        padding: 8px 10px !important;
+        padding: 10px 12px !important;
+        gap: 10px !important;
     }
     .main-features .feature-item i {
-        font-size: 12px !important;
-        width: 18px !important;
+        font-size: 14px !important;
+        width: 20px !important;
     }
     .main-features .feature-item span {
-        font-size: 11px !important;
+        font-size: 12px !important;
+    }
+    .stats-container {
+        grid-template-columns: 1fr !important;
+        gap: 10px !important;
     }
     .page-header-content h1 {
         font-size: 20px !important;
+    }
+    .cv-type-card .icon {
+        font-size: 22px !important;
+    }
+    .cv-type-card h3 {
+        font-size: 14px !important;
+    }
+    .cv-type-card p {
+        font-size: 12px !important;
     }
     #cvPreviewContainer .cv-generic .cv-name-heading {
         font-size: 14px !important;
@@ -4155,6 +4264,9 @@ nav ul li.active a i {
     #cvPreviewContainer .cv-generic .cv-photo-wrapper {
         width: 40px !important;
         height: 40px !important;
+    }
+    #docSplitPreviewContent .doc-split-grid {
+        grid-template-columns: 1fr !important;
     }
 }
 
@@ -4242,334 +4354,5 @@ textarea:focus-visible {
     }
     .page-header-content h1 .highlight {
         color: var(--gold-dark);
-    }
-}
-/* ============================================
-   EMERGENCY FIXES - ALL CARDS & SECTIONS STACKING
-   ============================================ */
-
-/* ===== FORCE ALL CARDS TO STACK ON MOBILE ===== */
-@media (max-width: 768px) {
-    
-    /* 1. MAIN CONTENT - Force stacking */
-    .main-content-inner {
-        display: block !important;
-    }
-    
-    .main-text {
-        width: 100% !important;
-        margin-bottom: 25px !important;
-    }
-    
-    .main-visual {
-        width: 100% !important;
-    }
-    
-    .visual-card {
-        max-width: 100% !important;
-        margin: 0 auto !important;
-        padding: 16px !important;
-    }
-
-    /* 2. FEATURE CARDS - Force stacking */
-    .main-features {
-        display: block !important;
-    }
-    
-    .main-features .feature-item {
-        display: flex !important;
-        flex-direction: row !important;
-        align-items: center !important;
-        gap: 14px !important;
-        padding: 14px 16px !important;
-        margin-bottom: 10px !important;
-        background: var(--white) !important;
-        border-radius: var(--radius) !important;
-        border: 1px solid var(--gray-200) !important;
-        width: 100% !important;
-        box-sizing: border-box !important;
-    }
-    
-    .main-features .feature-item:last-child {
-        margin-bottom: 0 !important;
-    }
-    
-    .main-features .feature-item i {
-        font-size: 18px !important;
-        width: 30px !important;
-        flex-shrink: 0 !important;
-        color: var(--gold) !important;
-    }
-    
-    .main-features .feature-item span {
-        font-size: 14px !important;
-        line-height: 1.4 !important;
-        color: var(--gray-700) !important;
-        flex: 1 !important;
-    }
-
-    /* 3. CV TYPE CARDS - Force stacking */
-    .cv-type-selector {
-        display: block !important;
-    }
-    
-    .cv-type-card {
-        width: 100% !important;
-        margin-bottom: 12px !important;
-        padding: 18px 16px !important;
-        box-sizing: border-box !important;
-    }
-    
-    .cv-type-card:last-child {
-        margin-bottom: 0 !important;
-    }
-    
-    .cv-type-card .icon {
-        font-size: 30px !important;
-    }
-    
-    .cv-type-card h3 {
-        font-size: 16px !important;
-    }
-    
-    .cv-type-card p {
-        font-size: 13px !important;
-    }
-
-    /* 4. STATS CARDS - Force proper grid */
-    .stats-container {
-        display: grid !important;
-        grid-template-columns: 1fr 1fr !important;
-        gap: 16px !important;
-    }
-    
-    .stat-item {
-        padding: 12px !important;
-    }
-    
-    .stat-item .stat-number {
-        font-size: 22px !important;
-    }
-    
-    .stat-item .stat-label {
-        font-size: 11px !important;
-    }
-
-    /* 5. DOCUMENT MANAGER CARDS - Force stacking */
-    .doc-file-item {
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: flex-start !important;
-        gap: 8px !important;
-        padding: 12px 14px !important;
-        width: 100% !important;
-        box-sizing: border-box !important;
-    }
-    
-    .doc-file-item .file-info {
-        width: 100% !important;
-        display: flex !important;
-        align-items: center !important;
-        gap: 12px !important;
-    }
-    
-    .doc-file-item .file-actions {
-        width: 100% !important;
-        display: flex !important;
-        justify-content: flex-end !important;
-        gap: 8px !important;
-    }
-
-    /* 6. FORM CARDS - Force stacking */
-    .form-grid {
-        display: block !important;
-    }
-    
-    .form-grid .full-width {
-        display: block !important;
-        width: 100% !important;
-    }
-    
-    .form-group {
-        width: 100% !important;
-        margin-bottom: 14px !important;
-    }
-    
-    .entry-item .entry-grid {
-        display: block !important;
-    }
-    
-    .entry-item .entry-grid .form-group {
-        width: 100% !important;
-        margin-bottom: 12px !important;
-    }
-
-    /* 7. LETTER FORM - Force stacking */
-    .letter-form-container .form-grid {
-        display: block !important;
-    }
-    
-    .letter-form-container .form-grid .full-width {
-        display: block !important;
-        width: 100% !important;
-    }
-    
-    .letter-form-container .form-group {
-        width: 100% !important;
-        margin-bottom: 14px !important;
-    }
-
-    /* 8. DOCUMENT MANAGER TABS - Force full width */
-    .doc-manager-tabs {
-        display: flex !important;
-        flex-direction: column !important;
-        gap: 8px !important;
-    }
-    
-    .doc-manager-tabs .tab-btn {
-        width: 100% !important;
-        justify-content: center !important;
-        padding: 10px 16px !important;
-        font-size: 13px !important;
-    }
-
-    /* 9. PREVIEW SECTION - Force stacking */
-    .preview-toolbar {
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: stretch !important;
-        gap: 10px !important;
-        padding: 14px !important;
-    }
-    
-    .preview-actions {
-        display: flex !important;
-        flex-direction: column !important;
-        gap: 8px !important;
-    }
-    
-    .preview-actions .btn {
-        width: 100% !important;
-        justify-content: center !important;
-    }
-
-    /* 10. FOOTER - Force stacking */
-    .footer-bottom {
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: center !important;
-        gap: 10px !important;
-        text-align: center !important;
-    }
-    
-    .footer-links {
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: center !important;
-        gap: 6px !important;
-    }
-    
-    .footer-social {
-        display: flex !important;
-        justify-content: center !important;
-        gap: 8px !important;
-    }
-}
-
-/* ===== SMALL PHONES (480px and below) ===== */
-@media (max-width: 480px) {
-    /* Feature cards */
-    .main-features .feature-item {
-        padding: 12px 14px !important;
-        gap: 12px !important;
-    }
-    
-    .main-features .feature-item i {
-        font-size: 16px !important;
-        width: 24px !important;
-    }
-    
-    .main-features .feature-item span {
-        font-size: 13px !important;
-    }
-    
-    /* Stats */
-    .stats-container {
-        grid-template-columns: 1fr 1fr !important;
-        gap: 12px !important;
-    }
-    
-    .stat-item .stat-number {
-        font-size: 18px !important;
-    }
-    
-    .stat-item .stat-label {
-        font-size: 10px !important;
-    }
-    
-    /* CV Cards */
-    .cv-type-card {
-        padding: 14px 12px !important;
-    }
-    
-    .cv-type-card .icon {
-        font-size: 26px !important;
-    }
-    
-    .cv-type-card h3 {
-        font-size: 15px !important;
-    }
-    
-    /* Form */
-    .form-container {
-        padding: 14px 10px !important;
-    }
-    
-    .form-group input,
-    .form-group select,
-    .form-group textarea {
-        padding: 8px 10px !important;
-        font-size: 13px !important;
-    }
-}
-
-/* ===== EXTRA SMALL PHONES (360px and below) ===== */
-@media (max-width: 360px) {
-    /* Feature cards */
-    .main-features .feature-item {
-        padding: 10px 12px !important;
-        gap: 10px !important;
-    }
-    
-    .main-features .feature-item i {
-        font-size: 14px !important;
-        width: 20px !important;
-    }
-    
-    .main-features .feature-item span {
-        font-size: 12px !important;
-    }
-    
-    /* Stats */
-    .stats-container {
-        grid-template-columns: 1fr !important;
-        gap: 10px !important;
-    }
-    
-    /* CV Cards */
-    .cv-type-card {
-        padding: 12px 10px !important;
-    }
-    
-    .cv-type-card .icon {
-        font-size: 22px !important;
-    }
-    
-    .cv-type-card h3 {
-        font-size: 14px !important;
-    }
-    
-    .cv-type-card p {
-        font-size: 12px !important;
     }
 }
