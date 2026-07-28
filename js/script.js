@@ -243,7 +243,7 @@ var SKILLS = {
     ]
 };
 // ==========================================
-// CV UPLOAD & UPDATE - PRODUCTION READY
+// CV UPLOAD & UPDATE - PRODUCTION READY (FIXED)
 // ==========================================
 
 // Variables for uploaded file
@@ -270,6 +270,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function initCVUpload() {
+    // Get ALL elements
     const dropzone = document.getElementById('cvUploadDropzone');
     const fileInput = document.getElementById('cvFileInput');
     const preview = document.getElementById('cvUploadPreview');
@@ -278,30 +279,32 @@ function initCVUpload() {
     const errorDiv = document.getElementById('cvUploadError');
     const errorMessage = document.getElementById('cvUploadErrorMessage');
 
-    if (!dropzone || !fileInput) {
-        console.warn('⚠️ CV upload elements not found');
+    // LOG: Check if elements exist
+    console.log('🔍 CV Upload Elements:');
+    console.log('  dropzone:', dropzone);
+    console.log('  fileInput:', fileInput);
+    console.log('  preview:', preview);
+    console.log('  removeBtn:', removeBtn);
+    console.log('  updateBtn:', updateBtn);
+
+    if (!dropzone) {
+        console.error('❌ cvUploadDropzone element NOT FOUND!');
+        return;
+    }
+    if (!fileInput) {
+        console.error('❌ cvFileInput element NOT FOUND!');
         return;
     }
 
-    // Click to upload
+    // ---- CLICK TO UPLOAD ----
     dropzone.addEventListener('click', function(e) {
         e.preventDefault();
         e.stopPropagation();
+        console.log('🖱️ Dropzone clicked! Opening file dialog...');
         fileInput.click();
     });
 
-    // File input change
-    fileInput.addEventListener('change', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        if (this.files && this.files.length > 0) {
-            handleCVFile(this.files[0]);
-        }
-        // Reset input so same file can be uploaded again
-        this.value = '';
-    });
-
-    // Drag and drop
+    // ---- DRAG AND DROP ----
     dropzone.addEventListener('dragover', function(e) {
         e.preventDefault();
         e.stopPropagation();
@@ -318,31 +321,55 @@ function initCVUpload() {
         e.preventDefault();
         e.stopPropagation();
         this.classList.remove('dragover');
+        console.log('📥 Files dropped!');
         if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
             handleCVFile(e.dataTransfer.files[0]);
         }
     });
 
-    // Remove file
+    // ---- FILE INPUT CHANGE ----
+    fileInput.addEventListener('change', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        console.log('📄 File input changed!');
+        if (this.files && this.files.length > 0) {
+            console.log('  File selected:', this.files[0].name);
+            handleCVFile(this.files[0]);
+        }
+        // Reset input so same file can be uploaded again
+        this.value = '';
+    });
+
+    // ---- REMOVE BUTTON ----
     if (removeBtn) {
         removeBtn.addEventListener('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
+            console.log('🗑️ Remove button clicked');
             clearUploadedFile();
         });
+    } else {
+        console.warn('⚠️ removeBtn not found');
     }
 
-    // Update button
+    // ---- UPDATE BUTTON ----
     if (updateBtn) {
         updateBtn.addEventListener('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
+            console.log('🔄 Update button clicked');
             updateCVWithAI();
         });
+    } else {
+        console.warn('⚠️ updateBtn not found');
     }
+
+    console.log('✅ CV Upload initialized successfully!');
 }
 
 function handleCVFile(file) {
+    console.log('📄 Handling file:', file.name);
+    
     const errorDiv = document.getElementById('cvUploadError');
     const errorMessage = document.getElementById('cvUploadErrorMessage');
     const dropzone = document.getElementById('cvUploadDropzone');
