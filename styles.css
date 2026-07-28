@@ -3430,10 +3430,10 @@ nav ul li.active a i {
 }
 
 /* ============================================
-   MOBILE RESPONSIVENESS - EVERYTHING STACKS
+   MOBILE RESPONSIVENESS - FINAL FIX
    ============================================ */
 
-/* ===== DESKTOP TO TABLET (1024px) ===== */
+/* ===== TABLET (1024px) ===== */
 @media (max-width: 1024px) {
     .navbar {
         padding: 14px 28px;
@@ -3462,7 +3462,7 @@ nav ul li.active a i {
     }
 }
 
-/* ===== TABLET TO PHONE (768px) ===== */
+/* ===== MOBILE (768px) - EVERYTHING STACKS ===== */
 @media (max-width: 768px) {
     
     /* ----- NAVBAR ----- */
@@ -3597,7 +3597,7 @@ nav ul li.active a i {
         gap: 6px !important;
     }
 
-    /* ----- MAIN CONTENT - STACKS VERTICALLY ----- */
+    /* ===== MAIN CONTENT - STACKS ===== */
     .main-content {
         padding: 30px 16px !important;
     }
@@ -3629,11 +3629,10 @@ nav ul li.active a i {
         padding: 16px !important;
     }
 
-    /* ----- FEATURE CARDS - STACKS VERTICALLY ----- */
+    /* ===== FEATURE CARDS - STACK VERTICALLY ===== */
     .main-features {
         display: block !important;
         width: 100% !important;
-        margin: 16px 0 !important;
     }
     .main-features .feature-item {
         display: flex !important;
@@ -3642,9 +3641,9 @@ nav ul li.active a i {
         gap: 14px !important;
         padding: 14px 16px !important;
         margin-bottom: 12px !important;
-        background: var(--white) !important;
-        border-radius: var(--radius) !important;
-        border: 1px solid var(--gray-200) !important;
+        background: #ffffff !important;
+        border-radius: 12px !important;
+        border: 1px solid #e0dbd3 !important;
         width: 100% !important;
         box-sizing: border-box !important;
     }
@@ -3655,16 +3654,16 @@ nav ul li.active a i {
         font-size: 18px !important;
         width: 30px !important;
         flex-shrink: 0 !important;
-        color: var(--gold) !important;
+        color: #c9a84c !important;
     }
     .main-features .feature-item span {
         font-size: 14px !important;
         line-height: 1.4 !important;
-        color: var(--gray-700) !important;
+        color: #3d3730 !important;
         flex: 1 !important;
     }
 
-    /* ----- STATS - STACKS ----- */
+    /* ===== STATS ===== */
     .stats-container {
         grid-template-columns: 1fr 1fr !important;
         gap: 16px !important;
@@ -3676,7 +3675,7 @@ nav ul li.active a i {
         font-size: 11px !important;
     }
 
-    /* ----- PAGE HEADERS ----- */
+    /* ===== PAGE HEADERS ===== */
     .generate-header {
         padding: 70px 16px 24px !important;
         margin-top: 64px !important;
@@ -3689,7 +3688,7 @@ nav ul li.active a i {
         padding: 0 10px !important;
     }
 
-    /* ----- CV TYPE CARDS - STACKS ----- */
+    /* ===== CV TYPE CARDS - STACK ===== */
     .cv-type-selector {
         display: block !important;
     }
@@ -3697,7 +3696,6 @@ nav ul li.active a i {
         width: 100% !important;
         margin-bottom: 12px !important;
         padding: 18px 16px !important;
-        box-sizing: border-box !important;
     }
     .cv-type-card:last-child {
         margin-bottom: 0 !important;
@@ -3712,7 +3710,7 @@ nav ul li.active a i {
         font-size: 13px !important;
     }
 
-    /* ----- FORM - STACKS ----- */
+    /* ===== FORM - STACK ===== */
     .form-container {
         padding: 16px 12px !important;
     }
@@ -3790,7 +3788,7 @@ nav ul li.active a i {
         justify-content: center !important;
     }
 
-    /* ----- LETTER FORM - STACKS ----- */
+    /* ===== LETTER FORM - STACK ===== */
     .letter-form-container {
         padding: 16px 12px !important;
     }
@@ -3835,7 +3833,7 @@ nav ul li.active a i {
         min-height: 250px !important;
     }
 
-    /* ----- DOCUMENT MANAGER - STACKS ----- */
+    /* ===== DOCUMENT MANAGER - STACK ===== */
     .doc-manager-tabs {
         display: flex !important;
         flex-direction: column !important;
@@ -3866,7 +3864,6 @@ nav ul li.active a i {
         gap: 8px !important;
         padding: 12px 14px !important;
         width: 100% !important;
-        box-sizing: border-box !important;
     }
     .doc-file-item .file-info {
         width: 100% !important;
@@ -3910,7 +3907,7 @@ nav ul li.active a i {
         gap: 8px !important;
     }
 
-    /* ----- MODAL - STACKS ----- */
+    /* ===== MODAL - STACK ===== */
     .doc-modal {
         padding: 16px !important;
         margin: 8px !important;
@@ -3937,7 +3934,7 @@ nav ul li.active a i {
         justify-content: center !important;
     }
 
-    /* ----- PREVIEW - STACKS ----- */
+    /* ===== PREVIEW - STACK ===== */
     .preview-toolbar {
         flex-direction: column !important;
         align-items: stretch !important;
@@ -3959,7 +3956,7 @@ nav ul li.active a i {
         min-height: 250px !important;
     }
 
-    /* ----- CV GENERATE BUTTON ----- */
+    /* ===== CV GENERATE BUTTON ===== */
     #cvPreviewContainer .cv-generate-btn {
         padding: 8px 16px !important;
         font-size: 12px !important;
@@ -3973,7 +3970,7 @@ nav ul li.active a i {
         font-size: 11px !important;
     }
 
-    /* ----- GENERIC CV - STACKS ----- */
+    /* ===== GENERIC CV - STACK ===== */
     #cvPreviewContainer .cv-generic {
         padding: 16px 12px !important;
     }
@@ -4004,7 +4001,7 @@ nav ul li.active a i {
         gap: 2px !important;
     }
 
-    /* ----- PROFESSIONAL CV - STACKS ----- */
+    /* ===== PROFESSIONAL CV - STACK ===== */
     #cvPreviewContainer .cv-professional .cv-prof-grid {
         grid-template-columns: 1fr !important;
         gap: 0 !important;
@@ -4032,11 +4029,8 @@ nav ul li.active a i {
         align-items: flex-start !important;
         gap: 2px !important;
     }
-    #cvPreviewContainer .cv-professional .cv-exp-item .cv-exp-header strong {
-        font-size: 14px !important;
-    }
 
-    /* ----- LETTER CONTAINER - STACKS ----- */
+    /* ===== LETTER CONTAINER - STACK ===== */
     #letterContainer .letter-wrapper {
         padding: 20px 14px !important;
     }
@@ -4066,7 +4060,7 @@ nav ul li.active a i {
         margin: 0 !important;
     }
 
-    /* ----- SUMMARY BOX - STACKS ----- */
+    /* ===== SUMMARY BOX - STACK ===== */
     .summary-box #summaryContent .summary-item {
         flex-direction: column !important;
         gap: 2px !important;
@@ -4076,7 +4070,7 @@ nav ul li.active a i {
         text-align: left !important;
     }
 
-    /* ----- FOOTER - STACKS ----- */
+    /* ===== FOOTER - STACK ===== */
     .footer {
         padding: 24px 16px 12px !important;
     }
@@ -4107,7 +4101,7 @@ nav ul li.active a i {
         font-size: 12px !important;
     }
 
-    /* ----- NOTIFICATIONS ----- */
+    /* ===== NOTIFICATIONS ===== */
     .cv-notification,
     .doc-notification {
         top: 70px !important;
@@ -4354,110 +4348,5 @@ textarea:focus-visible {
     }
     .page-header-content h1 .highlight {
         color: var(--gold-dark);
-    }
-}
-/* ============================================
-   ABSOLUTE FINAL FIX - FORCE CARDS TO STACK
-   ============================================ */
-
-@media (max-width: 768px) {
-    /* FORCE the container to be block */
-    .main-features {
-        display: block !important;
-        width: 100% !important;
-        max-width: 100% !important;
-        flex-direction: column !important;
-    }
-    
-    /* FORCE each card to be full width and stack */
-    .main-features .feature-item {
-        display: flex !important;
-        flex-direction: row !important;
-        align-items: center !important;
-        justify-content: flex-start !important;
-        gap: 16px !important;
-        width: 100% !important;
-        max-width: 100% !important;
-        padding: 16px 18px !important;
-        margin-bottom: 12px !important;
-        background: #ffffff !important;
-        border-radius: 12px !important;
-        border: 1px solid #e0dbd3 !important;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.06) !important;
-        box-sizing: border-box !important;
-        float: none !important;
-        clear: both !important;
-    }
-    
-    .main-features .feature-item:last-child {
-        margin-bottom: 0 !important;
-    }
-    
-    .main-features .feature-item i {
-        font-size: 20px !important;
-        width: 40px !important;
-        height: 40px !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        flex-shrink: 0 !important;
-        color: #c9a84c !important;
-        background: rgba(201, 168, 76, 0.1) !important;
-        border-radius: 50% !important;
-    }
-    
-    .main-features .feature-item span {
-        font-size: 14px !important;
-        line-height: 1.5 !important;
-        color: #3d3730 !important;
-        flex: 1 !important;
-        font-weight: 500 !important;
-        text-align: left !important;
-    }
-}
-
-@media (max-width: 480px) {
-    .main-features .feature-item {
-        padding: 14px 16px !important;
-        gap: 14px !important;
-    }
-    .main-features .feature-item i {
-        font-size: 18px !important;
-        width: 36px !important;
-        height: 36px !important;
-    }
-    .main-features .feature-item span {
-        font-size: 13px !important;
-    }
-}
-
-@media (max-width: 360px) {
-    .main-features .feature-item {
-        padding: 12px 14px !important;
-        gap: 12px !important;
-    }
-    .main-features .feature-item i {
-        font-size: 16px !important;
-        width: 32px !important;
-        height: 32px !important;
-    }
-    .main-features .feature-item span {
-        font-size: 12px !important;
-    }
-}
-@media (max-width: 768px) {
-    .main-content-inner {
-        display: block !important;
-    }
-    .main-text {
-        width: 100% !important;
-        margin-bottom: 30px !important;
-    }
-    .main-visual {
-        width: 100% !important;
-    }
-    .visual-card {
-        width: 100% !important;
-        max-width: 100% !important;
     }
 }
