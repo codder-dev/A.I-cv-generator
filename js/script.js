@@ -15,31 +15,7 @@ function refreshAOS() {
     }
 }
 
-// Prevent right-click 
-document.addEventListener('contextmenu', function(e) {
-    e.preventDefault();
-    return false;
-});
 
-// Prevent keyboard shortcuts for dev tools
-document.addEventListener('keydown', function(e) {
-    if (e.key === 'F12') {
-        e.preventDefault();
-        return false;
-    }
-    if (e.ctrlKey && e.shiftKey && e.key === 'I') {
-        e.preventDefault();
-        return false;
-    }
-    if (e.ctrlKey && e.shiftKey && e.key === 'J') {
-        e.preventDefault();
-        return false;
-    }
-    if (e.ctrlKey && e.key === 'u') {
-        e.preventDefault();
-        return false;
-    }
-});
 
 // ============================================
 // HAMBURGER MENU TOGGLE
