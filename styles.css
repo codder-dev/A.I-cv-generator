@@ -1209,6 +1209,179 @@ nav ul li.active a i {
     color: var(--gold);
     background: rgba(201, 168, 76, 0.05);
 }
+/* ============================================
+   CV UPLOAD & UPDATE SECTION
+   ============================================ */
+
+.cv-upload-section {
+    margin-bottom: 30px;
+}
+
+.cv-upload-container {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: 30px;
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--gray-200);
+}
+
+.cv-upload-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.cv-upload-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: rgba(201, 168, 76, 0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.cv-upload-icon i {
+    font-size: 22px;
+    color: var(--gold);
+}
+
+.cv-upload-title h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--primary);
+    font-family: var(--font-heading);
+    margin-bottom: 2px;
+}
+
+.cv-upload-title p {
+    font-size: 14px;
+    color: var(--gray-500);
+    margin: 0;
+}
+
+.cv-upload-area {
+    margin-top: 4px;
+}
+
+.cv-upload-dropzone {
+    border: 2px dashed var(--gray-300);
+    border-radius: var(--radius);
+    padding: 50px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: var(--transition);
+    background: var(--off-white);
+}
+
+.cv-upload-dropzone:hover {
+    border-color: var(--gold);
+    background: rgba(201, 168, 76, 0.03);
+}
+
+.cv-upload-dropzone.dragover {
+    border-color: var(--gold);
+    background: rgba(201, 168, 76, 0.08);
+}
+
+.cv-upload-dropzone i {
+    font-size: 48px;
+    color: var(--gold);
+    margin-bottom: 12px;
+}
+
+.cv-upload-dropzone h4 {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--primary);
+    margin-bottom: 4px;
+}
+
+.cv-upload-dropzone p {
+    font-size: 13px;
+    color: var(--gray-500);
+}
+
+.cv-upload-preview {
+    display: none;
+    border: 2px solid var(--gray-200);
+    border-radius: var(--radius);
+    padding: 20px;
+    background: var(--off-white);
+}
+
+.cv-upload-preview .cv-upload-file-info {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--gray-200);
+}
+
+.cv-upload-preview .cv-upload-file-info i {
+    font-size: 32px;
+    color: var(--gold);
+}
+
+.cv-upload-preview .cv-upload-file-info .file-name {
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--gray-700);
+    display: block;
+}
+
+.cv-upload-preview .cv-upload-file-info .file-size {
+    font-size: 12px;
+    color: var(--gray-500);
+}
+
+.cv-upload-preview .cv-upload-remove {
+    background: none;
+    border: none;
+    color: var(--gray-400);
+    cursor: pointer;
+    font-size: 18px;
+    padding: 4px 8px;
+    border-radius: 6px;
+    transition: var(--transition);
+    margin-left: auto;
+}
+
+.cv-upload-preview .cv-upload-remove:hover {
+    color: #dc3545;
+    background: #fff5f5;
+}
+
+.cv-upload-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.cv-upload-actions .btn {
+    flex: 1;
+    justify-content: center;
+}
+
+.cv-upload-error {
+    background: #fff5f5;
+    border: 1px solid #fecaca;
+    border-radius: var(--radius);
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #dc3545;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.cv-upload-error i {
+    font-size: 18px;
+}
+
 
 /* ============================================
    PHOTO UPLOAD
@@ -3807,7 +3980,57 @@ nav ul li.active a i {
         grid-template-columns: repeat(2, 1fr);
     }
 }
+/* ============================================
+   CV UPLOAD - MOBILE RESPONSIVE
+   ============================================ */
 
+@media (max-width: 768px) {
+    .cv-upload-container {
+        padding: 16px !important;
+    }
+    
+    .cv-upload-header {
+        flex-direction: column !important;
+        text-align: center !important;
+        gap: 10px !important;
+    }
+    
+    .cv-upload-title h3 {
+        font-size: 16px !important;
+    }
+    
+    .cv-upload-title p {
+        font-size: 13px !important;
+    }
+    
+    .cv-upload-dropzone {
+        padding: 30px 16px !important;
+    }
+    
+    .cv-upload-dropzone i {
+        font-size: 36px !important;
+    }
+    
+    .cv-upload-dropzone h4 {
+        font-size: 14px !important;
+    }
+    
+    .cv-upload-preview {
+        padding: 14px !important;
+    }
+    
+    .cv-upload-preview .cv-upload-file-info {
+        flex-wrap: wrap !important;
+    }
+    
+    .cv-upload-actions {
+        flex-direction: column !important;
+    }
+    
+    .cv-upload-actions .btn {
+        width: 100% !important;
+    }
+}
 /* ===== MOBILE (768px) - EVERYTHING STACKS ===== */
 @media (max-width: 768px) {
     
