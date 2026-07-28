@@ -2066,37 +2066,75 @@ async function generateApplicationLetter() {
         });
     }
 }
-
 // ==========================================
 // SUBMIT LETTER DETAILS
 // ==========================================
 async function submitLetterDetails() {
     console.log('🔍 Submit Letter Details called');
     
-    // Get elements with error checking
+    // Get elements
     var senderAddressEl = document.getElementById('letterSenderAddress');
     var companyNameEl = document.getElementById('letterCompanyName');
     var companyAddressEl = document.getElementById('letterCompanyAddress');
     var positionEl = document.getElementById('letterPosition');
     
-    // Log if elements are found
-    console.log('📋 Elements found:', {
-        senderAddress: !!senderAddressEl,
-        companyName: !!companyNameEl,
-        companyAddress: !!companyAddressEl,
-        position: !!positionEl
+    // Get values - using .value directly without trim first to see raw value
+    var senderAddressRaw = senderAddressEl ? senderAddressEl.value : '';
+    var companyNameRaw = companyNameEl ? companyNameEl.value : '';
+    var companyAddressRaw = companyAddressEl ? companyAddressEl.value : '';
+    var positionRaw = positionEl ? positionEl.value : '';
+    
+    console.log('📝 Raw Values:', { 
+        senderAddressRaw: senderAddressRaw, 
+        companyNameRaw: companyNameRaw, 
+        companyAddressRaw: companyAddressRaw, 
+        positionRaw: positionRaw 
     });
     
-    // Get values
-    var senderAddress = senderAddressEl ? senderAddressEl.value.trim() : '';
-    var companyName = companyNameEl ? companyNameEl.value.trim() : '';
-    var companyAddress = companyAddressEl ? companyAddressEl.value.trim() : '';
-    var position = positionEl ? positionEl.value.trim() : '';
+    // Trim values
+    var senderAddress = senderAddressRaw.trim();
+    var companyName = companyNameRaw.trim();
+    var companyAddress = companyAddressRaw.trim();
+    var position = positionRaw.trim();
     var signature = window._letterSignature || '';
     
-    console.log('📝 Values:', { senderAddress, companyName, companyAddress, position });
+    console.log('📝 Trimmed Values:', { 
+        senderAddress: senderAddress, 
+        companyName: companyName, 
+        companyAddress: companyAddress, 
+        position: position 
+    });
     
-    // Validation with detailed messages
+    // Check if fields are disabled or readonly
+    console.log('🔍 Field states:', {
+        senderAddressDisabled: senderAddressEl ? senderAddressEl.disabled : 'N/A',
+        companyNameDisabled: companyNameEl ? companyNameEl.disabled : 'N/A',
+        companyAddressDisabled: companyAddressEl ? companyAddressEl.disabled : 'N/A',
+        positionDisabled: positionEl ? positionEl.disabled : 'N/A',
+        senderAddressReadOnly: senderAddressEl ? senderAddressEl.readOnly : 'N/A',
+        companyNameReadOnly: companyNameEl ? companyNameEl.readOnly : 'N/A',
+        companyAddressReadOnly: companyAddressEl ? companyAddressEl.readOnly : 'N/A',
+        positionReadOnly: positionEl ? positionEl.readOnly : 'N/A'
+    });
+    
+    // Check if fields exist in the DOM
+    console.log('🔍 DOM Check:');
+    console.log('letterSenderAddress exists:', !!document.getElementById('letterSenderAddress'));
+    console.log('letterCompanyName exists:', !!document.getElementById('letterCompanyName'));
+    console.log('letterCompanyAddress exists:', !!document.getElementById('letterCompanyAddress'));
+    console.log('letterPosition exists:', !!document.getElementById('letterPosition'));
+    
+    // ALSO CHECK BY QUERY SELECTOR (case sensitive)
+    var altCompanyName = document.querySelector('#letterCompanyName');
+    var altCompanyAddress = document.querySelector('#letterCompanyAddress');
+    var altPosition = document.querySelector('#letterPosition');
+    console.log('🔍 QuerySelector Check:', {
+        altCompanyName: altCompanyName ? altCompanyName.value : 'null',
+        altCompanyAddress: altCompanyAddress ? altCompanyAddress.value : 'null',
+        altPosition: altPosition ? altPosition.value : 'null'
+    });
+    
+    // Validation
     if (!senderAddress || senderAddress === '') {
         showNotification('Please enter your address/P.O Box.', 'error');
         console.warn('❌ Missing: senderAddress');
@@ -2105,19 +2143,19 @@ async function submitLetterDetails() {
     
     if (!companyName || companyName === '') {
         showNotification('Please enter the company name.', 'error');
-        console.warn('❌ Missing: companyName');
+        console.warn('❌ Missing: companyName - Raw value was: "' + companyNameRaw + '"');
         return;
     }
     
     if (!companyAddress || companyAddress === '') {
         showNotification('Please enter the company address/P.O Box.', 'error');
-        console.warn('❌ Missing: companyAddress');
+        console.warn('❌ Missing: companyAddress - Raw value was: "' + companyAddressRaw + '"');
         return;
     }
     
     if (!position || position === '') {
         showNotification('Please enter the position you are applying for.', 'error');
-        console.warn('❌ Missing: position');
+        console.warn('❌ Missing: position - Raw value was: "' + positionRaw + '"');
         return;
     }
     
