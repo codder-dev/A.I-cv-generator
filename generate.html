@@ -417,6 +417,8 @@
         </div>
 
     </section>
+
+    
 <!-- ========================================== -->
 <!-- CV UPLOAD & UPDATE SECTION -->
 <!-- ========================================== -->
@@ -466,6 +468,21 @@
             <div class="cv-upload-error" id="cvUploadError" style="display:none;">
                 <i class="fas fa-exclamation-circle"></i>
                 <span id="cvUploadErrorMessage">Invalid file. Please upload a PDF.</span>
+            </div>
+            
+            <!-- ===== DOWNLOAD BUTTONS - ALWAYS IN HTML BUT HIDDEN ===== -->
+            <div class="cv-download-section" id="cvDownloadSection" style="display: none; margin-top: 20px; padding: 20px; background: #faf8f4; border-radius: 12px; border: 2px solid #c9a84c; text-align: center;">
+                <p style="font-size: 14px; color: #22c55e; margin-bottom: 14px; font-weight: 600; font-family: 'Times New Roman', Times, serif;">
+                    <i class="fas fa-check-circle"></i> Your CV has been updated successfully!
+                </p>
+                <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+                    <button onclick="downloadUpdatedCV('pdf')" class="btn-download-pdf" style="padding: 12px 30px; font-size: 15px; background: #c9a84c; color: #0b2a35; border: none; border-radius: 999px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 16px rgba(201, 168, 76, 0.3); font-family: 'Times New Roman', Times, serif;">
+                        <i class="fas fa-file-pdf"></i> Download PDF
+                    </button>
+                    <button onclick="downloadUpdatedCV('word')" class="btn-download-word" style="padding: 12px 30px; font-size: 15px; background: transparent; color: #0b2a35; border: 2px solid #0b2a35; border-radius: 999px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; font-family: 'Times New Roman', Times, serif;">
+                        <i class="fas fa-file-word"></i> Download Word
+                    </button>
+                </div>
             </div>
         </div>
     </div>
