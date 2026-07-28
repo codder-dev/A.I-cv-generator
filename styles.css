@@ -5228,6 +5228,146 @@ nav ul li.active a i {
         font-size: 14px !important;
     }
 }
+/* ============================================
+   MOBILE EMERGENCY FIXES - CAROUSEL & BUTTONS
+   ============================================ */
+
+/* Fix Hero Carousel on Mobile */
+@media (max-width: 768px) {
+    .hero-carousel {
+        height: 60vh !important;
+        min-height: 350px !important;
+        margin-top: 68px !important;
+    }
+    
+    .carousel-slide {
+        height: 100% !important;
+    }
+    
+    .carousel-slide .carousel-image {
+        height: 100% !important;
+        object-fit: cover !important;
+    }
+    
+    .carousel-caption {
+        top: 35% !important;
+        left: 5% !important;
+        right: 5% !important;
+        transform: translateY(-50%) !important;
+        max-width: 100% !important;
+        padding: 0 10px !important;
+    }
+    
+    .carousel-caption .badge {
+        font-size: 10px !important;
+        padding: 4px 14px !important;
+        margin-bottom: 10px !important;
+    }
+    
+    .carousel-caption h1 {
+        font-size: 24px !important;
+        line-height: 1.2 !important;
+        margin-bottom: 8px !important;
+    }
+    
+    .carousel-caption p {
+        font-size: 13px !important;
+        max-width: 100% !important;
+        line-height: 1.5 !important;
+    }
+    
+    .carousel-controls {
+        padding: 0 10px !important;
+    }
+    
+    .carousel-controls .prev,
+    .carousel-controls .next {
+        width: 32px !important;
+        height: 32px !important;
+        font-size: 12px !important;
+    }
+    
+    .carousel-indicators {
+        bottom: 20px !important;
+        gap: 6px !important;
+    }
+    
+    .carousel-indicators .indicator {
+        width: 20px !important;
+        height: 2px !important;
+    }
+    
+    .carousel-indicators .indicator.active {
+        width: 30px !important;
+    }
+    
+    .hero-buttons {
+        bottom: 15% !important;
+        left: 5% !important;
+        right: 5% !important;
+        gap: 8px !important;
+    }
+    
+    .hero-buttons .btn-primary,
+    .hero-buttons .btn-secondary,
+    .hero-buttons .btn-prysec {
+        padding: 10px 18px !important;
+        font-size: 12px !important;
+        width: 100% !important;
+        justify-content: center !important;
+        gap: 6px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-carousel {
+        height: 55vh !important;
+        min-height: 300px !important;
+    }
+    
+    .carousel-caption h1 {
+        font-size: 20px !important;
+    }
+    
+    .carousel-caption p {
+        font-size: 12px !important;
+    }
+    
+    .carousel-caption .badge {
+        font-size: 9px !important;
+        padding: 3px 10px !important;
+        margin-bottom: 6px !important;
+    }
+    
+    .carousel-controls .prev,
+    .carousel-controls .next {
+        width: 28px !important;
+        height: 28px !important;
+        font-size: 10px !important;
+    }
+    
+    .hero-buttons .btn-primary,
+    .hero-buttons .btn-secondary,
+    .hero-buttons .btn-prysec {
+        padding: 8px 14px !important;
+        font-size: 11px !important;
+    }
+}
+
+@media (max-width: 360px) {
+    .hero-carousel {
+        height: 50vh !important;
+        min-height: 260px !important;
+    }
+    
+    .carousel-caption h1 {
+        font-size: 17px !important;
+    }
+    
+    .carousel-caption p {
+        font-size: 11px !important;
+    }
+}
 
 /* ============================================
    ACCESSIBILITY & UTILITY
