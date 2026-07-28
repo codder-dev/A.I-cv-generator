@@ -3428,6 +3428,105 @@ nav ul li.active a i {
     transform: translateY(-2px);
     box-shadow: 0 12px 32px rgba(201, 168, 76, 0.4);
 }
+/* ============================================
+   WHY CHOOSE US - FIXED FOR MOBILE
+   ============================================ */
+
+.why-choose-section {
+    padding: 60px 48px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.why-choose-header {
+    text-align: center;
+    margin-bottom: 48px;
+}
+
+.why-choose-header .section-badge {
+    display: inline-block;
+    padding: 6px 18px;
+    background: rgba(201, 168, 76, 0.12);
+    border: 1px solid rgba(201, 168, 76, 0.15);
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--gold);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+}
+
+.why-choose-header h2 {
+    font-size: 36px;
+    font-weight: 800;
+    font-family: var(--font-heading);
+    color: var(--primary);
+    line-height: 1.1;
+}
+
+.why-choose-header h2 .highlight {
+    color: var(--gold);
+}
+
+.why-choose-header p {
+    font-size: 17px;
+    color: var(--gray-500);
+    max-width: 600px;
+    margin: 12px auto 0;
+    line-height: 1.7;
+}
+
+.why-choose-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+}
+
+.why-choose-card {
+    background: var(--white);
+    padding: 30px 24px;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--gray-200);
+    transition: var(--transition);
+    text-align: center;
+}
+
+.why-choose-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-sm);
+    border-color: var(--gold);
+}
+
+.why-choose-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: rgba(201, 168, 76, 0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px;
+}
+
+.why-choose-icon i {
+    font-size: 28px;
+    color: var(--gold);
+}
+
+.why-choose-card h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 8px;
+    font-family: var(--font-heading);
+}
+
+.why-choose-card p {
+    font-size: 14px;
+    color: var(--gray-500);
+    line-height: 1.7;
+}
 
 /* ============================================
    MOBILE RESPONSIVENESS - FINAL FIX
@@ -4348,5 +4447,53 @@ textarea:focus-visible {
     }
     .page-header-content h1 .highlight {
         color: var(--gold-dark);
+    }
+}
+
+
+/* ============================================
+   WHY CHOOSE US - MOBILE RESPONSIVE
+   ============================================ */
+
+@media (max-width: 768px) {
+    .why-choose-section {
+        padding: 30px 16px !important;
+    }
+    
+    .why-choose-header h2 {
+        font-size: 26px !important;
+    }
+    
+    .why-choose-header p {
+        font-size: 15px !important;
+        padding: 0 10px !important;
+    }
+    
+    .why-choose-grid {
+        grid-template-columns: 1fr !important;
+        gap: 16px !important;
+    }
+    
+    .why-choose-card {
+        padding: 20px 16px !important;
+        width: 100% !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .why-choose-header h2 {
+        font-size: 22px !important;
+    }
+    
+    .why-choose-card {
+        padding: 16px 14px !important;
+    }
+    
+    .why-choose-card h3 {
+        font-size: 16px !important;
+    }
+    
+    .why-choose-card p {
+        font-size: 13px !important;
     }
 }
