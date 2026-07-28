@@ -242,6 +242,514 @@ var SKILLS = {
         'Time Management'
     ]
 };
+// ==========================================
+// CV UPLOAD & UPDATE - PRODUCTION READY
+// ==========================================
+
+// Configure PDF.js worker
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+// Variables for uploaded file
+let uploadedFileData = null;
+let uploadedFileContent = '';
+let isProcessing = false;
+
+// Initialize CV upload
+document.addEventListener('DOMContentLoaded', function() {
+    initCVUpload();
+});
+
+function initCVUpload() {
+    const dropzone = document.getElementById('cvUploadDropzone');
+    const fileInput = document.getElementById('cvFileInput');
+    const preview = document.getElementById('cvUploadPreview');
+    const removeBtn = document.getElementById('cvUploadRemove');
+    const updateBtn = document.getElementById('cvUpdateBtn');
+    const errorDiv = document.getElementById('cvUploadError');
+    const errorMessage = document.getElementById('cvUploadErrorMessage');
+
+    if (!dropzone || !fileInput) return;
+
+    // Click to upload
+    dropzone.addEventListener('click', function(e) {
+        e.preventDefault();
+        fileInput.click();
+    });
+
+    // File input change
+    fileInput.addEventListener('change', function(e) {
+        if (this.files && this.files.length > 0) {
+            handleCVFile(this.files[0]);
+        }
+        // Reset input so same file can be uploaded again
+        this.value = '';
+    });
+
+    // Drag and drop
+    dropzone.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        this.classList.add('dragover');
+    });
+
+    dropzone.addEventListener('dragleave', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        this.classList.remove('dragover');
+    });
+
+    dropzone.addEventListener('drop', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        this.classList.remove('dragover');
+        if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+            handleCVFile(e.dataTransfer.files[0]);
+        }
+    });
+
+    // Remove file
+    if (removeBtn) {
+        removeBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            clearUploadedFile();
+        });
+    }
+
+    // Update button
+    if (updateBtn) {
+        updateBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            updateCVWithAI();
+        });
+    }
+}
+
+function handleCVFile(file) {
+    const errorDiv = document.getElementById('cvUploadError');
+    const errorMessage = document.getElementById('cvUploadErrorMessage');
+    const dropzone = document.getElementById('cvUploadDropzone');
+    const preview = document.getElementById('cvUploadPreview');
+    const fileName = document.getElementById('uploadFileName');
+    const fileSize = document.getElementById('uploadFileSize');
+    
+    // Reset states
+    if (errorDiv) errorDiv.style.display = 'none';
+    if (errorMessage) errorMessage.textContent = '';
+
+    // Check if PDF
+    if (file.type !== 'application/pdf') {
+        showCVError('❌ Only PDF files are allowed. Please upload a PDF document.');
+        return;
+    }
+
+    // Check size (max 10MB)
+    if (file.size > 10 * 1024 * 1024) {
+        showCVError('❌ File size exceeds 10MB limit. Please compress your PDF.');
+        return;
+    }
+
+    // Store file data
+    uploadedFileData = file;
+
+    // Show preview
+    if (preview) {
+        preview.style.display = 'block';
+        if (fileName) fileName.textContent = file.name;
+        if (fileSize) fileSize.textContent = (file.size / 1024).toFixed(1) + ' KB';
+    }
+
+    if (dropzone) dropzone.style.display = 'none';
+
+    // Show processing indicator
+    if (fileName) fileName.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Extracting text...';
+
+    // Extract text from PDF
+    extractTextFromPDF(file).then(text => {
+        uploadedFileContent = text;
+        if (fileName) {
+            fileName.innerHTML = file.name + ' <span style="color: #22c55e; font-size: 12px;">✓ Extracted</span>';
+        }
+        console.log('📄 PDF text extracted. Length:', text.length);
+        showNotification('PDF uploaded and text extracted successfully! Click "Update CV" to reformat.', 'success');
+    }).catch(error => {
+        console.error('Error extracting text:', error);
+        showCVError('❌ Failed to extract text from PDF. Please try again.');
+        if (fileName) fileName.textContent = file.name + ' ❌ Extraction failed';
+    });
+}
+
+function showCVError(message) {
+    const errorDiv = document.getElementById('cvUploadError');
+    const errorMessage = document.getElementById('cvUploadErrorMessage');
+    const dropzone = document.getElementById('cvUploadDropzone');
+    const preview = document.getElementById('cvUploadPreview');
+    
+    if (errorDiv && errorMessage) {
+        errorDiv.style.display = 'flex';
+        errorMessage.textContent = message;
+    }
+    if (preview) preview.style.display = 'none';
+    if (dropzone) dropzone.style.display = 'block';
+    uploadedFileData = null;
+    uploadedFileContent = '';
+}
+
+function clearUploadedFile() {
+    uploadedFileData = null;
+    uploadedFileContent = '';
+    const preview = document.getElementById('cvUploadPreview');
+    const dropzone = document.getElementById('cvUploadDropzone');
+    const fileInput = document.getElementById('cvFileInput');
+    const errorDiv = document.getElementById('cvUploadError');
+    const updateBtn = document.getElementById('cvUpdateBtn');
+    
+    if (preview) preview.style.display = 'none';
+    if (dropzone) dropzone.style.display = 'block';
+    if (fileInput) fileInput.value = '';
+    if (errorDiv) errorDiv.style.display = 'none';
+    if (updateBtn) {
+        updateBtn.disabled = false;
+        updateBtn.innerHTML = '<i class="fas fa-wand-magic-sparkles"></i> Update CV with AI';
+    }
+    // Reset uploaded content display
+    const container = document.getElementById('cvPreviewContainer');
+    if (container) {
+        container.innerHTML = '';
+    }
+}
+
+// ==========================================
+// EXTRACT TEXT FROM PDF USING PDF.JS
+// ==========================================
+
+async function extractTextFromPDF(file) {
+    try {
+        const arrayBuffer = await file.arrayBuffer();
+        const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+        
+        let fullText = '';
+        const totalPages = pdf.numPages;
+        
+        for (let i = 1; i <= totalPages; i++) {
+            const page = await pdf.getPage(i);
+            const textContent = await page.getTextContent();
+            const pageText = textContent.items.map(item => item.str).join(' ');
+            fullText += pageText + '\n\n';
+        }
+        
+        // Clean up the extracted text
+        fullText = cleanExtractedText(fullText);
+        
+        return fullText;
+    } catch (error) {
+        console.error('PDF extraction error:', error);
+        throw new Error('Failed to extract text from PDF: ' + error.message);
+    }
+}
+
+function cleanExtractedText(text) {
+    // Remove excessive whitespace
+    text = text.replace(/\s+/g, ' ');
+    // Fix common PDF extraction issues
+    text = text.replace(/\n\s*\n/g, '\n\n');
+    text = text.replace(/[•·●○]/g, '•');
+    // Remove weird characters
+    text = text.replace(/[^\x20-\x7E\n]/g, '');
+    return text.trim();
+}
+
+// ==========================================
+// UPDATE CV WITH AI
+// ==========================================
+
+async function updateCVWithAI() {
+    if (!uploadedFileData) {
+        showNotification('⚠️ Please upload a PDF file first.', 'error');
+        return;
+    }
+
+    if (isProcessing) return;
+    isProcessing = true;
+
+    const updateBtn = document.getElementById('cvUpdateBtn');
+    const originalText = updateBtn.innerHTML;
+    updateBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+    updateBtn.disabled = true;
+
+    try {
+        // Show loading in preview container
+        const container = document.getElementById('cvPreviewContainer');
+        if (container) {
+            container.innerHTML = `
+                <div style="text-align: center; padding: 40px; background: white; border-radius: 8px; border: 1px solid #e0dbd3;">
+                    <i class="fas fa-spinner fa-spin" style="font-size: 40px; color: #c9a84c;"></i>
+                    <p style="margin-top: 16px; color: #6b645a; font-family: 'Times New Roman', Times, serif;">
+                        🔄 AI is reformatting your CV...
+                    </p>
+                    <p style="font-size: 13px; color: #8a8277; margin-top: 4px;">
+                        This may take a moment
+                    </p>
+                </div>
+            `;
+        }
+
+        // Build the prompt
+        const prompt = buildCvUpdatePrompt(uploadedFileContent);
+
+        // Call the API
+        const messages = [
+            {
+                role: 'system',
+                content: `You are a professional CV formatter. Take the provided CV content and reformat it with:
+                - Font: Times New Roman
+                - Line height: 1.5
+                - Name: centered, bold, size 20px
+                - Job Title: centered, color #c9a84c, size 16px
+                - Contact info: centered, size 13px, color #64748b
+                - Section headings: left-aligned, bold, uppercase, size 14px
+                - Skills: bullet points, 2 columns
+                - Experience: company, title, dates, and responsibilities as bullet points
+                - Education: institution, qualification, year
+                - Keep all content organized and professional
+                - Return ONLY the formatted CV content as clean HTML (no markdown, no extra text)`
+            },
+            {
+                role: 'user',
+                content: prompt
+            }
+        ];
+
+        const response = await fetch(API_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                messages: messages,
+                model: OR_MODEL,
+                temperature: 0.3,
+                max_tokens: 4000
+            })
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'API request failed');
+        }
+
+        const result = await response.json();
+        let updatedCV = result.choices[0].message.content;
+
+        // Clean up the response
+        updatedCV = cleanAIResponse(updatedCV);
+
+        if (!updatedCV || updatedCV.length < 50) {
+            showNotification('⚠️ Failed to update CV. Please try again.', 'error');
+            return;
+        }
+
+        // Display the updated CV
+        displayUpdatedCV(updatedCV);
+        showNotification('✅ CV updated successfully!', 'success');
+
+    } catch (error) {
+        console.error('Error updating CV:', error);
+        showNotification('❌ Error: ' + error.message, 'error');
+        const container = document.getElementById('cvPreviewContainer');
+        if (container) {
+            container.innerHTML = `
+                <div style="text-align: center; padding: 40px; background: white; border-radius: 8px; border: 1px solid #fecaca;">
+                    <i class="fas fa-exclamation-circle" style="font-size: 40px; color: #dc3545;"></i>
+                    <p style="margin-top: 16px; color: #dc3545; font-family: 'Times New Roman', Times, serif;">
+                        Error updating CV: ${error.message}
+                    </p>
+                    <button onclick="clearUploadedFile()" style="margin-top: 12px; padding: 8px 20px; background: #dc3545; color: white; border: none; border-radius: 999px; cursor: pointer; font-weight: 600;">
+                        Try Again
+                    </button>
+                </div>
+            `;
+        }
+    }
+
+    isProcessing = false;
+    updateBtn.innerHTML = originalText;
+    updateBtn.disabled = false;
+}
+
+function buildCvUpdatePrompt(content) {
+    return `
+    FORMAT THIS CV CONTENT PROFESSIONALLY:
+
+    ${content || 'No content found. Please create a professional CV with placeholder content.'}
+
+    FORMATTING REQUIREMENTS:
+    1. Use Times New Roman font
+    2. Line height: 1.5
+    3. Name should be centered and bold at the top
+    4. Contact info (phone, email, address) centered below name
+    5. Section headings left-aligned, bold, uppercase
+    6. Skills in bullet points, 2 columns where possible
+    7. Experience: Company | Title | Dates, then responsibilities as bullet points
+    8. Education: Institution, Qualification, Year
+    9. Clean spacing between sections
+
+    Return ONLY the formatted HTML content.
+    `;
+}
+
+function cleanAIResponse(response) {
+    // Remove markdown code blocks
+    response = response.replace(/```html/g, '');
+    response = response.replace(/```/g, '');
+    // Remove any "Here is your formatted CV" text
+    response = response.replace(/^Here is.*CV.*:/i, '');
+    response = response.replace(/^I have formatted.*CV.*:/i, '');
+    // Remove any extra wrapper text
+    response = response.trim();
+    return response;
+}
+
+function displayUpdatedCV(content) {
+    const container = document.getElementById('cvPreviewContainer');
+    if (!container) return;
+
+    // Check if content already has HTML tags
+    let formattedContent = content;
+    
+    // If content doesn't have HTML tags, wrap it
+    if (!content.includes('<') && !content.includes('>')) {
+        // Convert newlines to <br> and wrap in paragraphs
+        const lines = content.split('\n').filter(line => line.trim());
+        formattedContent = lines.map(line => {
+            // Check if it looks like a heading (all caps or short)
+            if (line.trim().length < 40 && line.trim() === line.trim().toUpperCase()) {
+                return `<h4 style="font-size: 14px; font-weight: 700; color: #0b2a35; text-transform: uppercase; letter-spacing: 1px; border-bottom: 2px solid #c9a84c; padding-bottom: 4px; margin: 16px 0 8px 0; font-family: 'Times New Roman', Times, serif;">${line.trim()}</h4>`;
+            }
+            // Check if it looks like a name (first line, short)
+            if (line.trim().length < 30 && !line.includes('|') && !line.includes('@')) {
+                return `<h1 style="font-size: 22px; font-weight: 700; color: #0b2a35; text-align: center; margin: 0 0 2px 0; font-family: 'Times New Roman', Times, serif; letter-spacing: 1px;">${line.trim()}</h1>`;
+            }
+            return `<p style="margin: 4px 0; font-family: 'Times New Roman', Times, serif; font-size: 14px; line-height: 1.5;">${line.trim()}</p>`;
+        }).join('');
+    }
+
+    const fullHtml = `
+        <div style="font-family: 'Times New Roman', Times, serif; max-width: 100%; margin: 0 auto; background: white; padding: 30px 25px; border: 1px solid #e0dbd3; border-radius: 8px; line-height: 1.5; overflow: hidden;">
+            ${formattedContent}
+        </div>
+        <div style="margin-top: 20px; padding-top: 15px; border-top: 2px solid #c9a84c; text-align: center;">
+            <button onclick="downloadUpdatedCV('pdf')" style="padding: 10px 20px; font-size: 14px; background: #c9a84c; color: #0b2a35; border: none; border-radius: 999px; font-weight: 700; cursor: pointer; transition: all 0.3s ease; font-family: 'Times New Roman', Times, serif; margin: 0 8px;">
+                <i class="fas fa-file-pdf"></i> Download PDF
+            </button>
+            <button onclick="downloadUpdatedCV('word')" style="padding: 10px 20px; font-size: 14px; background: transparent; color: #0b2a35; border: 2px solid #0b2a35; border-radius: 999px; font-weight: 700; cursor: pointer; transition: all 0.3s ease; font-family: 'Times New Roman', Times, serif; margin: 0 8px;">
+                <i class="fas fa-file-word"></i> Download Word
+            </button>
+        </div>
+    `;
+
+    container.innerHTML = fullHtml;
+    container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    // Store content for download
+    window._updatedCVContent = content;
+}
+
+// ==========================================
+// DOWNLOAD UPDATED CV
+// ==========================================
+
+function downloadUpdatedCV(format) {
+    const content = window._updatedCVContent || '';
+    if (!content) {
+        showNotification('Please update your CV first.', 'error');
+        return;
+    }
+
+    const name = document.getElementById('fullName')?.value || 'Updated_CV';
+
+    if (format === 'pdf') {
+        const win = window.open('', '_blank');
+        if (!win) {
+            showNotification('Please allow popups to download PDF.', 'error');
+            return;
+        }
+
+        win.document.write(`
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <title>${name} - Updated CV</title>
+                <meta charset="utf-8">
+                <style>
+                    * { margin: 0; padding: 0; box-sizing: border-box; }
+                    body { 
+                        background: white; 
+                        font-family: 'Times New Roman', Times, serif; 
+                        line-height: 1.5; 
+                        color: #000000; 
+                        padding: 40px; 
+                        max-width: 900px; 
+                        margin: 0 auto;
+                    }
+                    @page { margin: 1.5cm; size: A4; }
+                    @media print { body { padding: 0; } }
+                </style>
+            </head>
+            <body>
+                ${content}
+                <script>
+                    window.onload = function() { 
+                        setTimeout(function() { window.print(); }, 500); 
+                    }
+                <\/script>
+            </body>
+            </html>
+        `);
+        win.document.close();
+        showNotification('✅ PDF downloaded successfully!', 'success');
+
+    } else if (format === 'word') {
+        const doc = `
+            <!DOCTYPE html>
+            <html xmlns:o='urn:schemas-microsoft-com:office:office' 
+                  xmlns:w='urn:schemas-microsoft-com:office:word' 
+                  xmlns='http://www.w3.org/TR/REC-html40'>
+            <head>
+                <meta charset="utf-8">
+                <title>${name} - Updated CV</title>
+                <!--[if gte mso 9]><xml><w:WordDocument><w:View>Print</w:View><w:Zoom>100</w:Zoom></w:WordDocument></xml><![endif]-->
+                <style>
+                    * { margin: 0; padding: 0; box-sizing: border-box; }
+                    body { 
+                        background: white; 
+                        font-family: 'Times New Roman', Times, serif; 
+                        line-height: 1.5; 
+                        color: #000000; 
+                        padding: 40px; 
+                        max-width: 900px; 
+                        margin: 0 auto;
+                    }
+                    @page { margin: 1.5cm; }
+                </style>
+            </head>
+            <body>
+                ${content}
+            </body>
+            </html>
+        `;
+
+        const blob = new Blob([doc], { type: 'application/msword;charset=utf-8' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = name + '_Updated_CV.doc';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        setTimeout(() => URL.revokeObjectURL(link.href), 100);
+
+        showNotification('<i class="fa-fas-checkmark"></i> Word document downloaded successfully!', 'success');
+    }
+}
 
 // ==========================================
 // DOM READY
