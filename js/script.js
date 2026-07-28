@@ -243,7 +243,7 @@ var SKILLS = {
     ]
 };
 // ==========================================
-// CV UPLOAD & UPDATE - PRODUCTION READY (FIXED)
+// CV UPLOAD & UPDATE - PRODUCTION READY
 // ==========================================
 
 // Variables for uploaded file
@@ -270,7 +270,6 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function initCVUpload() {
-    // Get ALL elements
     const dropzone = document.getElementById('cvUploadDropzone');
     const fileInput = document.getElementById('cvFileInput');
     const preview = document.getElementById('cvUploadPreview');
@@ -279,32 +278,29 @@ function initCVUpload() {
     const errorDiv = document.getElementById('cvUploadError');
     const errorMessage = document.getElementById('cvUploadErrorMessage');
 
-    // LOG: Check if elements exist
-    console.log('🔍 CV Upload Elements:');
-    console.log('  dropzone:', dropzone);
-    console.log('  fileInput:', fileInput);
-    console.log('  preview:', preview);
-    console.log('  removeBtn:', removeBtn);
-    console.log('  updateBtn:', updateBtn);
-
-    if (!dropzone) {
-        console.error('❌ cvUploadDropzone element NOT FOUND!');
-        return;
-    }
-    if (!fileInput) {
-        console.error('❌ cvFileInput element NOT FOUND!');
+    if (!dropzone || !fileInput) {
+        console.warn('⚠️ CV upload elements not found');
         return;
     }
 
-    // ---- CLICK TO UPLOAD ----
+    // Click to upload
     dropzone.addEventListener('click', function(e) {
         e.preventDefault();
         e.stopPropagation();
-        console.log('🖱️ Dropzone clicked! Opening file dialog...');
         fileInput.click();
     });
 
-    // ---- DRAG AND DROP ----
+    // File input change
+    fileInput.addEventListener('change', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        if (this.files && this.files.length > 0) {
+            handleCVFile(this.files[0]);
+        }
+        this.value = '';
+    });
+
+    // Drag and drop
     dropzone.addEventListener('dragover', function(e) {
         e.preventDefault();
         e.stopPropagation();
@@ -321,55 +317,31 @@ function initCVUpload() {
         e.preventDefault();
         e.stopPropagation();
         this.classList.remove('dragover');
-        console.log('📥 Files dropped!');
         if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
             handleCVFile(e.dataTransfer.files[0]);
         }
     });
 
-    // ---- FILE INPUT CHANGE ----
-    fileInput.addEventListener('change', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        console.log('📄 File input changed!');
-        if (this.files && this.files.length > 0) {
-            console.log('  File selected:', this.files[0].name);
-            handleCVFile(this.files[0]);
-        }
-        // Reset input so same file can be uploaded again
-        this.value = '';
-    });
-
-    // ---- REMOVE BUTTON ----
+    // Remove file
     if (removeBtn) {
         removeBtn.addEventListener('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
-            console.log('🗑️ Remove button clicked');
             clearUploadedFile();
         });
-    } else {
-        console.warn('⚠️ removeBtn not found');
     }
 
-    // ---- UPDATE BUTTON ----
+    // Update button
     if (updateBtn) {
         updateBtn.addEventListener('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
-            console.log('🔄 Update button clicked');
             updateCVWithAI();
         });
-    } else {
-        console.warn('⚠️ updateBtn not found');
     }
-
-    console.log('✅ CV Upload initialized successfully!');
 }
 
 function handleCVFile(file) {
-    console.log('📄 Handling file:', file.name);
-    
     const errorDiv = document.getElementById('cvUploadError');
     const errorMessage = document.getElementById('cvUploadErrorMessage');
     const dropzone = document.getElementById('cvUploadDropzone');
@@ -377,32 +349,26 @@ function handleCVFile(file) {
     const fileName = document.getElementById('uploadFileName');
     const fileSize = document.getElementById('uploadFileSize');
     
-    // Reset states
     if (errorDiv) errorDiv.style.display = 'none';
     if (errorMessage) errorMessage.textContent = '';
 
-    // Check if file exists
     if (!file) {
         showCVError('❌ No file selected. Please choose a PDF file.');
         return;
     }
 
-    // Check if PDF
     if (file.type !== 'application/pdf') {
         showCVError('❌ Only PDF files are allowed. Please upload a PDF document.');
         return;
     }
 
-    // Check size (max 10MB)
     if (file.size > 10 * 1024 * 1024) {
         showCVError('❌ File size exceeds 10MB limit. Please compress your PDF.');
         return;
     }
 
-    // Store file data
     uploadedFileData = file;
 
-    // Show preview
     if (preview) {
         preview.style.display = 'block';
         if (fileName) fileName.textContent = file.name;
@@ -411,10 +377,8 @@ function handleCVFile(file) {
 
     if (dropzone) dropzone.style.display = 'none';
 
-    // Show processing indicator
     if (fileName) fileName.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Extracting text...';
 
-    // Extract text from PDF
     extractTextFromPDF(file).then(text => {
         uploadedFileContent = text;
         if (fileName) {
@@ -462,7 +426,6 @@ function clearUploadedFile() {
         updateBtn.disabled = false;
         updateBtn.innerHTML = '<i class="fas fa-wand-magic-sparkles"></i> Update CV with AI';
     }
-    // Reset uploaded content display
     const container = document.getElementById('cvPreviewContainer');
     if (container) {
         container.innerHTML = '';
@@ -474,9 +437,7 @@ function clearUploadedFile() {
 // ==========================================
 
 async function extractTextFromPDF(file) {
-    // Check if PDF.js is loaded
     if (typeof pdfjsLib === 'undefined') {
-        // Try to load PDF.js dynamically
         try {
             await loadPDFJS();
         } catch (error) {
@@ -498,9 +459,7 @@ async function extractTextFromPDF(file) {
             fullText += pageText + '\n\n';
         }
         
-        // Clean up the extracted text
         fullText = cleanExtractedText(fullText);
-        
         return fullText;
     } catch (error) {
         console.error('PDF extraction error:', error);
@@ -508,7 +467,6 @@ async function extractTextFromPDF(file) {
     }
 }
 
-// Load PDF.js dynamically if not already loaded
 function loadPDFJS() {
     return new Promise((resolve, reject) => {
         if (typeof pdfjsLib !== 'undefined') {
@@ -535,12 +493,9 @@ function loadPDFJS() {
 }
 
 function cleanExtractedText(text) {
-    // Remove excessive whitespace
     text = text.replace(/\s+/g, ' ');
-    // Fix common PDF extraction issues
     text = text.replace(/\n\s*\n/g, '\n\n');
     text = text.replace(/[•·●○]/g, '•');
-    // Remove weird characters
     text = text.replace(/[^\x20-\x7E\n]/g, '');
     return text.trim();
 }
@@ -564,7 +519,6 @@ async function updateCVWithAI() {
     updateBtn.disabled = true;
 
     try {
-        // Show loading in preview container
         const container = document.getElementById('cvPreviewContainer');
         if (container) {
             container.innerHTML = `
@@ -580,7 +534,6 @@ async function updateCVWithAI() {
             `;
         }
 
-        // Check if content was extracted
         if (!uploadedFileContent || uploadedFileContent.length < 10) {
             showNotification('⚠️ No text extracted from PDF. Please try uploading again.', 'error');
             updateBtn.innerHTML = originalText;
@@ -589,10 +542,8 @@ async function updateCVWithAI() {
             return;
         }
 
-        // Build the prompt
         const prompt = buildCvUpdatePrompt(uploadedFileContent);
 
-        // Call the API
         const messages = [
             {
                 role: 'system',
@@ -635,8 +586,6 @@ async function updateCVWithAI() {
 
         const result = await response.json();
         let updatedCV = result.choices[0].message.content;
-
-        // Clean up the response
         updatedCV = cleanAIResponse(updatedCV);
 
         if (!updatedCV || updatedCV.length < 50) {
@@ -644,7 +593,6 @@ async function updateCVWithAI() {
             return;
         }
 
-        // Display the updated CV
         displayUpdatedCV(updatedCV);
         showNotification('✅ CV updated successfully!', 'success');
 
@@ -694,38 +642,39 @@ function buildCvUpdatePrompt(content) {
 }
 
 function cleanAIResponse(response) {
-    // Remove markdown code blocks
     response = response.replace(/```html/g, '');
     response = response.replace(/```/g, '');
-    // Remove any "Here is your formatted CV" text
     response = response.replace(/^Here is.*CV.*:/i, '');
     response = response.replace(/^I have formatted.*CV.*:/i, '');
-    // Remove any extra wrapper text
     response = response.trim();
     return response;
 }
 
 function displayUpdatedCV(content) {
     const container = document.getElementById('cvPreviewContainer');
-    if (!container) return;
+    if (!container) {
+        console.error('❌ cvPreviewContainer not found!');
+        return;
+    }
 
-    // Check if content already has HTML tags
+    console.log('📄 Displaying updated CV. Content length:', content.length);
+
     let formattedContent = content;
     
-    // If content doesn't have HTML tags, wrap it
     if (!content.includes('<') && !content.includes('>')) {
-        // Convert newlines to <br> and wrap in paragraphs
         const lines = content.split('\n').filter(line => line.trim());
         formattedContent = lines.map(line => {
-            // Check if it looks like a heading (all caps or short)
-            if (line.trim().length < 40 && line.trim() === line.trim().toUpperCase()) {
-                return `<h4 style="font-size: 14px; font-weight: 700; color: #0b2a35; text-transform: uppercase; letter-spacing: 1px; border-bottom: 2px solid #c9a84c; padding-bottom: 4px; margin: 16px 0 8px 0; font-family: 'Times New Roman', Times, serif;">${line.trim()}</h4>`;
+            const trimmed = line.trim();
+            if (trimmed.length < 40 && trimmed === trimmed.toUpperCase() && trimmed.length > 3) {
+                return `<h4 style="font-size: 14px; font-weight: 700; color: #0b2a35; text-transform: uppercase; letter-spacing: 1px; border-bottom: 2px solid #c9a84c; padding-bottom: 4px; margin: 16px 0 8px 0; font-family: 'Times New Roman', Times, serif;">${trimmed}</h4>`;
             }
-            // Check if it looks like a name (first line, short)
-            if (line.trim().length < 30 && !line.includes('|') && !line.includes('@')) {
-                return `<h1 style="font-size: 22px; font-weight: 700; color: #0b2a35; text-align: center; margin: 0 0 2px 0; font-family: 'Times New Roman', Times, serif; letter-spacing: 1px;">${line.trim()}</h1>`;
+            if (trimmed.length < 30 && !trimmed.includes('|') && !trimmed.includes('@') && !trimmed.includes('•')) {
+                return `<h1 style="font-size: 22px; font-weight: 700; color: #0b2a35; text-align: center; margin: 0 0 2px 0; font-family: 'Times New Roman', Times, serif; letter-spacing: 1px;">${trimmed}</h1>`;
             }
-            return `<p style="margin: 4px 0; font-family: 'Times New Roman', Times, serif; font-size: 14px; line-height: 1.5;">${line.trim()}</p>`;
+            if (trimmed.startsWith('•') || trimmed.startsWith('-') || trimmed.startsWith('*')) {
+                return `<li style="margin-bottom: 4px; font-family: 'Times New Roman', Times, serif; font-size: 14px; line-height: 1.5;">${trimmed.replace(/^[•\-\*]\s*/, '')}</li>`;
+            }
+            return `<p style="margin: 4px 0; font-family: 'Times New Roman', Times, serif; font-size: 14px; line-height: 1.5;">${trimmed}</p>`;
         }).join('');
     }
 
@@ -733,21 +682,25 @@ function displayUpdatedCV(content) {
         <div style="font-family: 'Times New Roman', Times, serif; max-width: 100%; margin: 0 auto; background: white; padding: 30px 25px; border: 1px solid #e0dbd3; border-radius: 8px; line-height: 1.5; overflow: hidden;">
             ${formattedContent}
         </div>
-        <div style="margin-top: 20px; padding-top: 15px; border-top: 2px solid #c9a84c; text-align: center;">
-            <button onclick="downloadUpdatedCV('pdf')" style="padding: 10px 20px; font-size: 14px; background: #c9a84c; color: #0b2a35; border: none; border-radius: 999px; font-weight: 700; cursor: pointer; transition: all 0.3s ease; font-family: 'Times New Roman', Times, serif; margin: 0 8px;">
-                <i class="fas fa-file-pdf"></i> Download PDF
-            </button>
-            <button onclick="downloadUpdatedCV('word')" style="padding: 10px 20px; font-size: 14px; background: transparent; color: #0b2a35; border: 2px solid #0b2a35; border-radius: 999px; font-weight: 700; cursor: pointer; transition: all 0.3s ease; font-family: 'Times New Roman', Times, serif; margin: 0 8px;">
-                <i class="fas fa-file-word"></i> Download Word
-            </button>
+        <div style="margin-top: 25px; padding-top: 20px; border-top: 2px solid #c9a84c; text-align: center;">
+            <p style="font-size: 14px; color: #6b645a; margin-bottom: 12px; font-family: 'Times New Roman', Times, serif;">
+                <i class="fas fa-check-circle" style="color: #22c55e;"></i> Your CV has been updated successfully!
+            </p>
+            <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+                <button onclick="downloadUpdatedCV('pdf')" style="padding: 12px 28px; font-size: 15px; background: #c9a84c; color: #0b2a35; border: none; border-radius: 999px; font-weight: 700; cursor: pointer; transition: all 0.3s ease; font-family: 'Times New Roman', Times, serif; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 16px rgba(201, 168, 76, 0.3);">
+                    <i class="fas fa-file-pdf"></i> Download PDF
+                </button>
+                <button onclick="downloadUpdatedCV('word')" style="padding: 12px 28px; font-size: 15px; background: transparent; color: #0b2a35; border: 2px solid #0b2a35; border-radius: 999px; font-weight: 700; cursor: pointer; transition: all 0.3s ease; font-family: 'Times New Roman', Times, serif; display: inline-flex; align-items: center; gap: 8px;">
+                    <i class="fas fa-file-word"></i> Download Word
+                </button>
+            </div>
         </div>
     `;
 
     container.innerHTML = fullHtml;
     container.scrollIntoView({ behavior: 'smooth', block: 'start' });
-
-    // Store content for download
     window._updatedCVContent = content;
+    console.log('✅ Updated CV displayed successfully!');
 }
 
 // ==========================================
@@ -755,22 +708,28 @@ function displayUpdatedCV(content) {
 // ==========================================
 
 function downloadUpdatedCV(format) {
+    console.log('📥 Downloading updated CV as:', format);
+    
     const content = window._updatedCVContent || '';
     if (!content) {
-        showNotification('Please update your CV first.', 'error');
+        showNotification('⚠️ Please update your CV first.', 'error');
         return;
     }
 
-    const name = document.getElementById('fullName')?.value || 'Updated_CV';
+    const nameInput = document.getElementById('fullName');
+    const name = nameInput?.value?.trim() || 'Updated_CV';
+    const fileName = name.replace(/\s+/g, '_');
+
+    console.log('📄 File name:', fileName);
 
     if (format === 'pdf') {
         const win = window.open('', '_blank');
         if (!win) {
-            showNotification('Please allow popups to download PDF.', 'error');
+            showNotification('⚠️ Please allow popups to download PDF.', 'error');
             return;
         }
 
-        win.document.write(`
+        const htmlContent = `
             <!DOCTYPE html>
             <html>
             <head>
@@ -789,23 +748,32 @@ function downloadUpdatedCV(format) {
                     }
                     @page { margin: 1.5cm; size: A4; }
                     @media print { body { padding: 0; } }
+                    h1 { font-size: 22px; font-weight: 700; text-align: center; margin-bottom: 2px; }
+                    h4 { font-size: 14px; font-weight: 700; text-transform: uppercase; border-bottom: 2px solid #c9a84c; padding-bottom: 4px; margin: 16px 0 8px 0; }
+                    p { margin: 4px 0; font-size: 14px; line-height: 1.5; }
+                    li { margin-bottom: 4px; font-size: 14px; line-height: 1.5; }
+                    ul { padding-left: 20px; }
                 </style>
             </head>
             <body>
                 ${content}
                 <script>
                     window.onload = function() { 
-                        setTimeout(function() { window.print(); }, 500); 
+                        setTimeout(function() { 
+                            window.print(); 
+                        }, 500); 
                     }
                 <\/script>
             </body>
             </html>
-        `);
+        `;
+
+        win.document.write(htmlContent);
         win.document.close();
         showNotification('✅ PDF downloaded successfully!', 'success');
 
     } else if (format === 'word') {
-        const doc = `
+        const docContent = `
             <!DOCTYPE html>
             <html xmlns:o='urn:schemas-microsoft-com:office:office' 
                   xmlns:w='urn:schemas-microsoft-com:office:word' 
@@ -813,11 +781,16 @@ function downloadUpdatedCV(format) {
             <head>
                 <meta charset="utf-8">
                 <title>${name} - Updated CV</title>
-                <!--[if gte mso 9]><xml><w:WordDocument><w:View>Print</w:View><w:Zoom>100</w:Zoom></w:WordDocument></xml><![endif]-->
+                <!--[if gte mso 9]>
+                <xml>
+                    <w:WordDocument>
+                        <w:View>Print</w:View>
+                        <w:Zoom>100</w:Zoom>
+                    </w:WordDocument>
+                </xml>
+                <![endif]-->
                 <style>
-                    * { margin: 0; padding: 0; box-sizing: border-box; }
                     body { 
-                        background: white; 
                         font-family: 'Times New Roman', Times, serif; 
                         line-height: 1.5; 
                         color: #000000; 
@@ -825,6 +798,11 @@ function downloadUpdatedCV(format) {
                         max-width: 900px; 
                         margin: 0 auto;
                     }
+                    h1 { font-size: 22px; font-weight: 700; text-align: center; margin-bottom: 2px; }
+                    h4 { font-size: 14px; font-weight: 700; text-transform: uppercase; border-bottom: 2px solid #c9a84c; padding-bottom: 4px; margin: 16px 0 8px 0; }
+                    p { margin: 4px 0; font-size: 14px; line-height: 1.5; }
+                    li { margin-bottom: 4px; font-size: 14px; line-height: 1.5; }
+                    ul { padding-left: 20px; }
                     @page { margin: 1.5cm; }
                 </style>
             </head>
@@ -834,10 +812,10 @@ function downloadUpdatedCV(format) {
             </html>
         `;
 
-        const blob = new Blob([doc], { type: 'application/msword;charset=utf-8' });
+        const blob = new Blob([docContent], { type: 'application/msword;charset=utf-8' });
         const link = document.createElement('a');
         link.href = URL.createObjectURL(blob);
-        link.download = name + '_Updated_CV.doc';
+        link.download = fileName + '_Updated_CV.doc';
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
@@ -846,6 +824,11 @@ function downloadUpdatedCV(format) {
         showNotification('✅ Word document downloaded successfully!', 'success');
     }
 }
+
+// Make functions globally accessible
+window.clearUploadedFile = clearUploadedFile;
+window.downloadUpdatedCV = downloadUpdatedCV;
+window.updateCVWithAI = updateCVWithAI;
 
 // ==========================================
 // DOM READY
