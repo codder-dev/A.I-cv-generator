@@ -1770,7 +1770,6 @@ function buildLetterPrompt(data) {
 
     return prompt;
 }
-
 // ==========================================
 // GENERATE APPLICATION LETTER
 // ==========================================
@@ -1866,7 +1865,7 @@ async function generateApplicationLetter() {
                         <i class="fas fa-home" style="color: #c9a84c; margin-right: 6px;"></i>
                         Your Address / P.O Box <span style="color: #dc3545;">*</span>
                     </label>
-                    <textarea id="letterSenderAddress" rows="3" placeholder="P.O. Box 12345-00100&#10;Nairobi, Kenya" style="
+                    <textarea id="letterSenderAddress" name="senderAddress" rows="3" placeholder="P.O. Box 12345-00100&#10;Nairobi, Kenya" style="
                         width: 100%;
                         padding: 10px 14px;
                         border: 2px solid #e0dbd3;
@@ -1895,7 +1894,7 @@ async function generateApplicationLetter() {
                         <i class="fas fa-building" style="color: #c9a84c; margin-right: 6px;"></i>
                         Company Name <span style="color: #dc3545;">*</span>
                     </label>
-                    <input type="text" id="letterCompanyName" placeholder="e.g. Tech Solutions Ltd" style="
+                    <input type="text" id="letterCompanyName" name="companyName" placeholder="e.g. Tech Solutions Ltd" style="
                         width: 100%;
                         padding: 10px 14px;
                         border: 2px solid #e0dbd3;
@@ -1919,7 +1918,7 @@ async function generateApplicationLetter() {
                         <i class="fas fa-location-dot" style="color: #c9a84c; margin-right: 6px;"></i>
                         Company Address / P.O Box <span style="color: #dc3545;">*</span>
                     </label>
-                    <textarea id="letterCompanyAddress" rows="2" placeholder="P.O. Box 12345-00100&#10;Nairobi, Kenya" style="
+                    <textarea id="letterCompanyAddress" name="companyAddress" rows="2" placeholder="P.O. Box 12345-00100&#10;Nairobi, Kenya" style="
                         width: 100%;
                         padding: 10px 14px;
                         border: 2px solid #e0dbd3;
@@ -1948,7 +1947,7 @@ async function generateApplicationLetter() {
                         <i class="fas fa-briefcase" style="color: #c9a84c; margin-right: 6px;"></i>
                         Position Applying For <span style="color: #dc3545;">*</span>
                     </label>
-                    <input type="text" id="letterPosition" placeholder="e.g. Senior Software Developer" style="
+                    <input type="text" id="letterPosition" name="position" placeholder="e.g. Senior Software Developer" style="
                         width: 100%;
                         padding: 10px 14px;
                         border: 2px solid #e0dbd3;
@@ -2072,90 +2071,96 @@ async function generateApplicationLetter() {
 async function submitLetterDetails() {
     console.log('🔍 Submit Letter Details called');
     
-    // Get elements
-    var senderAddressEl = document.getElementById('letterSenderAddress');
-    var companyNameEl = document.getElementById('letterCompanyName');
-    var companyAddressEl = document.getElementById('letterCompanyAddress');
-    var positionEl = document.getElementById('letterPosition');
+    // Get the form element
+    var form = document.getElementById('letterDetailsForm');
+    if (!form) {
+        console.error('❌ Form not found!');
+        showNotification('Form not found. Please try again.', 'error');
+        return;
+    }
     
-    // Get values - using .value directly without trim first to see raw value
-    var senderAddressRaw = senderAddressEl ? senderAddressEl.value : '';
-    var companyNameRaw = companyNameEl ? companyNameEl.value : '';
-    var companyAddressRaw = companyAddressEl ? companyAddressEl.value : '';
-    var positionRaw = positionEl ? positionEl.value : '';
+    // Get values directly from the form using FormData
+    var formData = new FormData(form);
     
-    console.log('📝 Raw Values:', { 
-        senderAddressRaw: senderAddressRaw, 
-        companyNameRaw: companyNameRaw, 
-        companyAddressRaw: companyAddressRaw, 
-        positionRaw: positionRaw 
-    });
+    // Log all form data
+    console.log('📋 FormData entries:');
+    for (var pair of formData.entries()) {
+        console.log(pair[0] + ': ' + pair[1]);
+    }
     
-    // Trim values
-    var senderAddress = senderAddressRaw.trim();
-    var companyName = companyNameRaw.trim();
-    var companyAddress = companyAddressRaw.trim();
-    var position = positionRaw.trim();
+    // Get values from FormData
+    var senderAddress = formData.get('senderAddress') || '';
+    var companyName = formData.get('companyName') || '';
+    var companyAddress = formData.get('companyAddress') || '';
+    var position = formData.get('position') || '';
     var signature = window._letterSignature || '';
     
-    console.log('📝 Trimmed Values:', { 
+    console.log('📝 Values from FormData:', { 
         senderAddress: senderAddress, 
         companyName: companyName, 
         companyAddress: companyAddress, 
         position: position 
     });
     
-    // Check if fields are disabled or readonly
-    console.log('🔍 Field states:', {
-        senderAddressDisabled: senderAddressEl ? senderAddressEl.disabled : 'N/A',
-        companyNameDisabled: companyNameEl ? companyNameEl.disabled : 'N/A',
-        companyAddressDisabled: companyAddressEl ? companyAddressEl.disabled : 'N/A',
-        positionDisabled: positionEl ? positionEl.disabled : 'N/A',
-        senderAddressReadOnly: senderAddressEl ? senderAddressEl.readOnly : 'N/A',
-        companyNameReadOnly: companyNameEl ? companyNameEl.readOnly : 'N/A',
-        companyAddressReadOnly: companyAddressEl ? companyAddressEl.readOnly : 'N/A',
-        positionReadOnly: positionEl ? positionEl.readOnly : 'N/A'
+    // ALSO try getting by ID as fallback
+    var senderAddressEl = document.getElementById('letterSenderAddress');
+    var companyNameEl = document.getElementById('letterCompanyName');
+    var companyAddressEl = document.getElementById('letterCompanyAddress');
+    var positionEl = document.getElementById('letterPosition');
+    
+    var senderAddressById = senderAddressEl ? senderAddressEl.value : '';
+    var companyNameById = companyNameEl ? companyNameEl.value : '';
+    var companyAddressById = companyAddressEl ? companyAddressEl.value : '';
+    var positionById = positionEl ? positionEl.value : '';
+    
+    console.log('📝 Values by ID:', { 
+        senderAddressById: senderAddressById, 
+        companyNameById: companyNameById, 
+        companyAddressById: companyAddressById, 
+        positionById: positionById 
     });
     
-    // Check if fields exist in the DOM
-    console.log('🔍 DOM Check:');
-    console.log('letterSenderAddress exists:', !!document.getElementById('letterSenderAddress'));
-    console.log('letterCompanyName exists:', !!document.getElementById('letterCompanyName'));
-    console.log('letterCompanyAddress exists:', !!document.getElementById('letterCompanyAddress'));
-    console.log('letterPosition exists:', !!document.getElementById('letterPosition'));
+    // Use the values from FormData (they should have the actual user input)
+    var finalSenderAddress = senderAddress || senderAddressById;
+    var finalCompanyName = companyName || companyNameById;
+    var finalCompanyAddress = companyAddress || companyAddressById;
+    var finalPosition = position || positionById;
     
-    // ALSO CHECK BY QUERY SELECTOR (case sensitive)
-    var altCompanyName = document.querySelector('#letterCompanyName');
-    var altCompanyAddress = document.querySelector('#letterCompanyAddress');
-    var altPosition = document.querySelector('#letterPosition');
-    console.log('🔍 QuerySelector Check:', {
-        altCompanyName: altCompanyName ? altCompanyName.value : 'null',
-        altCompanyAddress: altCompanyAddress ? altCompanyAddress.value : 'null',
-        altPosition: altPosition ? altPosition.value : 'null'
+    // Trim values
+    finalSenderAddress = finalSenderAddress.trim();
+    finalCompanyName = finalCompanyName.trim();
+    finalCompanyAddress = finalCompanyAddress.trim();
+    finalPosition = finalPosition.trim();
+    
+    console.log('📝 Final Values:', { 
+        finalSenderAddress: finalSenderAddress, 
+        finalCompanyName: finalCompanyName, 
+        finalCompanyAddress: finalCompanyAddress, 
+        finalPosition: finalPosition 
     });
     
     // Validation
-    if (!senderAddress || senderAddress === '') {
+    if (!finalSenderAddress || finalSenderAddress === '') {
         showNotification('Please enter your address/P.O Box.', 'error');
         console.warn('❌ Missing: senderAddress');
         return;
     }
     
-    if (!companyName || companyName === '') {
+    if (!finalCompanyName || finalCompanyName === '') {
         showNotification('Please enter the company name.', 'error');
-        console.warn('❌ Missing: companyName - Raw value was: "' + companyNameRaw + '"');
+        console.warn('❌ Missing: companyName');
         return;
     }
     
-    if (!companyAddress || companyAddress === '') {
+    if (!finalCompanyAddress || finalCompanyAddress === '') {
         showNotification('Please enter the company address/P.O Box.', 'error');
-        console.warn('❌ Missing: companyAddress - Raw value was: "' + companyAddressRaw + '"');
+        console.warn('❌ Missing: companyAddress');
         return;
     }
     
-    if (!position || position === '') {
+    if (!finalPosition || finalPosition === '') {
         showNotification('Please enter the position you are applying for.', 'error');
-        console.warn('❌ Missing: position - Raw value was: "' + positionRaw + '"');
+        console.warn('❌ Missing: position');
         return;
     }
     
@@ -2163,10 +2168,10 @@ async function submitLetterDetails() {
     closeLetterDetailsModal();
     
     var data = lastGeneratedData;
-    data.senderAddress = senderAddress;
-    data.companyName = companyName;
-    data.companyAddress = companyAddress;
-    data.position = position;
+    data.senderAddress = finalSenderAddress;
+    data.companyName = finalCompanyName;
+    data.companyAddress = finalCompanyAddress;
+    data.position = finalPosition;
     data.signature = signature;
     
     var letterContainer = document.getElementById('letterContainer');
