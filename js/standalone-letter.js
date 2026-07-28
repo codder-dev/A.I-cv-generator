@@ -62,7 +62,7 @@ console.log('🌐 Standalone API URL:', API_URL);
         // ===== DOM Elements =====
         const form = document.getElementById('letterForm');
         if (!form) {
-            console.warn('Letter form not found!');
+            console.warn('⚠️ Letter form not found!');
             return;
         }
 
@@ -203,15 +203,15 @@ console.log('🌐 Standalone API URL:', API_URL);
             const currentCompany = document.getElementById('letterCurrentCompany')?.value?.trim() || 'Not specified';
 
             let html = '';
-            html += '<div class="summary-item"><span class="summary-label">Full Name:</span><span class="summary-value">' + fullName + '</span></div>';
-            html += '<div class="summary-item"><span class="summary-label">Address:</span><span class="summary-value">' + address + '</span></div>';
-            html += '<div class="summary-item"><span class="summary-label">Phone:</span><span class="summary-value">' + phone + '</span></div>';
-            html += '<div class="summary-item"><span class="summary-label">Email:</span><span class="summary-value">' + email + '</span></div>';
-            html += '<div class="summary-item"><span class="summary-label">Current Job:</span><span class="summary-value">' + currentJob + '</span></div>';
-            html += '<div class="summary-item"><span class="summary-label">Current Company:</span><span class="summary-value">' + currentCompany + '</span></div>';
-            html += '<div class="summary-item"><span class="summary-label">Company Name:</span><span class="summary-value">' + companyName + '</span></div>';
-            html += '<div class="summary-item"><span class="summary-label">Company Address:</span><span class="summary-value">' + companyAddress + '</span></div>';
-            html += '<div class="summary-item"><span class="summary-label">Position:</span><span class="summary-value">' + position + '</span></div>';
+            html += '<div class="summary-item"><span class="summary-label"><i class="fas fa-user"></i> Full Name:</span><span class="summary-value">' + fullName + '</span></div>';
+            html += '<div class="summary-item"><span class="summary-label"><i class="fas fa-home"></i> Address:</span><span class="summary-value">' + address + '</span></div>';
+            html += '<div class="summary-item"><span class="summary-label"><i class="fas fa-phone"></i> Phone:</span><span class="summary-value">' + phone + '</span></div>';
+            html += '<div class="summary-item"><span class="summary-label"><i class="fas fa-envelope"></i> Email:</span><span class="summary-value">' + email + '</span></div>';
+            html += '<div class="summary-item"><span class="summary-label"><i class="fas fa-briefcase"></i> Current Job:</span><span class="summary-value">' + currentJob + '</span></div>';
+            html += '<div class="summary-item"><span class="summary-label"><i class="fas fa-building"></i> Current Company:</span><span class="summary-value">' + currentCompany + '</span></div>';
+            html += '<div class="summary-item"><span class="summary-label"><i class="fas fa-building"></i> Company Name:</span><span class="summary-value">' + companyName + '</span></div>';
+            html += '<div class="summary-item"><span class="summary-label"><i class="fas fa-location-dot"></i> Company Address:</span><span class="summary-value">' + companyAddress + '</span></div>';
+            html += '<div class="summary-item"><span class="summary-label"><i class="fas fa-briefcase"></i> Position:</span><span class="summary-value">' + position + '</span></div>';
 
             container.innerHTML = html;
         }
@@ -467,7 +467,7 @@ console.log('🌐 Standalone API URL:', API_URL);
                 window._standaloneLetterContent = letterContent;
 
             } catch (error) {
-                console.error('Error generating letter:', error);
+                console.error('❌ Error generating letter:', error);
                 showNotification('Error: ' + error.message, 'error');
             }
 
@@ -579,8 +579,8 @@ console.log('🌐 Standalone API URL:', API_URL);
             }
         });
 
-        console.log(' Standalone Letter Generator initialized!');
-        console.log(' Current step: ' + currentStep);
+        console.log('✅ Standalone Letter Generator initialized!');
+        console.log('📊 Current step: ' + currentStep);
     }
 
     // ===== Make functions globally accessible =====

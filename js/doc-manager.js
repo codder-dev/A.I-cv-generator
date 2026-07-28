@@ -51,7 +51,7 @@ let splitPageBlobs = {};
 // DOCUMENT MANAGER TAB SWITCHING
 // ============================================
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('Document Manager initialized!');
+    console.log('📄 Document Manager initialized!');
     
     // Tab switching
     document.querySelectorAll('.doc-manager-tabs .tab-btn').forEach(btn => {
@@ -101,7 +101,7 @@ function initCombineUpload() {
     const fileInput = document.getElementById('docCombineFileInput');
 
     if (!uploadArea || !fileInput) {
-        console.warn('Combine upload elements not found!');
+        console.warn('<i class="fas fa-circle-xmark"></i> Combine upload elements not found!');
         return;
     }
 
@@ -160,7 +160,7 @@ function renderCombineFiles() {
         container.innerHTML = `
             <div class="doc-empty-state">
                 <i class="fas fa-inbox"></i>
-                <p>No files uploaded yet</p>
+                <p><i class="fas fa-info-circle" style="color: var(--gold);"></i> No files uploaded yet</p>
             </div>
         `;
         return;
@@ -170,10 +170,10 @@ function renderCombineFiles() {
         <div class="doc-file-item" draggable="true" data-index="${index}">
             <div class="file-info">
                 <span class="drag-handle"><i class="fas fa-grip-lines"></i></span>
-                <i class="fas fa-file-pdf"></i>
+                <i class="fas fa-file-pdf" style="color: var(--gold);"></i>
                 <div>
-                    <div class="file-name">${file.name}</div>
-                    <div class="file-size">${(file.size / 1024).toFixed(1)} KB</div>
+                    <div class="file-name"><i class="fas fa-file"></i> ${file.name}</div>
+                    <div class="file-size"><i class="fas fa-weight-hanging"></i> ${(file.size / 1024).toFixed(1)} KB</div>
                 </div>
             </div>
             <div class="file-actions">
@@ -280,9 +280,9 @@ async function confirmDocCombine() {
             `;
         }
 
-        docShowNotification(`PDF combined successfully!`, 'success');
+        docShowNotification(`<i class="fas fa-circle-check"></i> PDF combined successfully!`, 'success');
     } catch (error) {
-        console.error('Error combining PDFs:', error);
+        console.error('<i class="fas fa-xmark"></i> Error combining PDFs:', error);
         docShowNotification('Error combining PDFs. Please try again.', 'error');
     }
 }
@@ -312,7 +312,7 @@ function initSplitUpload() {
     const fileInput = document.getElementById('docSplitFileInput');
 
     if (!uploadArea || !fileInput) {
-        console.warn('Split upload elements not found!');
+        console.warn('<i class="fas fa-circle-xmark"></i> Split upload elements not found!');
         return;
     }
 
@@ -375,7 +375,7 @@ function renderSplitFiles() {
         container.innerHTML = `
             <div class="doc-empty-state">
                 <i class="fas fa-inbox"></i>
-                <p>No file uploaded yet</p>
+                <p><i class="fas fa-info-circle" style="color: var(--gold);"></i> No file uploaded yet</p>
             </div>
         `;
         const controls = document.getElementById('docSplitControls');
@@ -386,10 +386,10 @@ function renderSplitFiles() {
     container.innerHTML = `
         <div class="doc-file-item">
             <div class="file-info">
-                <i class="fas fa-file-pdf"></i>
+                <i class="fas fa-file-pdf" style="color: var(--gold);"></i>
                 <div>
-                    <div class="file-name">${docState.splitFile.name}</div>
-                    <div class="file-size">${(docState.splitFile.size / 1024).toFixed(1)} KB</div>
+                    <div class="file-name"><i class="fas fa-file"></i> ${docState.splitFile.name}</div>
+                    <div class="file-size"><i class="fas fa-weight-hanging"></i> ${(docState.splitFile.size / 1024).toFixed(1)} KB</div>
                 </div>
             </div>
             <div class="file-actions">
@@ -443,7 +443,7 @@ async function loadSplitDocument() {
         docShowNotification(`Loaded ${splitTotalPages} pages successfully.`, 'success');
 
     } catch (error) {
-        console.error('Error loading PDF:', error);
+        console.error('<i class="fas fa-xmark"></i> Error loading PDF:', error);
         docShowNotification('Error loading PDF. Please try again.', 'error');
     }
 }
@@ -503,7 +503,7 @@ async function splitSelectedPage() {
         addSplitResult(pageNumber, blob);
         docShowNotification(`Page ${pageNumber} extracted successfully!`, 'success');
     } catch (error) {
-        console.error('Error splitting page:', error);
+        console.error('<i class="fas fa-xmark"></i> Error splitting page:', error);
         docShowNotification('Error splitting page. Please try again.', 'error');
     }
 }
@@ -530,7 +530,7 @@ function renderSplitResults() {
         container.innerHTML = `
             <div style="text-align: center; padding: 40px; color: var(--gray-500);">
                 <i class="fas fa-inbox" style="font-size: 48px; color: var(--gray-300);"></i>
-                <p style="margin-top: 8px;">No pages split yet. Select a page and click "Split This Page".</p>
+                <p style="margin-top: 8px;"><i class="fas fa-info-circle" style="color: var(--gold);"></i> No pages split yet. Select a page and click "Split This Page".</p>
             </div>
         `;
         return;
@@ -543,7 +543,7 @@ function renderSplitResults() {
         html += `
             <div style="background: var(--off-white); padding: 16px; border-radius: 8px; text-align: center; border: 1px solid var(--gray-200); transition: var(--transition);">
                 <i class="fas fa-file-pdf" style="font-size: 40px; color: var(--gold);"></i>
-                <p style="font-size: 15px; font-weight: 700; margin: 8px 0; color: var(--primary);">Page ${item.page}</p>
+                <p style="font-size: 15px; font-weight: 700; margin: 8px 0; color: var(--primary);"><i class="fas fa-page"></i> Page ${item.page}</p>
                 <div style="display: flex; gap: 6px; flex-wrap: wrap; justify-content: center;">
                     <button class="btn-secondary" style="padding: 4px 12px; font-size: 12px;" onclick="downloadSplitResult(${index})">
                         <i class="fas fa-download"></i> Download
@@ -628,7 +628,7 @@ async function splitAllDocPages() {
         renderSplitResults();
         docShowNotification(`Split into ${splitTotalPages} pages successfully!`, 'success');
     } catch (error) {
-        console.error('Error splitting all pages:', error);
+        console.error('<i class="fas fa-xmark"></i> Error splitting all pages:', error);
         docShowNotification('Error splitting all pages. Please try again.', 'error');
     }
 }
@@ -687,7 +687,7 @@ function openDocViewModal(content) {
     const modal = document.getElementById('docViewModal');
     const modalContent = document.getElementById('docViewModalContent');
     if (!modal || !modalContent) {
-        console.warn('View modal elements not found!');
+        console.warn('<i class="fas fa-circle-xmark"></i> View modal elements not found!');
         return;
     }
     modal.classList.add('active');
@@ -728,5 +728,5 @@ window.clearDocFiles = clearDocFiles;
 window.closeDocViewModal = closeDocViewModal;
 window.openDocViewModal = openDocViewModal;
 
-console.log('Document Manager loaded successfully!');
-console.log('Combine & Split features only - Convert removed.');
+console.log('✅ Document Manager loaded successfully!');
+console.log('📄 Combine & Split features only - Convert removed.');

@@ -928,15 +928,15 @@ function updateSummary() {
     var refEntries = document.querySelectorAll('#referenceContainer .entry-item').length;
 
     var html = '';
-    html += '<div class="summary-item"><span class="summary-label">Name:</span><span class="summary-value">' + fullName + '</span></div>';
-    html += '<div class="summary-item"><span class="summary-label">Job Title:</span><span class="summary-value">' + jobTitle + '</span></div>';
-    html += '<div class="summary-item"><span class="summary-label">Email:</span><span class="summary-value">' + email + '</span></div>';
-    html += '<div class="summary-item"><span class="summary-label">Phone:</span><span class="summary-value">' + phone + '</span></div>';
-    html += '<div class="summary-item"><span class="summary-label">Address:</span><span class="summary-value">' + address + '</span></div>';
-    html += '<div class="summary-item"><span class="summary-label">Education:</span><span class="summary-value">' + eduEntries + ' entries</span></div>';
-    html += '<div class="summary-item"><span class="summary-label">Experience:</span><span class="summary-value">' + expEntries + ' entries</span></div>';
-    html += '<div class="summary-item"><span class="summary-label">References:</span><span class="summary-value">' + (refEntries > 0 ? refEntries + ' provided' : 'Available upon request') + '</span></div>';
-    html += '<div class="summary-item"><span class="summary-label">CV Type:</span><span class="summary-value" style="text-transform:capitalize;">' + selectedCVType + '</span></div>';
+    html += '<div class="summary-item"><span class="summary-label"><i class="fas fa-user"></i> Name:</span><span class="summary-value">' + fullName + '</span></div>';
+    html += '<div class="summary-item"><span class="summary-label"><i class="fas fa-briefcase"></i> Job Title:</span><span class="summary-value">' + jobTitle + '</span></div>';
+    html += '<div class="summary-item"><span class="summary-label"><i class="fas fa-envelope"></i> Email:</span><span class="summary-value">' + email + '</span></div>';
+    html += '<div class="summary-item"><span class="summary-label"><i class="fas fa-phone"></i> Phone:</span><span class="summary-value">' + phone + '</span></div>';
+    html += '<div class="summary-item"><span class="summary-label"><i class="fas fa-home"></i> Address:</span><span class="summary-value">' + address + '</span></div>';
+    html += '<div class="summary-item"><span class="summary-label"><i class="fas fa-graduation-cap"></i> Education:</span><span class="summary-value">' + eduEntries + ' entries</span></div>';
+    html += '<div class="summary-item"><span class="summary-label"><i class="fas fa-briefcase"></i> Experience:</span><span class="summary-value">' + expEntries + ' entries</span></div>';
+    html += '<div class="summary-item"><span class="summary-label"><i class="fas fa-users"></i> References:</span><span class="summary-value">' + (refEntries > 0 ? refEntries + ' provided' : 'Available upon request') + '</span></div>';
+    html += '<div class="summary-item"><span class="summary-label"><i class="fas fa-file-alt"></i> CV Type:</span><span class="summary-value" style="text-transform:capitalize;">' + selectedCVType + '</span></div>';
 
     container.innerHTML = html;
 }
@@ -1394,7 +1394,7 @@ function displayGeneratedCV(generatedText, data) {
                 <i class="fas fa-envelope"></i> Generate Application Letter from CV
             </button>
             <p style="font-size: 13px; color: #6b645a; margin-top: 8px; font-family: 'Times New Roman', Times, serif;">
-                Create a professional application letter based on this CV
+                <i class="fas fa-info-circle"></i> Create a professional application letter based on this CV
             </p>
         </div>
         <div id="letterContainer" style="display:none; margin-top: 30px;"></div>
@@ -1835,15 +1835,26 @@ async function generateApplicationLetter() {
         ">
             <button onclick="closeLetterDetailsModal()" style="
                 position: absolute;
-                top: 16px;
-                right: 20px;
+                top: 12px;
+                right: 16px;
                 background: none;
                 border: none;
-                font-size: 28px;
+                font-size: 20px;
                 color: #6b645a;
                 cursor: pointer;
                 transition: all 0.3s ease;
-            ">×</button>
+                padding: 6px;
+                border-radius: 50%;
+                width: 36px;
+                height: 36px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            " 
+            onmouseover="this.style.backgroundColor='#f0ede8'; this.style.color='#dc3545'"
+            onmouseout="this.style.backgroundColor='transparent'; this.style.color='#6b645a'">
+                <i class="fas fa-times"></i>
+            </button>
             
             <h2 style="
                 font-family: 'Times New Roman', Times, serif;
@@ -1851,13 +1862,19 @@ async function generateApplicationLetter() {
                 color: #0b2a35;
                 margin-bottom: 4px;
                 font-weight: 700;
-            ">Application Letter Details</h2>
+            ">
+                <i class="fas fa-envelope" style="color: #c9a84c; margin-right: 10px;"></i>
+                Application Letter Details
+            </h2>
             <p style="
                 font-family: 'Times New Roman', Times, serif;
                 color: #6b645a;
                 font-size: 14px;
                 margin-bottom: 24px;
-            ">Please provide the required information for the application letter</p>
+            ">
+                <i class="fas fa-info-circle" style="color: #c9a84c;"></i>
+                Please provide the required information for the application letter
+            </p>
             
             <form id="letterDetailsForm" onsubmit="event.preventDefault(); submitLetterDetails();">
                 
@@ -1869,7 +1886,10 @@ async function generateApplicationLetter() {
                         color: #0b2a35;
                         display: block;
                         margin-bottom: 4px;
-                    ">Your Address / P.O Box <span style="color: #dc3545;">*</span></label>
+                    ">
+                        <i class="fas fa-home" style="color: #c9a84c; margin-right: 6px;"></i>
+                        Your Address / P.O Box <span style="color: #dc3545;">*</span>
+                    </label>
                     <textarea id="letterSenderAddress" rows="3" placeholder="P.O. Box 12345-00100&#10;Nairobi, Kenya" style="
                         width: 100%;
                         padding: 10px 14px;
@@ -1882,6 +1902,7 @@ async function generateApplicationLetter() {
                         resize: vertical;
                     " required>${lastGeneratedData.personal.address || ''}</textarea>
                     <p style="font-size: 12px; color: #6b645a; margin-top: 4px; font-family: 'Times New Roman', Times, serif;">
+                        <i class="fas fa-info-circle" style="color: #c9a84c;"></i>
                         Format: P.O. Box [Number]-[Postal Code], [City] (One line per detail)
                     </p>
                 </div>
@@ -1894,7 +1915,10 @@ async function generateApplicationLetter() {
                         color: #0b2a35;
                         display: block;
                         margin-bottom: 4px;
-                    ">Company Name <span style="color: #dc3545;">*</span></label>
+                    ">
+                        <i class="fas fa-building" style="color: #c9a84c; margin-right: 6px;"></i>
+                        Company Name <span style="color: #dc3545;">*</span>
+                    </label>
                     <input type="text" id="letterCompanyName" placeholder="e.g. Tech Solutions Ltd" style="
                         width: 100%;
                         padding: 10px 14px;
@@ -1915,7 +1939,10 @@ async function generateApplicationLetter() {
                         color: #0b2a35;
                         display: block;
                         margin-bottom: 4px;
-                    ">Company Address / P.O Box <span style="color: #dc3545;">*</span></label>
+                    ">
+                        <i class="fas fa-location-dot" style="color: #c9a84c; margin-right: 6px;"></i>
+                        Company Address / P.O Box <span style="color: #dc3545;">*</span>
+                    </label>
                     <textarea id="letterCompanyAddress" rows="2" placeholder="P.O. Box 12345-00100&#10;Nairobi, Kenya" style="
                         width: 100%;
                         padding: 10px 14px;
@@ -1928,6 +1955,7 @@ async function generateApplicationLetter() {
                         resize: vertical;
                     " required></textarea>
                     <p style="font-size: 12px; color: #6b645a; margin-top: 4px; font-family: 'Times New Roman', Times, serif;">
+                        <i class="fas fa-info-circle" style="color: #c9a84c;"></i>
                         Format: P.O. Box [Number]-[Postal Code], [City] (One line per detail)
                     </p>
                 </div>
@@ -1940,7 +1968,10 @@ async function generateApplicationLetter() {
                         color: #0b2a35;
                         display: block;
                         margin-bottom: 4px;
-                    ">Position Applying For <span style="color: #dc3545;">*</span></label>
+                    ">
+                        <i class="fas fa-briefcase" style="color: #c9a84c; margin-right: 6px;"></i>
+                        Position Applying For <span style="color: #dc3545;">*</span>
+                    </label>
                     <input type="text" id="letterPosition" placeholder="e.g. Senior Software Developer" style="
                         width: 100%;
                         padding: 10px 14px;
@@ -1961,7 +1992,10 @@ async function generateApplicationLetter() {
                         color: #0b2a35;
                         display: block;
                         margin-bottom: 4px;
-                    ">Upload Signature <span style="color: #6b645a;">(Optional)</span></label>
+                    ">
+                        <i class="fas fa-pen" style="color: #c9a84c; margin-right: 6px;"></i>
+                        Upload Signature <span style="color: #6b645a;">(Optional)</span>
+                    </label>
                     <div id="signatureUploadArea" style="
                         border: 2px dashed #e0dbd3;
                         border-radius: 8px;
@@ -1979,7 +2013,9 @@ async function generateApplicationLetter() {
                         </div>
                         <div id="signaturePreview" style="display:none;">
                             <img id="signatureImg" src="" alt="Signature" style="max-width: 200px; max-height: 80px;">
-                            <p style="font-family: 'Times New Roman', Times, serif; color: #0b2a35; margin-top: 8px; font-weight: 600;">✓ Signature uploaded</p>
+                            <p style="font-family: 'Times New Roman', Times, serif; color: #0b2a35; margin-top: 8px; font-weight: 600;">
+                                <i class="fas fa-check-circle" style="color: #22c55e;"></i> Signature uploaded
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -1996,7 +2032,9 @@ async function generateApplicationLetter() {
                         cursor: pointer;
                         transition: all 0.3s ease;
                         font-family: 'Times New Roman', Times, serif;
-                    ">Cancel</button>
+                    ">
+                        <i class="fas fa-times"></i> Cancel
+                    </button>
                     <button type="submit" style="
                         padding: 10px 32px;
                         background: #c9a84c;
@@ -2057,32 +2095,57 @@ async function generateApplicationLetter() {
 // SUBMIT LETTER DETAILS
 // ==========================================
 async function submitLetterDetails() {
-    var senderAddress = document.getElementById('letterSenderAddress')?.value?.trim();
-    var companyName = document.getElementById('letterCompanyName')?.value?.trim();
-    var companyAddress = document.getElementById('letterCompanyAddress')?.value?.trim();
-    var position = document.getElementById('letterPosition')?.value?.trim();
+    console.log('🔍 Submit Letter Details called');
+    
+    // Get elements with error checking
+    var senderAddressEl = document.getElementById('letterSenderAddress');
+    var companyNameEl = document.getElementById('letterCompanyName');
+    var companyAddressEl = document.getElementById('letterCompanyAddress');
+    var positionEl = document.getElementById('letterPosition');
+    
+    // Log if elements are found
+    console.log('📋 Elements found:', {
+        senderAddress: !!senderAddressEl,
+        companyName: !!companyNameEl,
+        companyAddress: !!companyAddressEl,
+        position: !!positionEl
+    });
+    
+    // Get values
+    var senderAddress = senderAddressEl ? senderAddressEl.value.trim() : '';
+    var companyName = companyNameEl ? companyNameEl.value.trim() : '';
+    var companyAddress = companyAddressEl ? companyAddressEl.value.trim() : '';
+    var position = positionEl ? positionEl.value.trim() : '';
     var signature = window._letterSignature || '';
     
-    if (!senderAddress) {
+    console.log('📝 Values:', { senderAddress, companyName, companyAddress, position });
+    
+    // Validation with detailed messages
+    if (!senderAddress || senderAddress === '') {
         showNotification('Please enter your address/P.O Box.', 'error');
+        console.warn('❌ Missing: senderAddress');
         return;
     }
     
-    if (!companyName) {
+    if (!companyName || companyName === '') {
         showNotification('Please enter the company name.', 'error');
+        console.warn('❌ Missing: companyName');
         return;
     }
     
-    if (!companyAddress) {
+    if (!companyAddress || companyAddress === '') {
         showNotification('Please enter the company address/P.O Box.', 'error');
+        console.warn('❌ Missing: companyAddress');
         return;
     }
     
-    if (!position) {
+    if (!position || position === '') {
         showNotification('Please enter the position you are applying for.', 'error');
+        console.warn('❌ Missing: position');
         return;
     }
     
+    console.log('✅ All fields validated successfully!');
     closeLetterDetailsModal();
     
     var data = lastGeneratedData;
@@ -2093,7 +2156,10 @@ async function submitLetterDetails() {
     data.signature = signature;
     
     var letterContainer = document.getElementById('letterContainer');
-    if (!letterContainer) return;
+    if (!letterContainer) {
+        console.error('❌ letterContainer not found!');
+        return;
+    }
     
     letterContainer.style.display = 'block';
     letterContainer.innerHTML = '<div style="text-align: center; padding: 40px;"><i class="fas fa-spinner fa-spin" style="font-size: 30px; color: #c9a84c;"></i><p style="margin-top: 10px; font-family: \'Times New Roman\', Times, serif;">Generating your application letter...</p></div>';
@@ -2112,6 +2178,8 @@ async function submitLetterDetails() {
             }
         ];
 
+        console.log('📤 Sending request to API:', API_URL);
+        
         var response = await fetch(API_URL, {
             method: 'POST',
             headers: {
@@ -2127,10 +2195,12 @@ async function submitLetterDetails() {
         
         if (!response.ok) {
             var errorData = await response.json();
+            console.error('❌ API Error:', errorData);
             throw new Error(errorData.error || 'API request failed');
         }
         
         var result = await response.json();
+        console.log('✅ API Response received');
         var letterContent = result.choices[0].message.content;
         
         window._letterData = data;
@@ -2154,7 +2224,7 @@ async function submitLetterDetails() {
         showNotification('Application Letter Generated successfully!', 'success');
         
     } catch (error) {
-        console.error('Error generating letter:', error);
+        console.error('❌ Error generating letter:', error);
         letterContainer.innerHTML = '<p style="color: #ef4444; text-align: center; padding: 20px; font-family: \'Times New Roman\', Times, serif;">Error generating letter. Please try again.</p>';
         showNotification('Error: ' + error.message, 'error');
     }
