@@ -232,13 +232,15 @@ var SKILLS = {
 };
 
 // ==========================================
-// CV UPLOAD & UPDATE - SIMPLE VERSION
+// CV UPLOAD & UPDATE - COMPLETE AI VERSION
 // ==========================================
 
 // Variables
 let uploadedFileData = null;
 let uploadedFileContent = '';
+let uploadedProfilePhotoURL = null;
 let isProcessing = false;
+let isPhotoModalOpen = false;
 
 // Initialize CV upload
 document.addEventListener('DOMContentLoaded', function() {
@@ -254,12 +256,12 @@ function initCVUpload() {
 
     if (!dropzone || !fileInput) return;
 
-    // Click to upload
+    // Click to upload in the dropzone
     dropzone.addEventListener('click', function() {
         fileInput.click();
     });
 
-    // File selected
+    // File selected (PDF)
     fileInput.addEventListener('change', function() {
         if (this.files && this.files.length > 0) {
             handleCVFile(this.files[0]);
@@ -301,6 +303,10 @@ function initCVUpload() {
     }
 }
 
+// ==========================================
+// HANDLE CV FILE UPLOAD & EXTRACTION
+// ==========================================
+
 function handleCVFile(file) {
     const errorDiv = document.getElementById('cvUploadError');
     const errorMessage = document.getElementById('cvUploadErrorMessage');
@@ -313,19 +319,19 @@ function handleCVFile(file) {
     if (errorMessage) errorMessage.textContent = '';
 
     if (!file) {
-        if (errorMessage) errorMessage.textContent = '❌ No file selected.';
+        if (errorMessage) errorMessage.textContent = ' No file selected.';
         if (errorDiv) errorDiv.style.display = 'flex';
         return;
     }
 
     if (file.type !== 'application/pdf') {
-        if (errorMessage) errorMessage.textContent = '❌ Only PDF files are allowed.';
+        if (errorMessage) errorMessage.textContent = ' Only PDF files are allowed.';
         if (errorDiv) errorDiv.style.display = 'flex';
         return;
     }
 
     if (file.size > 10 * 1024 * 1024) {
-        if (errorMessage) errorMessage.textContent = '❌ File size exceeds 10MB.';
+        if (errorMessage) errorMessage.textContent = ' File size exceeds 10MB.';
         if (errorDiv) errorDiv.style.display = 'flex';
         return;
     }
@@ -340,27 +346,72 @@ function handleCVFile(file) {
 
     if (dropzone) dropzone.style.display = 'none';
 
-    // Get the file name without extension
-    const nameWithoutExt = file.name.replace(/\.[^/.]+$/, '');
-    uploadedFileContent = nameWithoutExt;
-
+    // --- EXTRACT THE ACTUAL TEXT FROM THE PDF ---
     if (fileName) {
-        fileName.innerHTML = '<i class="fas fa-check-circle" style="color: #22c55e;"></i> ' + file.name;
+        fileName.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Extracting text...';
     }
-    
-    // HIDE download section if it was showing
+
+    extractTextFromPDF(file).then(text => {
+        uploadedFileContent = text; // Save the REAL content
+        if (fileName) {
+            fileName.innerHTML = '<i class="fas fa-check-circle" style="color: #22c55e;"></i> ' + file.name;
+        }
+        showNotification('✅ PDF text extracted! Click "Update CV" to reformat.', 'success');
+    }).catch(error => {
+        console.error(error);
+        uploadedFileContent = file.name; // Fallback
+        if (fileName) fileName.textContent = '⚠️ ' + file.name + ' (Text extraction failed)';
+    });
+
     const downloadSection = document.getElementById('cvDownloadSection');
     if (downloadSection) {
         downloadSection.style.display = 'none';
         downloadSection.classList.remove('show');
     }
-    
-    showNotification('✅ PDF uploaded successfully! Click "Update CV" to reformat.', 'success');
 }
+
+// ==========================================
+// PDF TEXT EXTRACTION LOGIC
+// ==========================================
+
+async function extractTextFromPDF(file) {
+    if (typeof pdfjsLib === 'undefined') {
+        const script = document.createElement('script');
+        script.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+        document.head.appendChild(script);
+        await new Promise(resolve => script.onload = resolve);
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    }
+
+    try {
+        const arrayBuffer = await file.arrayBuffer();
+        const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+        let fullText = '';
+        
+        for (let i = 1; i <= pdf.numPages; i++) {
+            const page = await pdf.getPage(i);
+            const textContent = await page.getTextContent();
+            fullText += textContent.items.map(item => item.str).join(' ') + '\n\n';
+        }
+        return fullText.trim();
+    } catch (error) {
+        console.error('PDF extraction error:', error);
+        throw new Error('Failed to extract text from PDF.');
+    }
+}
+
+// ==========================================
+// CLEAR UPLOADED FILE
+// ==========================================
 
 function clearUploadedFile() {
     uploadedFileData = null;
     uploadedFileContent = '';
+    if (uploadedProfilePhotoURL) {
+        URL.revokeObjectURL(uploadedProfilePhotoURL);
+        uploadedProfilePhotoURL = null;
+    }
+    
     const preview = document.getElementById('cvUploadPreview');
     const dropzone = document.getElementById('cvUploadDropzone');
     const fileInput = document.getElementById('cvFileInput');
@@ -384,112 +435,283 @@ function clearUploadedFile() {
     if (container) {
         container.innerHTML = '';
     }
+    
+    // Close modal if open
+    closePhotoModal();
 }
 
 // ==========================================
-// UPDATE CV WITH AI - SHOW DOWNLOAD BUTTONS
+// OPTIONAL PHOTO MODAL FUNCTIONS
+// ==========================================
+
+function openPhotoModal() {
+    // Prevent opening multiple modals
+    if (isPhotoModalOpen) return;
+    isPhotoModalOpen = true;
+
+    // Remove existing modal if somehow leftover
+    const existing = document.getElementById('cvPhotoModalOverlay');
+    if (existing) existing.remove();
+
+    // Create Modal HTML
+    const modal = document.createElement('div');
+    modal.id = 'cvPhotoModalOverlay';
+    modal.style.cssText = `
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(11, 42, 53, 0.7); backdrop-filter: blur(5px);
+        z-index: 9999; display: flex; justify-content: center; align-items: center;
+        opacity: 0; transition: opacity 0.3s ease;
+    `;
+
+    modal.innerHTML = `
+        <div id="cvPhotoModalBox" style="
+            background: white; max-width: 440px; width: 92%; border-radius: 16px;
+            padding: 35px 30px 30px; box-shadow: 0 25px 60px rgba(0,0,0,0.3);
+            position: relative; transform: scale(0.95); transition: transform 0.3s ease;
+        ">
+            <button id="closePhotoModalBtn" style="
+                position: absolute; top: 12px; right: 16px;
+                background: none; border: none; font-size: 22px; color: #6b645a;
+                cursor: pointer; transition: 0.2s;
+            "><i class="fas fa-times"></i></button>
+            
+            <div style="text-align: center;">
+                <div style="width: 60px; height: 60px; background: rgba(201, 168, 76, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px;">
+                    <i class="fas fa-user-plus" style="font-size: 24px; color: #c9a84c;"></i>
+                </div>
+                <h3 style="font-size: 18px; color: #0b2a35; font-weight: 700; margin-bottom: 6px;">Add a Profile Photo</h3>
+                <p style="font-size: 14px; color: #64748b; margin-bottom: 20px;">Optional: Upload a photo to make your CV stand out.</p>
+                
+                <div id="modalPhotoDropzone" style="
+                    border: 2px dashed #e0dbd3; border-radius: 10px; padding: 25px 20px;
+                    background: #faf8f4; cursor: pointer; transition: 0.3s; margin-bottom: 10px;
+                ">
+                    <i class="fas fa-cloud-upload-alt" style="font-size: 32px; color: #c9a84c; display: block; margin-bottom: 6px;"></i>
+                    <p style="font-size: 14px; color: #0b2a35; font-weight: 500;">Click to browse or drag & drop</p>
+                    <p style="font-size: 11px; color: #8a8277;">JPG, PNG, WEBP (Max 5MB)</p>
+                    <input type="file" id="modalPhotoInput" accept="image/*" style="display: none;">
+                </div>
+                
+                <div id="modalPhotoPreview" style="display: none; margin-top: 10px;">
+                    <img id="modalPreviewImg" src="" alt="Preview" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 3px solid #c9a84c; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                    <p style="font-size: 13px; color: #22c55e; margin-top: 6px; font-weight: 600;"><i class="fas fa-check-circle"></i> Photo ready!</p>
+                </div>
+                
+                <div style="display: flex; gap: 10px; justify-content: center; margin-top: 20px;">
+                    <button id="modalSkipBtn" style="padding: 8px 24px; background: transparent; border: 1px solid #e0dbd3; border-radius: 8px; color: #6b645a; font-weight: 600; cursor: pointer;">Skip</button>
+                    <button id="modalConfirmBtn" style="padding: 8px 24px; background: #c9a84c; border: none; border-radius: 8px; color: #0b2a35; font-weight: 700; cursor: pointer; opacity: 0.5; pointer-events: none;">Confirm Photo</button>
+                </div>
+            </div>
+        </div>
+    `;
+
+    document.body.appendChild(modal);
+
+    // Select elements inside the modal
+    const dropzoneModal = document.getElementById('modalPhotoDropzone');
+    const inputModal = document.getElementById('modalPhotoInput');
+    const previewModal = document.getElementById('modalPhotoPreview');
+    const previewImg = document.getElementById('modalPreviewImg');
+    const confirmBtn = document.getElementById('modalConfirmBtn');
+    const skipBtn = document.getElementById('modalSkipBtn');
+    const closeBtn = document.getElementById('closePhotoModalBtn');
+
+    // Handle dropzone click
+    dropzoneModal.addEventListener('click', () => inputModal.click());
+
+    // Handle file selection
+    inputModal.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+        if (file.size > 5 * 1024 * 1024) {
+            showNotification('Photo size must be less than 5MB', 'error');
+            return;
+        }
+        
+        const reader = new FileReader();
+        reader.onload = function(ev) {
+            previewImg.src = ev.target.result;
+            previewModal.style.display = 'block';
+            dropzoneModal.style.display = 'none';
+            confirmBtn.style.opacity = '1';
+            confirmBtn.style.pointerEvents = 'auto';
+            
+            // Save temp URL
+            if (uploadedProfilePhotoURL) URL.revokeObjectURL(uploadedProfilePhotoURL);
+            uploadedProfilePhotoURL = ev.target.result; // Base64 string
+        };
+        reader.readAsDataURL(file);
+        this.value = '';
+    });
+
+    // Handle Confirm
+    confirmBtn.addEventListener('click', function() {
+        if (uploadedProfilePhotoURL) {
+            closePhotoModal();
+            showNotification('✅ Photo added! Generating your CV...', 'success');
+            proceedWithAIGeneration(); // Trigger the AI NOW
+        }
+    });
+
+    // Handle Skip/Close
+    const closeModalAction = () => {
+        closePhotoModal();
+        proceedWithAIGeneration(); // Trigger AI without photo
+    };
+    skipBtn.addEventListener('click', closeModalAction);
+    closeBtn.addEventListener('click', closeModalAction);
+
+    // Animate In
+    requestAnimationFrame(() => {
+        modal.style.opacity = '1';
+        document.getElementById('cvPhotoModalBox').style.transform = 'scale(1)';
+    });
+}
+
+function closePhotoModal() {
+    const modal = document.getElementById('cvPhotoModalOverlay');
+    if (modal) {
+        modal.style.opacity = '0';
+        document.getElementById('cvPhotoModalBox').style.transform = 'scale(0.95)';
+        setTimeout(() => modal.remove(), 300);
+    }
+    isPhotoModalOpen = false;
+}
+
+// ==========================================
+// UPDATE CV WITH AI (MODAL TRIGGER)
 // ==========================================
 
 function updateCVWithAI() {
-    console.log('🔄 Update CV button clicked!');
-    
     if (!uploadedFileData) {
         showNotification('⚠️ Please upload a PDF file first.', 'error');
         return;
     }
 
+    if (!uploadedFileContent || uploadedFileContent.length < 20) {
+        showNotification('⚠️ Please wait for text extraction to finish.', 'error');
+        return;
+    }
+
+    // OPEN THE MODAL INSTEAD OF GENERATING IMMEDIATELY
+    openPhotoModal();
+}
+
+// ==========================================
+// PROCEED WITH AI GENERATION
+// ==========================================
+
+async function proceedWithAIGeneration() {
     if (isProcessing) return;
     isProcessing = true;
 
     const updateBtn = document.getElementById('cvUpdateBtn');
     const originalText = updateBtn.innerHTML;
-    updateBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+    updateBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> AI is reformatting...';
     updateBtn.disabled = true;
 
+    // Show loading state in preview
+    const container = document.getElementById('cvPreviewContainer');
+    if (container) {
+        container.innerHTML = `<div style="text-align: center; padding: 40px;">
+            <i class="fas fa-spinner fa-spin" style="font-size: 36px; color: #c9a84c;"></i>
+            <p style="margin-top: 10px; color: #6b645a;">AI is analyzing and reformatting your CV...</p>
+        </div>`;
+    }
+
+    // Build the prompt with the EXACT extracted text
+    const prompt = `Reformat this CV professionally as clean HTML (no markdown, no explanations, no extra text outside the HTML). I must be able to inject a photo at the top if needed, so just create the text/heading sections beautifully:\n\n${uploadedFileContent}`;
+
+    // VERCEL URL
+    const API_ENDPOINT = 'https://a-i-cv-generator.vercel.app/api/generate-cv';
+
     try {
-        // Get the file name
-        const name = uploadedFileContent || 'Professional';
+        const response = await fetch(API_ENDPOINT, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                messages: [
+                    { role: 'system', content: 'You are a professional CV formatter. Return ONLY clean HTML matching the structure of a standard CV, using <h1>, <h2>, <p>, <ul>, <li> tags.' },
+                    { role: 'user', content: prompt }
+                ],
+                model: 'meta-llama/llama-3.1-8b-instruct',
+                temperature: 0.3,
+                max_tokens: 4000
+            })
+        });
+
+        if (!response.ok) throw new Error('API request failed');
+        const data = await response.json();
         
-        // Generate the CV content
-        const content = generateCVContent(name);
+        let updatedContent = data.choices[0].message.content;
+        updatedContent = updatedContent.replace(/```html/g, '').replace(/```/g, '').trim();
+        updatedContent = updatedContent.replace(/^Here is.*CV:?\s*/i, '');
+
+        // --- FORMAT THE AI OUTPUT USING YOUR BEAUTIFUL CLASSES ---
+        // Wrap AI content in YOUR standard CV wrapper so it uses your exact CSS
+        let finalCVHtml = '';
         
-        // Store for download
-        window._updatedCVContent = content;
-        
-        // Display the CV in the preview container
-        const container = document.getElementById('cvPreviewContainer');
-        if (container) {
-            container.innerHTML = `
-                <div style="font-family: 'Times New Roman', Times, serif; max-width: 100%; margin: 0 auto; background: white; padding: 30px 25px; border: 1px solid #e0dbd3; border-radius: 8px; line-height: 1.5; overflow: hidden;">
-                    ${content}
+        if (uploadedProfilePhotoURL) {
+            // Add Photo at the top if user uploaded one
+            finalCVHtml += `
+                <div style="text-align: center; margin-bottom: 25px; padding-bottom: 20px;">
+                    <img src="${uploadedProfilePhotoURL}" 
+                         alt="Profile Photo" 
+                         style="width: 130px; height: 130px; border-radius: 50%; object-fit: cover; border: 4px solid #c9a84c; box-shadow: 0 4px 15px rgba(0,0,0,0.1); background: #faf8f4;">
                 </div>
             `;
         }
-        
-        // ===== SHOW THE DOWNLOAD BUTTONS =====
+
+        // Wrap inside your standard .cv-generic class (or .cv-professional based on user preference)
+        // We use .cv-generic because the AI text structure matches it. 
+        // If you want to force Professional style, change the class to .cv-professional
+        finalCVHtml += `
+            <div class="cv-generic">
+                <div class="cv-body">
+                    ${updatedContent}
+                </div>
+            </div>
+        `;
+
+        // Store the AI content for download
+        window._updatedCVContent = finalCVHtml;
+
+        // Display with beautiful wrapper
+        if (container) {
+            container.innerHTML = `
+                <div style="font-family: 'Times New Roman', Times, serif; max-width: 100%; margin: 0 auto; background: white; padding: 40px 35px; border: 1px solid #e0dbd3; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); overflow: hidden;">
+                    ${finalCVHtml}
+                </div>
+            `;
+        }
+
+        // Show download buttons
         const downloadSection = document.getElementById('cvDownloadSection');
         if (downloadSection) {
             downloadSection.style.display = 'block';
             downloadSection.classList.add('show');
-            console.log('✅ Download buttons shown!');
-        } else {
-            console.error('❌ cvDownloadSection not found!');
         }
-        
-        showNotification('✅ CV updated successfully!', 'success');
+        showNotification('✅ CV updated successfully by AI!', 'success');
 
     } catch (error) {
-        console.error('❌ Error:', error);
-        showNotification('❌ Error: ' + error.message, 'error');
+        console.error('AI Error:', error);
+        showNotification('❌ AI failed. Showing raw text.', 'error');
+        
+        // Fallback
+        window._updatedCVContent = `<div class="cv-generic"><div class="cv-body"><p>${uploadedFileContent.split('\n').map(line => line).join('<br>')}</p></div></div>`;
+        if (container) {
+            container.innerHTML = `<div style="font-family: 'Times New Roman'; padding:20px;">${window._updatedCVContent}</div>`;
+        }
+        const downloadSection = document.getElementById('cvDownloadSection');
+        if (downloadSection) {
+            downloadSection.style.display = 'block';
+            downloadSection.classList.add('show');
+        }
+    } finally {
+        isProcessing = false;
+        updateBtn.innerHTML = originalText;
+        updateBtn.disabled = false;
     }
-
-    isProcessing = false;
-    updateBtn.innerHTML = originalText;
-    updateBtn.disabled = false;
-}
-
-function generateCVContent(name) {
-    return `
-        <div style="font-family: 'Times New Roman', Times, serif; line-height: 1.5; padding: 20px;">
-            <h1 style="font-size: 22px; font-weight: 700; color: #0b2a35; text-align: center; margin: 0 0 2px 0; letter-spacing: 1px;">${name}</h1>
-            <p style="text-align: center; font-size: 16px; color: #c9a84c; font-weight: 600; margin: 0 0 8px 0;">Senior Professional</p>
-            <div style="text-align: center; font-size: 13px; color: #64748b; margin-bottom: 16px;">
-                <span><i class="fas fa-phone"></i> +254 700 000 000</span> | 
-                <span><i class="fas fa-envelope"></i> ${name.toLowerCase().replace(/\s/g, '.')}@email.com</span>
-            </div>
-            
-            <h4 style="font-size: 14px; font-weight: 700; color: #0b2a35; text-transform: uppercase; letter-spacing: 1px; border-bottom: 2px solid #c9a84c; padding-bottom: 4px; margin: 16px 0 8px 0;">Professional Summary</h4>
-            <p style="margin: 4px 0; font-size: 14px; line-height: 1.5;">A dedicated and results-oriented professional with extensive experience in the industry. Proven track record of delivering high-quality results and exceeding expectations.</p>
-            
-            <h4 style="font-size: 14px; font-weight: 700; color: #0b2a35; text-transform: uppercase; letter-spacing: 1px; border-bottom: 2px solid #c9a84c; padding-bottom: 4px; margin: 16px 0 8px 0;">Work Experience</h4>
-            <p style="margin: 4px 0; font-size: 14px; line-height: 1.5;"><strong>Senior Professional</strong> | Industry Leader | 2018-Present</p>
-            <ul style="padding-left: 20px; font-size: 14px; line-height: 1.5;">
-                <li>Led multiple successful projects from conception to completion</li>
-                <li>Managed cross-functional teams of up to 20 members</li>
-                <li>Increased operational efficiency by 30%</li>
-            </ul>
-            
-            <h4 style="font-size: 14px; font-weight: 700; color: #0b2a35; text-transform: uppercase; letter-spacing: 1px; border-bottom: 2px solid #c9a84c; padding-bottom: 4px; margin: 16px 0 8px 0;">Education</h4>
-            <p style="margin: 4px 0; font-size: 14px; line-height: 1.5;"><strong>University of Excellence</strong> | Master's Degree | 2012</p>
-            
-            <h4 style="font-size: 14px; font-weight: 700; color: #0b2a35; text-transform: uppercase; letter-spacing: 1px; border-bottom: 2px solid #c9a84c; padding-bottom: 4px; margin: 16px 0 8px 0;">Skills</h4>
-            <ul style="padding-left: 20px; font-size: 14px; line-height: 1.5;">
-                <li>Leadership & Team Management</li>
-                <li>Strategic Planning & Execution</li>
-                <li>Project Management</li>
-                <li>Communication & Interpersonal</li>
-            </ul>
-            
-            <h4 style="font-size: 14px; font-weight: 700; color: #0b2a35; text-transform: uppercase; letter-spacing: 1px; border-bottom: 2px solid #c9a84c; padding-bottom: 4px; margin: 16px 0 8px 0;">Languages</h4>
-            <ul style="padding-left: 20px; font-size: 14px; line-height: 1.5;">
-                <li>English (Fluent)</li>
-                <li>Kiswahili (Native)</li>
-            </ul>
-            
-            <h4 style="font-size: 14px; font-weight: 700; color: #0b2a35; text-transform: uppercase; letter-spacing: 1px; border-bottom: 2px solid #c9a84c; padding-bottom: 4px; margin: 16px 0 8px 0;">References</h4>
-            <p style="margin: 4px 0; font-size: 14px; line-height: 1.5; font-style: italic; color: #6b645a;">Available upon request.</p>
-        </div>
-    `;
 }
 
 // ==========================================
@@ -505,6 +727,7 @@ function downloadUpdatedCV(format) {
         return;
     }
 
+    // Uses the existing id="fullName" in your HTML Step 1
     const nameInput = document.getElementById('fullName');
     const name = nameInput?.value?.trim() || 'Updated_CV';
     const fileName = name.replace(/\s+/g, '_');
@@ -522,6 +745,7 @@ function downloadUpdatedCV(format) {
             <head>
                 <title>${name} - Updated CV</title>
                 <meta charset="utf-8">
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
                 <style>
                     * { margin: 0; padding: 0; box-sizing: border-box; }
                     body { 
@@ -535,6 +759,13 @@ function downloadUpdatedCV(format) {
                     }
                     @page { margin: 1.5cm; size: A4; }
                     @media print { body { padding: 0; } }
+                    /* INJECT YOUR CV CLASS STYLES HERE FOR PROPER PRINTING */
+                    .cv-generic .cv-body { padding: 10px; }
+                    .cv-generic .cv-section { margin-bottom: 20px; }
+                    .cv-generic .cv-section-title { font-size: 16px; font-weight: 700; text-transform: uppercase; border-bottom: 2px solid #c9a84c; padding-bottom: 5px; margin-bottom: 10px; }
+                    .cv-generic h1 { font-size: 24px; text-align: center; margin-bottom: 5px; }
+                    .cv-generic ul { padding-left: 20px; margin: 5px 0; }
+                    .cv-generic li { margin-bottom: 3px; }
                 </style>
             </head>
             <body>
@@ -571,16 +802,16 @@ function downloadUpdatedCV(format) {
                     </w:WordDocument>
                 </xml>
                 <![endif]-->
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
                 <style>
-                    body { 
-                        font-family: 'Times New Roman', Times, serif; 
-                        line-height: 1.5; 
-                        color: #000000; 
-                        padding: 40px; 
-                        max-width: 900px; 
-                        margin: 0 auto;
-                    }
+                    body { font-family: 'Times New Roman', Times, serif; line-height: 1.5; color: #000000; padding: 40px; max-width: 900px; margin: 0 auto; }
                     @page { margin: 1.5cm; }
+                    .cv-generic .cv-body { padding: 10px; }
+                    .cv-generic .cv-section { margin-bottom: 20px; }
+                    .cv-generic .cv-section-title { font-size: 16px; font-weight: 700; text-transform: uppercase; border-bottom: 2px solid #c9a84c; padding-bottom: 5px; margin-bottom: 10px; }
+                    .cv-generic h1 { font-size: 24px; text-align: center; margin-bottom: 5px; }
+                    .cv-generic ul { padding-left: 20px; margin: 5px 0; }
+                    .cv-generic li { margin-bottom: 3px; }
                 </style>
             </head>
             <body>
