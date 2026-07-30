@@ -1142,7 +1142,298 @@ nav ul li.active a i {
 .field-error.show {
     display: block;
 }
+/* ============================================
+   CV UPLOAD & UPDATE - DESKTOP STYLES (ADDED)
+   ============================================ */
 
+/* Main Container */
+.cv-upload-container {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: 30px;
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--gray-200);
+    transition: var(--transition);
+}
+
+.cv-upload-container:hover {
+    box-shadow: var(--shadow-lg);
+}
+
+/* Header */
+.cv-upload-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.cv-upload-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: rgba(201, 168, 76, 0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.cv-upload-icon i {
+    font-size: 22px;
+    color: var(--gold);
+}
+
+.cv-upload-title h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--primary);
+    font-family: var(--font-heading);
+    margin-bottom: 2px;
+}
+
+.cv-upload-title p {
+    font-size: 14px;
+    color: var(--gray-500);
+    margin: 0;
+}
+
+/* Upload Area */
+.cv-upload-area {
+    margin-top: 4px;
+}
+
+/* Dropzone */
+.cv-upload-dropzone {
+    border: 2px dashed var(--gray-300);
+    border-radius: var(--radius);
+    padding: 50px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: var(--transition);
+    background: var(--off-white);
+}
+
+.cv-upload-dropzone:hover {
+    border-color: var(--gold);
+    background: rgba(201, 168, 76, 0.03);
+}
+
+.cv-upload-dropzone.dragover {
+    border-color: var(--gold);
+    background: rgba(201, 168, 76, 0.08);
+    transform: scale(1.01);
+}
+
+.cv-upload-dropzone i.fa-file-pdf {
+    font-size: 48px;
+    color: var(--gold);
+    margin-bottom: 12px;
+    display: block;
+}
+
+.cv-upload-dropzone h4 {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--primary);
+    margin-bottom: 4px;
+}
+
+.cv-upload-dropzone h4 i {
+    font-size: 16px;
+    color: var(--gold);
+    margin-right: 6px;
+}
+
+.cv-upload-dropzone p {
+    font-size: 13px;
+    color: var(--gray-500);
+}
+
+.cv-upload-dropzone p i {
+    font-size: 12px;
+    color: var(--gold);
+    margin-right: 4px;
+}
+
+/* Preview */
+.cv-upload-preview {
+    display: none;
+    border: 2px solid var(--gray-200);
+    border-radius: var(--radius);
+    padding: 20px;
+    background: var(--off-white);
+    animation: fadeInUp 0.4s ease;
+}
+
+.cv-upload-file-info {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--gray-200);
+}
+
+.cv-upload-file-info i.fa-file-pdf {
+    font-size: 32px;
+    color: var(--gold);
+}
+
+.cv-upload-file-info .file-name {
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--gray-700);
+    display: block;
+}
+
+.cv-upload-file-info .file-size {
+    font-size: 12px;
+    color: var(--gray-500);
+}
+
+.cv-upload-remove {
+    background: none;
+    border: none;
+    color: var(--gray-400);
+    cursor: pointer;
+    font-size: 18px;
+    padding: 4px 8px;
+    border-radius: 6px;
+    transition: var(--transition);
+    margin-left: auto;
+}
+
+.cv-upload-remove:hover {
+    color: #dc3545;
+    background: #fff5f5;
+}
+
+.cv-upload-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.cv-upload-actions .btn {
+    flex: 1;
+    justify-content: center;
+}
+
+.cv-upload-actions .btn i {
+    margin-right: 8px;
+}
+
+/* Error */
+.cv-upload-error {
+    background: #fff5f5;
+    border: 1px solid #fecaca;
+    border-radius: var(--radius);
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #dc3545;
+    font-size: 14px;
+    font-weight: 500;
+    animation: fadeInUp 0.3s ease;
+}
+
+.cv-upload-error i {
+    font-size: 18px;
+    color: #dc3545;
+}
+
+/* CV Download Section Desktop */
+.cv-download-section {
+    display: none;
+    margin-top: 16px;
+    padding: 16px 20px;
+    background: #faf8f4;
+    border-radius: 12px;
+    border: 2px solid #c9a84c;
+    text-align: center;
+    animation: fadeInUp 0.5s ease;
+}
+
+.cv-download-section.show {
+    display: block;
+}
+
+.cv-download-section .download-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.cv-download-section .btn-download-pdf,
+.cv-download-section .btn-download-word {
+    padding: 8px 20px;
+    font-size: 13px;
+    border-radius: 999px;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'Times New Roman', Times, serif;
+    transition: all 0.3s ease;
+}
+
+.cv-download-section .btn-download-pdf {
+    background: #c9a84c;
+    color: #0b2a35;
+    border: none;
+    box-shadow: 0 3px 12px rgba(201, 168, 76, 0.25);
+}
+
+.cv-download-section .btn-download-pdf:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(201, 168, 76, 0.35);
+}
+
+.cv-download-section .btn-download-word {
+    background: transparent;
+    color: #0b2a35;
+    border: 2px solid #0b2a35;
+}
+
+.cv-download-section .btn-download-word:hover {
+    background: #0b2a35;
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* ============================================
+   CV PHOTO MODAL CSS (Added for the optional Modal)
+   ============================================ */
+#cvPhotoModalBox .cv-modal-dropzone {
+    border: 2px dashed var(--gray-300);
+    border-radius: var(--radius);
+    padding: 25px 20px;
+    background: var(--off-white);
+    cursor: pointer;
+    transition: var(--transition);
+    text-align: center;
+}
+
+#cvPhotoModalBox .cv-modal-dropzone:hover {
+    border-color: var(--gold);
+    background: rgba(201, 168, 76, 0.03);
+}
+
+#cvPhotoModalBox .cv-modal-dropzone i {
+    font-size: 32px;
+    color: var(--gold);
+    display: block;
+    margin-bottom: 6px;
+}
+
+#cvPhotoModalBox .cv-modal-dropzone p {
+    font-size: 14px;
+    color: var(--gray-600);
+    margin: 0;
+}
 /* ============================================
    ENTRY ITEMS
    ============================================ */
