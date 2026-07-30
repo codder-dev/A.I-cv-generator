@@ -458,7 +458,7 @@ function openPhotoModal() {
     modal.id = 'cvPhotoModalOverlay';
     modal.style.cssText = `
         position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-        background: rgba(11, 42, 53, 0.7); backdrop-filter: blur(5px);
+        background: rgba(11, 42, 53, 0.7); backdrop-filter: blur(15px);
         z-index: 9999; display: flex; justify-content: center; align-items: center;
         opacity: 0; transition: opacity 0.3s ease;
     `;
@@ -548,7 +548,7 @@ function openPhotoModal() {
     confirmBtn.addEventListener('click', function() {
         if (uploadedProfilePhotoURL) {
             closePhotoModal();
-            showNotification('✅ Photo added! Generating your CV...', 'success');
+            showNotification(' Photo added! Generating your CV...', 'success');
             proceedWithAIGeneration(); // Trigger the AI NOW
         }
     });
@@ -584,12 +584,12 @@ function closePhotoModal() {
 
 function updateCVWithAI() {
     if (!uploadedFileData) {
-        showNotification('⚠️ Please upload a PDF file first.', 'error');
+        showNotification(' Please upload a PDF file first.', 'error');
         return;
     }
 
     if (!uploadedFileContent || uploadedFileContent.length < 20) {
-        showNotification('⚠️ Please wait for text extraction to finish.', 'error');
+        showNotification(' Please wait for text extraction to finish.', 'error');
         return;
     }
 
@@ -619,8 +619,22 @@ async function proceedWithAIGeneration() {
         </div>`;
     }
 
-    // Build the prompt with the EXACT extracted text
-    const prompt = `Reformat this CV professionally as clean HTML (no markdown, no explanations, no extra text outside the HTML). I must be able to inject a photo at the top if needed, so just create the text/heading sections beautifully:\n\n${uploadedFileContent}`;
+    // =========================================================
+    // UPDATED STRICT PROMPT TO MATCH YOUR CSS EXACTLY
+    // =========================================================
+    const prompt = `Reformat this CV professionally. 
+
+    STRICT RULES:
+    1. ONLY output clean HTML.
+    2. Use ONLY these tags: <h3> for Section Headers, <p> for paragraphs, <ul> and <li> for lists.
+    3. REMOVE all decorative lines like "===========", "---", or "___".
+    4. REMOVE the words "Curriculum Vitae" or "CV" as a title.
+    5. DO NOT use <h1> or <h2>. ONLY use <h3> for section headers (Examples: Professional Summary, Work Experience, Education, Skills, Languages).
+    6. The Skills and Languages lists MUST be formatted as <ul><li>...</li></ul>.
+    7. Ensure the Work Experience section uses bullet points (<ul><li>) for responsibilities.
+
+    Here is the CV text to format:\n\n${uploadedFileContent}`;
+    // =========================================================
 
     // VERCEL URL
     const API_ENDPOINT = 'https://a-i-cv-generator.vercel.app/api/generate-cv';
@@ -631,7 +645,7 @@ async function proceedWithAIGeneration() {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 messages: [
-                    { role: 'system', content: 'You are a professional CV formatter. Return ONLY clean HTML matching the structure of a standard CV, using <h1>, <h2>, <p>, <ul>, <li> tags.' },
+                    { role: 'system', content: 'You are a professional CV formatter. Return ONLY clean HTML. Use <h3> for headers, <p> for text, and <ul><li> for lists. Remove decorative lines.' },
                     { role: 'user', content: prompt }
                 ],
                 model: 'meta-llama/llama-3.1-8b-instruct',
@@ -644,15 +658,18 @@ async function proceedWithAIGeneration() {
         const data = await response.json();
         
         let updatedContent = data.choices[0].message.content;
+        
+        // Clean up AI markdown and nonsense
         updatedContent = updatedContent.replace(/```html/g, '').replace(/```/g, '').trim();
         updatedContent = updatedContent.replace(/^Here is.*CV:?\s*/i, '');
+        
+        // Force removal of decorative lines if AI accidentally keeps them
+        updatedContent = updatedContent.replace(/={10,}/g, '').replace(/-{10,}/g, '');
 
         // --- FORMAT THE AI OUTPUT USING YOUR BEAUTIFUL CLASSES ---
-        // Wrap AI content in YOUR standard CV wrapper so it uses your exact CSS
         let finalCVHtml = '';
         
         if (uploadedProfilePhotoURL) {
-            // Add Photo at the top if user uploaded one
             finalCVHtml += `
                 <div style="text-align: center; margin-bottom: 25px; padding-bottom: 20px;">
                     <img src="${uploadedProfilePhotoURL}" 
@@ -662,9 +679,7 @@ async function proceedWithAIGeneration() {
             `;
         }
 
-        // Wrap inside your standard .cv-generic class (or .cv-professional based on user preference)
-        // We use .cv-generic because the AI text structure matches it. 
-        // If you want to force Professional style, change the class to .cv-professional
+        // Wrap inside your standard .cv-generic class
         finalCVHtml += `
             <div class="cv-generic">
                 <div class="cv-body">
@@ -783,7 +798,7 @@ function downloadUpdatedCV(format) {
 
         win.document.write(htmlContent);
         win.document.close();
-        showNotification('✅ PDF downloaded!', 'success');
+        showNotification(' PDF downloaded!', 'success');
 
     } else if (format === 'word') {
         const docContent = `
@@ -829,7 +844,7 @@ function downloadUpdatedCV(format) {
         document.body.removeChild(link);
         setTimeout(() => URL.revokeObjectURL(link.href), 100);
 
-        showNotification('✅ Word downloaded!', 'success');
+        showNotification(' Word downloaded!', 'success');
     }
 }
 
