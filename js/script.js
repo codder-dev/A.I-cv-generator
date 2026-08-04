@@ -182,18 +182,11 @@ function animateCounters() {
 var OR_API_URL = 'https://openrouter.ai/api/v1/chat/completions';
 var OR_MODEL = 'meta-llama/llama-3.1-8b-instruct';
 
+
 // ==========================================
 // API URL DETECTION
 // ==========================================
-var API_URL = '';
-
-if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-    API_URL = '/api/generate-cv';
-} else if (window.location.hostname.includes('github.io')) {
-    API_URL = 'https://a-i-cv-generator.vercel.app/api/generate-cv';
-} else {
-    API_URL = '/api/generate-cv';
-}
+var API_URL = 'https://a-i-cv-generator.vercel.app/api/generate-cv';
 
 console.log('🌐 API URL:', API_URL);
 
@@ -253,6 +246,7 @@ function initCVUpload() {
     const preview = document.getElementById('cvUploadPreview');
     const removeBtn = document.getElementById('cvUploadRemove');
     const updateBtn = document.getElementById('cvUpdateBtn');
+    const instructionArea = document.getElementById('cvInstructionArea');
 
     if (!dropzone || !fileInput) return;
 
@@ -298,6 +292,8 @@ function initCVUpload() {
     // Update button
     if (updateBtn) {
         updateBtn.addEventListener('click', function() {
+            // Show the instruction area if it's hidden
+            if (instructionArea) instructionArea.style.display = 'block';
             updateCVWithAI();
         });
     }
@@ -314,6 +310,7 @@ function handleCVFile(file) {
     const preview = document.getElementById('cvUploadPreview');
     const fileName = document.getElementById('uploadFileName');
     const fileSize = document.getElementById('uploadFileSize');
+    const instructionArea = document.getElementById('cvInstructionArea');
     
     if (errorDiv) errorDiv.style.display = 'none';
     if (errorMessage) errorMessage.textContent = '';
@@ -356,6 +353,9 @@ function handleCVFile(file) {
         if (fileName) {
             fileName.innerHTML = '<i class="fas fa-check-circle" style="color: #22c55e;"></i> ' + file.name;
         }
+        // Show the instruction box
+        if (instructionArea) instructionArea.style.display = 'block';
+        
         showNotification('✅ PDF text extracted! Click "Update CV" to reformat.', 'success');
     }).catch(error => {
         console.error(error);
@@ -418,6 +418,8 @@ function clearUploadedFile() {
     const errorDiv = document.getElementById('cvUploadError');
     const updateBtn = document.getElementById('cvUpdateBtn');
     const downloadSection = document.getElementById('cvDownloadSection');
+    const instructionArea = document.getElementById('cvInstructionArea');
+    const instructionInput = document.getElementById('cvInstructionInput');
     
     if (preview) preview.style.display = 'none';
     if (dropzone) dropzone.style.display = 'block';
@@ -427,6 +429,9 @@ function clearUploadedFile() {
         downloadSection.style.display = 'none';
         downloadSection.classList.remove('show');
     }
+    if (instructionArea) instructionArea.style.display = 'none';
+    if (instructionInput) instructionInput.value = '';
+    
     if (updateBtn) {
         updateBtn.disabled = false;
         updateBtn.innerHTML = '<i class="fas fa-wand-magic-sparkles"></i> Update CV with AI';
@@ -619,22 +624,26 @@ async function proceedWithAIGeneration() {
         </div>`;
     }
 
-    // =========================================================
-    // UPDATED STRICT PROMPT TO MATCH YOUR CSS EXACTLY
-    // =========================================================
-    const prompt = `Reformat this CV professionally. 
+    // 1. Get the user's optional instructions
+    const instructionInput = document.getElementById('cvInstructionInput');
+    let userInstructions = instructionInput ? instructionInput.value.trim() : '';
+    
+    // 2. Build the SMART prompt based on the instructions
+    let prompt = `You are a professional CV Refiner. Reformat the user's CV text into a modern, ATS-friendly professional CV.
 
     STRICT RULES:
-    1. ONLY output clean HTML.
-    2. Use ONLY these tags: <h3> for Section Headers, <p> for paragraphs, <ul> and <li> for lists.
-    3. REMOVE all decorative lines like "===========", "---", or "___".
-    4. REMOVE the words "Curriculum Vitae" or "CV" as a title.
-    5. DO NOT use <h1> or <h2>. ONLY use <h3> for section headers (Examples: Professional Summary, Work Experience, Education, Skills, Languages).
-    6. The Skills and Languages lists MUST be formatted as <ul><li>...</li></ul>.
-    7. Ensure the Work Experience section uses bullet points (<ul><li>) for responsibilities.
+    1. ONLY output clean HTML structure using <h3> for headers, <p> for paragraphs, and <ul> <li> for lists.
+    2. REMOVE all unnecessary personal data like "Marital Status", "Gender", "Date of Birth", "Religion", and "Nationality".
+    3. REMOVE decorative lines like "===========", "---", or "___".
+    4. Use professional, active present-tense words (e.g., "Lead", "Develop", "Create").
+    5. GENERATE a strong, dynamic "Professional Summary" paragraph based on the provided details.
+    6. Structure the CV into these sections: Professional Summary, Work Experience, Education, Skills, Languages.
 
-    Here is the CV text to format:\n\n${uploadedFileContent}`;
-    // =========================================================
+    USER INSTRUCTIONS (Follow these precisely):
+    ${userInstructions ? userInstructions : 'Use the standard format without any specific changes. Remove the unnecessary personal details mentioned in rule 2.'}
+
+    USER CV TEXT (DO NOT change the facts, only reword and reformat):
+    ${uploadedFileContent}`;
 
     // VERCEL URL
     const API_ENDPOINT = 'https://a-i-cv-generator.vercel.app/api/generate-cv';
@@ -658,20 +667,17 @@ async function proceedWithAIGeneration() {
         const data = await response.json();
         
         let updatedContent = data.choices[0].message.content;
-        
-        // Clean up AI markdown and nonsense
         updatedContent = updatedContent.replace(/```html/g, '').replace(/```/g, '').trim();
         updatedContent = updatedContent.replace(/^Here is.*CV:?\s*/i, '');
         
-        // Force removal of decorative lines if AI accidentally keeps them
+        // 3. Post-Process: Remove decorative lines if AI accidentally adds them
         updatedContent = updatedContent.replace(/={10,}/g, '').replace(/-{10,}/g, '');
 
-        // --- FORMAT THE AI OUTPUT USING YOUR BEAUTIFUL CLASSES ---
+        // 4. INJECT PHOTO IF IT WAS UPLOADED
         let finalCVHtml = '';
-        
         if (uploadedProfilePhotoURL) {
             finalCVHtml += `
-                <div style="text-align: center; margin-bottom: 25px; padding-bottom: 20px;">
+                <div style="text-align: center; margin-bottom: 25px;">
                     <img src="${uploadedProfilePhotoURL}" 
                          alt="Profile Photo" 
                          style="width: 130px; height: 130px; border-radius: 50%; object-fit: cover; border: 4px solid #c9a84c; box-shadow: 0 4px 15px rgba(0,0,0,0.1); background: #faf8f4;">
@@ -679,7 +685,7 @@ async function proceedWithAIGeneration() {
             `;
         }
 
-        // Wrap inside your standard .cv-generic class
+        // 5. WRAP THE OUTPUT IN YOUR BEAUTIFUL CLASSES
         finalCVHtml += `
             <div class="cv-generic">
                 <div class="cv-body">
@@ -688,10 +694,9 @@ async function proceedWithAIGeneration() {
             </div>
         `;
 
-        // Store the AI content for download
+        // 6. DISPLAY AND ENABLE DOWNLOADS
         window._updatedCVContent = finalCVHtml;
 
-        // Display with beautiful wrapper
         if (container) {
             container.innerHTML = `
                 <div style="font-family: 'Times New Roman', Times, serif; max-width: 100%; margin: 0 auto; background: white; padding: 40px 35px; border: 1px solid #e0dbd3; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); overflow: hidden;">
@@ -700,7 +705,6 @@ async function proceedWithAIGeneration() {
             `;
         }
 
-        // Show download buttons
         const downloadSection = document.getElementById('cvDownloadSection');
         if (downloadSection) {
             downloadSection.style.display = 'block';
@@ -712,7 +716,6 @@ async function proceedWithAIGeneration() {
         console.error('AI Error:', error);
         showNotification('❌ AI failed. Showing raw text.', 'error');
         
-        // Fallback
         window._updatedCVContent = `<div class="cv-generic"><div class="cv-body"><p>${uploadedFileContent.split('\n').map(line => line).join('<br>')}</p></div></div>`;
         if (container) {
             container.innerHTML = `<div style="font-family: 'Times New Roman'; padding:20px;">${window._updatedCVContent}</div>`;
@@ -1828,6 +1831,10 @@ function buildCVPrompt(data) {
     prompt += 'PROFESSIONAL SUMMARY\n';
     prompt += 'Write one paragraph of about 4-8 lines here. Must be complete and well-written.\n\n';
     
+    prompt += '\n\n===============\n';
+    prompt += 'NOT THIS: The professional sumarry is one of the crusial things, dont leave it\n\n';
+    prompt += '\n\n===============\n\n';
+
     prompt += 'WORK EXPERIENCE\n';
     prompt += 'Company | Job Title | Year Range\n';
     prompt += '- Responsibility 1\n';
@@ -1837,7 +1844,7 @@ function buildCVPrompt(data) {
     prompt += '\n\n==================================\n';
     prompt += 'CRITICAL STEPS TO FOLLOW IF NO WORK EXPERIENCE IS PROVIDED:\n';
     prompt += '==================================\n\n';
-    prompt += '1. Create entry-level experience but must be professional for ' + p.jobTitle + 'if no experience is provided and if Generic CV is selected\n';
+    prompt += '1. Create entry-level experience but must be professional for ' + p.jobTitle + 'if no experience is provided and if Generic CV is selected. Your add basic experience responsibilites according to the ' + p.jobTitle + 'requirements.\n';
    
 
     
@@ -2410,7 +2417,7 @@ function buildLetterPrompt(data) {
         prompt += '\n';
     }
     
-    prompt += 'Write 3 professional paragraphs for the letter body. Start directly with the first paragraph. Do not include any introductory text like "Here is the letter" or "I\'m happy to assist". Just write the letter content.';
+    prompt += 'Write 3 professional paragraphs for the letter body. Start directly with the first paragraph. Do not include any introductory text like "Here is the letter" or "I\'m happy to assist". Use present tense. Just write the letter content.';
 
     return prompt;
 }
@@ -2668,7 +2675,7 @@ async function submitLetterDetails() {
         var messages = [
             {
                 role: 'system',
-                content: 'Write a Professional cover letter. Write ONLY the body paragraphs of the application letter. Do not include any salutation, sender details, date, closing, or placeholder text. Just write 2-3 professional paragraphs explaining why the candidate is suitable for the position. Just be specific and precise to the point, dont add unnecessary information.'
+                content: 'Write a Professional cover letter. Write ONLY the body paragraphs of the application letter. Do not include any salutation, sender details, date, closing, or placeholder text. Just write 2-3 professional paragraphs explaining why the candidate is suitable for the position. Use present tense language. Just be specific and precise to the point, dont add unnecessary information.'
             },
             {
                 role: 'user',

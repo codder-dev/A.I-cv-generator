@@ -468,6 +468,13 @@
                     <i class="fas fa-exclamation-circle"></i>
                     <span id="cvUploadErrorMessage">Invalid file. Please upload a PDF.</span>
                 </div>
+                <div class="cv-instruction-area" style="margin-top: 14px; display: none;" id="cvInstructionArea">
+    <label for="cvInstructionInput" style="font-weight: 600; font-size: 14px; color: #0b2a35; display: block; margin-bottom: 4px;">
+        <i class="fas fa-pen" style="color: #c9a84c;"></i> Special Instructions (Optional)
+    </label>
+    <p style="font-size: 12px; color: #64748b; margin-bottom: 8px;">Tell the AI exactly how you want your CV updated. E.g., "Remove marital status", "Make it more technical", "Add an objective".</p>
+    <textarea id="cvInstructionInput" rows="2" style="width: 100%; padding: 10px 14px; border: 2px solid #e0dbd3; border-radius: 8px; font-size: 14px; font-family: inherit; background: #faf8f4; transition: 0.3s;" placeholder="e.g. Remove marital status and personal details..."></textarea>
+</div>
                 
                 <!-- ===== DOWNLOAD BUTTONS - ALWAYS IN HTML BUT HIDDEN ===== -->
                 <div class="cv-download-section" id="cvDownloadSection" style="display: none; margin-top: 20px; padding: 20px; background: #faf8f4; border-radius: 12px; border: 2px solid #c9a84c; text-align: center;">
