@@ -1826,13 +1826,20 @@ function buildCVPrompt(data) {
     prompt += '========================================\n\n';
     
     prompt += 'PROFESSIONAL SUMMARY\n';
-    prompt += 'Write one paragraph of about 4-6 lines here. Must be complete and well-written.\n\n';
+    prompt += 'Write one paragraph of about 4-8 lines here. Must be complete and well-written.\n\n';
     
     prompt += 'WORK EXPERIENCE\n';
     prompt += 'Company | Job Title | Year Range\n';
     prompt += '- Responsibility 1\n';
     prompt += '- Responsibility 2\n';
     prompt += '- Responsibility 3\n\n';
+
+    prompt += '\n\n==================================\n';
+    prompt += 'CRITICAL STEPS TO FOLLOW IF NO WORK EXPERIENCE IS PROVIDED:\n';
+    prompt += '==================================\n\n';
+    prompt += '1. Create entry-level experience but must be professional for ' + p.jobTitle + 'if no experience is provided and if Generic CV is selected\n';
+   
+
     
     prompt += 'EDUCATION\n';
     prompt += 'School | Qualification | Year\n\n';
@@ -1855,9 +1862,10 @@ function buildCVPrompt(data) {
     prompt += '2. Start EVERY bullet point with a strong ACTION VERB (e.g., Lead, Develop, Create, Design, Analyze, Optimize).\n';
     prompt += '3. NEVER use passive voice. (Write "I deliver high-quality code" instead of "High-quality code was delivered by me").\n';
     prompt += '4. Be direct, confident, and professional. Do not use weak words like "helped" or "assisted".\n';
-    prompt += '5. Keep the summary to 4-6 compelling, powerful sentences.\n';
+    prompt += '5. Keep the summary to 4-8 compelling, powerful sentences.\n';
+    prompt += '6. DO NOT use decorative lines (like ==== or ----). The AI MUST NOT add these lines under headings.\n'; 
 
-    prompt += '\nIMPORTANT: The PROFESSIONAL SUMMARY must be a complete paragraph with 4-6 lines. Do not cut it off.';
+    prompt += '\nIMPORTANT: The PROFESSIONAL SUMMARY must be a complete paragraph with 4-8 lines. Do not cut it off.';
 
     return prompt;
 }
