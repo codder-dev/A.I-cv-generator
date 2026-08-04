@@ -37,7 +37,7 @@ export default async function handler(req, res) {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${OR_API_KEY}`,
-                'HTTP-Referer': 'https://your-vercel-app.vercel.app',
+                'HTTP-Referer': 'https://a-i-cv-generator.vercel.app',
                 'X-Title': 'CV Generator'
             },
             body: JSON.stringify({

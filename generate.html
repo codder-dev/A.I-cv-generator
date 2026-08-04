@@ -19,6 +19,8 @@
     
     <!-- AOS Animation -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     
     <!-- Main Styles -->
     <link rel="stylesheet" href="styles.css" />
@@ -414,7 +416,69 @@
         </div>
 
     </section>
-
+<!-- ========================================== -->
+<!-- CV UPLOAD & UPDATE SECTION -->
+<!-- ========================================== -->
+<div class="cv-upload-section" data-aos="fade-up" data-aos-delay="100">
+    <div class="cv-upload-container">
+        <div class="cv-upload-header">
+            <div class="cv-upload-icon">
+                <i class="fas fa-cloud-upload-alt"></i>
+            </div>
+            <div class="cv-upload-title">
+                <h3><i class="fas fa-file-pdf" style="color: var(--gold); margin-right: 8px;"></i> Upload & Update Your CV</h3>
+                <p><i class="fas fa-robot" style="color: var(--gold); margin-right: 6px;"></i> Upload your existing CV (PDF) and let AI reformat it professionally</p>
+            </div>
+        </div>
+        
+        <div class="cv-upload-area" id="cvUploadArea">
+            <div class="cv-upload-dropzone" id="cvUploadDropzone">
+                <i class="fas fa-file-pdf"></i>
+                <h4><i class="fas fa-upload"></i> Drop your PDF here or click to browse</h4>
+                <p><i class="fas fa-info-circle"></i> Only PDF files are accepted. Max size: 10MB</p>
+                <input type="file" id="cvFileInput" accept=".pdf" style="display:none;">
+            </div>
+            
+            <div class="cv-upload-preview" id="cvUploadPreview" style="display:none;">
+                <div class="cv-upload-file-info">
+                    <i class="fas fa-file-pdf"></i>
+                    <div>
+                        <span class="file-name" id="uploadFileName">CV.pdf</span>
+                        <span class="file-size" id="uploadFileSize">0 KB</span>
+                    </div>
+                    <button class="cv-upload-remove" id="cvUploadRemove" title="Remove file">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="cv-upload-actions">
+                    <button class="btn btn-primary" id="cvUpdateBtn">
+                        <i class="fas fa-wand-magic-sparkles"></i> Update CV with AI
+                    </button>
+                </div>
+            </div>
+            
+            <div class="cv-upload-error" id="cvUploadError" style="display:none;">
+                <i class="fas fa-exclamation-circle"></i>
+                <span id="cvUploadErrorMessage">Invalid file. Please upload a PDF.</span>
+            </div>
+            
+            <!-- ===== DOWNLOAD BUTTONS - ADDED HERE ===== -->
+            <div class="cv-download-section" id="cvDownloadSection" style="display: none;">
+                <p>
+                    <i class="fas fa-check-circle"></i> Your CV has been updated!
+                </p>
+                <div class="download-buttons">
+                    <button onclick="downloadUpdatedCV('pdf')" class="btn-download-pdf">
+                        <i class="fas fa-file-pdf"></i> Download PDF
+                    </button>
+                    <button onclick="downloadUpdatedCV('word')" class="btn-download-word">
+                        <i class="fas fa-file-word"></i> Download Word
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
     <!-- ========================================== -->
 <!-- WHY CHOOSE SECTION - FIXED -->
 <!-- ========================================== -->

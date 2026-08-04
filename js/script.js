@@ -244,6 +244,613 @@ var SKILLS = {
 };
 
 // ==========================================
+// CV UPLOAD & UPDATE - COMPLETE AI VERSION
+// ==========================================
+
+// Variables
+let uploadedFileData = null;
+let uploadedFileContent = '';
+let uploadedProfilePhotoURL = null;
+let isProcessing = false;
+let isPhotoModalOpen = false;
+
+// Initialize CV upload
+document.addEventListener('DOMContentLoaded', function() {
+    initCVUpload();
+});
+
+function initCVUpload() {
+    const dropzone = document.getElementById('cvUploadDropzone');
+    const fileInput = document.getElementById('cvFileInput');
+    const preview = document.getElementById('cvUploadPreview');
+    const removeBtn = document.getElementById('cvUploadRemove');
+    const updateBtn = document.getElementById('cvUpdateBtn');
+
+    if (!dropzone || !fileInput) return;
+
+    // Click to upload in the dropzone
+    dropzone.addEventListener('click', function() {
+        fileInput.click();
+    });
+
+    // File selected (PDF)
+    fileInput.addEventListener('change', function() {
+        if (this.files && this.files.length > 0) {
+            handleCVFile(this.files[0]);
+        }
+        this.value = '';
+    });
+
+    // Drag and drop
+    dropzone.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        this.classList.add('dragover');
+    });
+
+    dropzone.addEventListener('dragleave', function(e) {
+        e.preventDefault();
+        this.classList.remove('dragover');
+    });
+
+    dropzone.addEventListener('drop', function(e) {
+        e.preventDefault();
+        this.classList.remove('dragover');
+        if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+            handleCVFile(e.dataTransfer.files[0]);
+        }
+    });
+
+    // Remove file
+    if (removeBtn) {
+        removeBtn.addEventListener('click', function() {
+            clearUploadedFile();
+        });
+    }
+
+    // Update button
+    if (updateBtn) {
+        updateBtn.addEventListener('click', function() {
+            updateCVWithAI();
+        });
+    }
+}
+
+// ==========================================
+// HANDLE CV FILE UPLOAD & EXTRACTION
+// ==========================================
+
+function handleCVFile(file) {
+    const errorDiv = document.getElementById('cvUploadError');
+    const errorMessage = document.getElementById('cvUploadErrorMessage');
+    const dropzone = document.getElementById('cvUploadDropzone');
+    const preview = document.getElementById('cvUploadPreview');
+    const fileName = document.getElementById('uploadFileName');
+    const fileSize = document.getElementById('uploadFileSize');
+    
+    if (errorDiv) errorDiv.style.display = 'none';
+    if (errorMessage) errorMessage.textContent = '';
+
+    if (!file) {
+        if (errorMessage) errorMessage.textContent = ' No file selected.';
+        if (errorDiv) errorDiv.style.display = 'flex';
+        return;
+    }
+
+    if (file.type !== 'application/pdf') {
+        if (errorMessage) errorMessage.textContent = ' Only PDF files are allowed.';
+        if (errorDiv) errorDiv.style.display = 'flex';
+        return;
+    }
+
+    if (file.size > 10 * 1024 * 1024) {
+        if (errorMessage) errorMessage.textContent = ' File size exceeds 10MB.';
+        if (errorDiv) errorDiv.style.display = 'flex';
+        return;
+    }
+
+    uploadedFileData = file;
+
+    if (preview) {
+        preview.style.display = 'block';
+        if (fileName) fileName.textContent = file.name;
+        if (fileSize) fileSize.textContent = (file.size / 1024).toFixed(1) + ' KB';
+    }
+
+    if (dropzone) dropzone.style.display = 'none';
+
+    // --- EXTRACT THE ACTUAL TEXT FROM THE PDF ---
+    if (fileName) {
+        fileName.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Extracting text...';
+    }
+
+    extractTextFromPDF(file).then(text => {
+        uploadedFileContent = text; // Save the REAL content
+        if (fileName) {
+            fileName.innerHTML = '<i class="fas fa-check-circle" style="color: #22c55e;"></i> ' + file.name;
+        }
+        showNotification('✅ PDF text extracted! Click "Update CV" to reformat.', 'success');
+    }).catch(error => {
+        console.error(error);
+        uploadedFileContent = file.name; // Fallback
+        if (fileName) fileName.textContent = '⚠️ ' + file.name + ' (Text extraction failed)';
+    });
+
+    const downloadSection = document.getElementById('cvDownloadSection');
+    if (downloadSection) {
+        downloadSection.style.display = 'none';
+        downloadSection.classList.remove('show');
+    }
+}
+
+// ==========================================
+// PDF TEXT EXTRACTION LOGIC
+// ==========================================
+
+async function extractTextFromPDF(file) {
+    if (typeof pdfjsLib === 'undefined') {
+        const script = document.createElement('script');
+        script.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+        document.head.appendChild(script);
+        await new Promise(resolve => script.onload = resolve);
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    }
+
+    try {
+        const arrayBuffer = await file.arrayBuffer();
+        const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+        let fullText = '';
+        
+        for (let i = 1; i <= pdf.numPages; i++) {
+            const page = await pdf.getPage(i);
+            const textContent = await page.getTextContent();
+            fullText += textContent.items.map(item => item.str).join(' ') + '\n\n';
+        }
+        return fullText.trim();
+    } catch (error) {
+        console.error('PDF extraction error:', error);
+        throw new Error('Failed to extract text from PDF.');
+    }
+}
+
+// ==========================================
+// CLEAR UPLOADED FILE
+// ==========================================
+
+function clearUploadedFile() {
+    uploadedFileData = null;
+    uploadedFileContent = '';
+    if (uploadedProfilePhotoURL) {
+        URL.revokeObjectURL(uploadedProfilePhotoURL);
+        uploadedProfilePhotoURL = null;
+    }
+    
+    const preview = document.getElementById('cvUploadPreview');
+    const dropzone = document.getElementById('cvUploadDropzone');
+    const fileInput = document.getElementById('cvFileInput');
+    const errorDiv = document.getElementById('cvUploadError');
+    const updateBtn = document.getElementById('cvUpdateBtn');
+    const downloadSection = document.getElementById('cvDownloadSection');
+    
+    if (preview) preview.style.display = 'none';
+    if (dropzone) dropzone.style.display = 'block';
+    if (fileInput) fileInput.value = '';
+    if (errorDiv) errorDiv.style.display = 'none';
+    if (downloadSection) {
+        downloadSection.style.display = 'none';
+        downloadSection.classList.remove('show');
+    }
+    if (updateBtn) {
+        updateBtn.disabled = false;
+        updateBtn.innerHTML = '<i class="fas fa-wand-magic-sparkles"></i> Update CV with AI';
+    }
+    const container = document.getElementById('cvPreviewContainer');
+    if (container) {
+        container.innerHTML = '';
+    }
+    
+    // Close modal if open
+    closePhotoModal();
+}
+
+// ==========================================
+// OPTIONAL PHOTO MODAL FUNCTIONS
+// ==========================================
+
+function openPhotoModal() {
+    // Prevent opening multiple modals
+    if (isPhotoModalOpen) return;
+    isPhotoModalOpen = true;
+
+    // Remove existing modal if somehow leftover
+    const existing = document.getElementById('cvPhotoModalOverlay');
+    if (existing) existing.remove();
+
+    // Create Modal HTML
+    const modal = document.createElement('div');
+    modal.id = 'cvPhotoModalOverlay';
+    modal.style.cssText = `
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(11, 42, 53, 0.7); backdrop-filter: blur(5px);
+        z-index: 9999; display: flex; justify-content: center; align-items: center;
+        opacity: 0; transition: opacity 0.3s ease;
+    `;
+
+    modal.innerHTML = `
+        <div id="cvPhotoModalBox" style="
+            background: white; max-width: 440px; width: 92%; border-radius: 16px;
+            padding: 35px 30px 30px; box-shadow: 0 25px 60px rgba(0,0,0,0.3);
+            position: relative; transform: scale(0.95); transition: transform 0.3s ease;
+        ">
+            <button id="closePhotoModalBtn" style="
+                position: absolute; top: 12px; right: 16px;
+                background: none; border: none; font-size: 22px; color: #6b645a;
+                cursor: pointer; transition: 0.2s;
+            "><i class="fas fa-times"></i></button>
+            
+            <div style="text-align: center;">
+                <div style="width: 60px; height: 60px; background: rgba(201, 168, 76, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px;">
+                    <i class="fas fa-user-plus" style="font-size: 24px; color: #c9a84c;"></i>
+                </div>
+                <h3 style="font-size: 18px; color: #0b2a35; font-weight: 700; margin-bottom: 6px;">Add a Profile Photo</h3>
+                <p style="font-size: 14px; color: #64748b; margin-bottom: 20px;">Optional: Upload a photo to make your CV stand out.</p>
+                
+                <div id="modalPhotoDropzone" style="
+                    border: 2px dashed #e0dbd3; border-radius: 10px; padding: 25px 20px;
+                    background: #faf8f4; cursor: pointer; transition: 0.3s; margin-bottom: 10px;
+                ">
+                    <i class="fas fa-cloud-upload-alt" style="font-size: 32px; color: #c9a84c; display: block; margin-bottom: 6px;"></i>
+                    <p style="font-size: 14px; color: #0b2a35; font-weight: 500;">Click to browse or drag & drop</p>
+                    <p style="font-size: 11px; color: #8a8277;">JPG, PNG, WEBP (Max 5MB)</p>
+                    <input type="file" id="modalPhotoInput" accept="image/*" style="display: none;">
+                </div>
+                
+                <div id="modalPhotoPreview" style="display: none; margin-top: 10px;">
+                    <img id="modalPreviewImg" src="" alt="Preview" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 3px solid #c9a84c; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                    <p style="font-size: 13px; color: #22c55e; margin-top: 6px; font-weight: 600;"><i class="fas fa-check-circle"></i> Photo ready!</p>
+                </div>
+                
+                <div style="display: flex; gap: 10px; justify-content: center; margin-top: 20px;">
+                    <button id="modalSkipBtn" style="padding: 8px 24px; background: transparent; border: 1px solid #e0dbd3; border-radius: 8px; color: #6b645a; font-weight: 600; cursor: pointer;">Skip</button>
+                    <button id="modalConfirmBtn" style="padding: 8px 24px; background: #c9a84c; border: none; border-radius: 8px; color: #0b2a35; font-weight: 700; cursor: pointer; opacity: 0.5; pointer-events: none;">Confirm Photo</button>
+                </div>
+            </div>
+        </div>
+    `;
+
+    document.body.appendChild(modal);
+
+    // Select elements inside the modal
+    const dropzoneModal = document.getElementById('modalPhotoDropzone');
+    const inputModal = document.getElementById('modalPhotoInput');
+    const previewModal = document.getElementById('modalPhotoPreview');
+    const previewImg = document.getElementById('modalPreviewImg');
+    const confirmBtn = document.getElementById('modalConfirmBtn');
+    const skipBtn = document.getElementById('modalSkipBtn');
+    const closeBtn = document.getElementById('closePhotoModalBtn');
+
+    // Handle dropzone click
+    dropzoneModal.addEventListener('click', () => inputModal.click());
+
+    // Handle file selection
+    inputModal.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+        if (file.size > 5 * 1024 * 1024) {
+            showNotification('Photo size must be less than 5MB', 'error');
+            return;
+        }
+        
+        const reader = new FileReader();
+        reader.onload = function(ev) {
+            previewImg.src = ev.target.result;
+            previewModal.style.display = 'block';
+            dropzoneModal.style.display = 'none';
+            confirmBtn.style.opacity = '1';
+            confirmBtn.style.pointerEvents = 'auto';
+            
+            // Save temp URL
+            if (uploadedProfilePhotoURL) URL.revokeObjectURL(uploadedProfilePhotoURL);
+            uploadedProfilePhotoURL = ev.target.result; // Base64 string
+        };
+        reader.readAsDataURL(file);
+        this.value = '';
+    });
+
+    // Handle Confirm
+    confirmBtn.addEventListener('click', function() {
+        if (uploadedProfilePhotoURL) {
+            closePhotoModal();
+            showNotification('✅ Photo added! Generating your CV...', 'success');
+            proceedWithAIGeneration(); // Trigger the AI NOW
+        }
+    });
+
+    // Handle Skip/Close
+    const closeModalAction = () => {
+        closePhotoModal();
+        proceedWithAIGeneration(); // Trigger AI without photo
+    };
+    skipBtn.addEventListener('click', closeModalAction);
+    closeBtn.addEventListener('click', closeModalAction);
+
+    // Animate In
+    requestAnimationFrame(() => {
+        modal.style.opacity = '1';
+        document.getElementById('cvPhotoModalBox').style.transform = 'scale(1)';
+    });
+}
+
+function closePhotoModal() {
+    const modal = document.getElementById('cvPhotoModalOverlay');
+    if (modal) {
+        modal.style.opacity = '0';
+        document.getElementById('cvPhotoModalBox').style.transform = 'scale(0.95)';
+        setTimeout(() => modal.remove(), 300);
+    }
+    isPhotoModalOpen = false;
+}
+
+// ==========================================
+// UPDATE CV WITH AI (MODAL TRIGGER)
+// ==========================================
+
+function updateCVWithAI() {
+    if (!uploadedFileData) {
+        showNotification('⚠️ Please upload a PDF file first.', 'error');
+        return;
+    }
+
+    if (!uploadedFileContent || uploadedFileContent.length < 20) {
+        showNotification('⚠️ Please wait for text extraction to finish.', 'error');
+        return;
+    }
+
+    // OPEN THE MODAL INSTEAD OF GENERATING IMMEDIATELY
+    openPhotoModal();
+}
+
+// ==========================================
+// PROCEED WITH AI GENERATION
+// ==========================================
+
+async function proceedWithAIGeneration() {
+    if (isProcessing) return;
+    isProcessing = true;
+
+    const updateBtn = document.getElementById('cvUpdateBtn');
+    const originalText = updateBtn.innerHTML;
+    updateBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> AI is reformatting...';
+    updateBtn.disabled = true;
+
+    // Show loading state in preview
+    const container = document.getElementById('cvPreviewContainer');
+    if (container) {
+        container.innerHTML = `<div style="text-align: center; padding: 40px;">
+            <i class="fas fa-spinner fa-spin" style="font-size: 36px; color: #c9a84c;"></i>
+            <p style="margin-top: 10px; color: #6b645a;">AI is analyzing and reformatting your CV...</p>
+        </div>`;
+    }
+
+    // Build the prompt with the EXACT extracted text
+    const prompt = `Reformat this CV professionally as clean HTML (no markdown, no explanations, no extra text outside the HTML). I must be able to inject a photo at the top if needed, so just create the text/heading sections beautifully:\n\n${uploadedFileContent}`;
+
+    try {
+        // ==========================================
+        // REVERTED TO YOUR ORIGINAL, WORKING FETCH CODE
+        // ==========================================
+        var messages = [
+            {
+                role: 'system',
+                content: 'You are a professional CV formatter. Return ONLY clean HTML matching the structure of a standard CV, using <h1>, <h2>, <p>, <ul>, <li> tags.'
+            },
+            {
+                role: 'user',
+                content: prompt
+            }
+        ];
+
+        var response = await fetch(API_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                messages: messages,
+                model: OR_MODEL, // USES YOUR ORIGINAL 'meta-llama/llama-3.1-8b-instruct'
+                temperature: 0.3,
+                max_tokens: 8000
+            })
+        });
+        // ==========================================
+
+        if (!response.ok) {
+            var errorData = await response.json();
+            throw new Error(errorData.error || 'API request failed');
+        }
+
+        var result = await response.json();
+        var updatedContent = result.choices[0].message.content;
+        updatedContent = updatedContent.replace(/```html/g, '').replace(/```/g, '').trim();
+        updatedContent = updatedContent.replace(/^Here is.*CV:?\s*/i, '');
+
+        // --- FORMAT THE AI OUTPUT ---
+        let finalCVHtml = '';
+        
+        if (uploadedProfilePhotoURL) {
+            // Add Photo at the top if user uploaded one
+            finalCVHtml += `
+                <div style="text-align: center; margin-bottom: 25px; padding-bottom: 20px;">
+                    <img src="${uploadedProfilePhotoURL}" 
+                         alt="Profile Photo" 
+                         style="width: 130px; height: 130px; border-radius: 50%; object-fit: cover; border: 4px solid #c9a84c; box-shadow: 0 4px 15px rgba(0,0,0,0.1); background: #faf8f4;">
+                </div>
+            `;
+        }
+
+        finalCVHtml += `
+            <div style="font-family: 'Times New Roman', Times, serif; line-height: 1.6; padding: 10px;">
+                ${updatedContent}
+            </div>
+        `;
+
+        // Store the AI content for download
+        window._updatedCVContent = finalCVHtml;
+
+        // Display with beautiful wrapper
+        if (container) {
+            container.innerHTML = `
+                <div style="font-family: 'Times New Roman', Times, serif; max-width: 100%; margin: 0 auto; background: white; padding: 40px 35px; border: 1px solid #e0dbd3; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); overflow: hidden;">
+                    ${finalCVHtml}
+                </div>
+            `;
+        }
+
+        // Show download buttons
+        const downloadSection = document.getElementById('cvDownloadSection');
+        if (downloadSection) {
+            downloadSection.style.display = 'block';
+            downloadSection.classList.add('show');
+        }
+        showNotification('✅ CV updated successfully by AI!', 'success');
+
+    } catch (error) {
+        console.error('AI Error:', error);
+        showNotification('❌ AI failed. Showing raw text.', 'error');
+        
+        // Fallback
+        window._updatedCVContent = `<div style="padding:20px; white-space: pre-wrap;">${uploadedFileContent}</div>`;
+        if (container) {
+            container.innerHTML = `<div style="font-family: 'Times New Roman'; padding:20px; background:white; border-radius:12px;">${window._updatedCVContent}</div>`;
+        }
+        const downloadSection = document.getElementById('cvDownloadSection');
+        if (downloadSection) {
+            downloadSection.style.display = 'block';
+            downloadSection.classList.add('show');
+        }
+    } finally {
+        isProcessing = false;
+        updateBtn.innerHTML = originalText;
+        updateBtn.disabled = false;
+    }
+}
+
+// ==========================================
+// DOWNLOAD UPDATED CV
+// ==========================================
+
+function downloadUpdatedCV(format) {
+    console.log('📥 Downloading as:', format);
+    
+    const content = window._updatedCVContent || '';
+    if (!content) {
+        showNotification('⚠️ Please update your CV first.', 'error');
+        return;
+    }
+
+    // Uses the existing id="fullName" in your HTML Step 1
+    const nameInput = document.getElementById('fullName');
+    const name = nameInput?.value?.trim() || 'Updated_CV';
+    const fileName = name.replace(/\s+/g, '_');
+
+    if (format === 'pdf') {
+        const win = window.open('', '_blank');
+        if (!win) {
+            showNotification('⚠️ Please allow popups.', 'error');
+            return;
+        }
+
+        const htmlContent = `
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <title>${name} - Updated CV</title>
+                <meta charset="utf-8">
+                <style>
+                    * { margin: 0; padding: 0; box-sizing: border-box; }
+                    body { 
+                        background: white; 
+                        font-family: 'Times New Roman', Times, serif; 
+                        line-height: 1.5; 
+                        color: #000000; 
+                        padding: 40px; 
+                        max-width: 900px; 
+                        margin: 0 auto;
+                    }
+                    @page { margin: 1.5cm; size: A4; }
+                    @media print { body { padding: 0; } }
+                </style>
+            </head>
+            <body>
+                ${content}
+                <script>
+                    window.onload = function() { 
+                        setTimeout(function() { 
+                            window.print(); 
+                        }, 500); 
+                    }
+                <\/script>
+            </body>
+            </html>
+        `;
+
+        win.document.write(htmlContent);
+        win.document.close();
+        showNotification('✅ PDF downloaded!', 'success');
+
+    } else if (format === 'word') {
+        const docContent = `
+            <!DOCTYPE html>
+            <html xmlns:o='urn:schemas-microsoft-com:office:office' 
+                  xmlns:w='urn:schemas-microsoft-com:office:word' 
+                  xmlns='http://www.w3.org/TR/REC-html40'>
+            <head>
+                <meta charset="utf-8">
+                <title>${name} - Updated CV</title>
+                <!--[if gte mso 9]>
+                <xml>
+                    <w:WordDocument>
+                        <w:View>Print</w:View>
+                        <w:Zoom>100</w:Zoom>
+                    </w:WordDocument>
+                </xml>
+                <![endif]-->
+                <style>
+                    body { 
+                        font-family: 'Times New Roman', Times, serif; 
+                        line-height: 1.5; 
+                        color: #000000; 
+                        padding: 40px; 
+                        max-width: 900px; 
+                        margin: 0 auto;
+                    }
+                    @page { margin: 1.5cm; }
+                </style>
+            </head>
+            <body>
+                ${content}
+            </body>
+            </html>
+        `;
+
+        const blob = new Blob([docContent], { type: 'application/msword;charset=utf-8' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = fileName + '_Updated_CV.doc';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        setTimeout(() => URL.revokeObjectURL(link.href), 100);
+
+        showNotification('✅ Word downloaded!', 'success');
+    }
+}
+
+// Make functions globally accessible
+window.clearUploadedFile = clearUploadedFile;
+window.downloadUpdatedCV = downloadUpdatedCV;
+window.updateCVWithAI = updateCVWithAI;
+
+// ==========================================
 // DOM READY
 // ==========================================
 document.addEventListener('DOMContentLoaded', function() {
@@ -376,6 +983,9 @@ window.submitLetterDetails = submitLetterDetails;
 window.printCV = printCV;
 window.showNotification = showNotification;
 window.goToStep = goToStep;
+window.clearUploadedFile = clearUploadedFile;
+window.downloadUpdatedCV = downloadUpdatedCV;
+window.updateCVWithAI = updateCVWithAI;
 
 // ==========================================
 // CV TYPE SELECTOR
@@ -996,7 +1606,7 @@ function sortEducation(education) {
 }
 
 // ==========================================
-// GENERATE CV WITH BACKEND API
+// GENERATE CV WITH BACKEND API - FIXED
 // ==========================================
 async function generateCVWithAI() {
     console.log('Generate button clicked!');
@@ -1015,14 +1625,55 @@ async function generateCVWithAI() {
     }
 
     if (!data.personal.fullName || !data.personal.email || !data.personal.phone || !data.personal.address) {
-        showNotification('Please fill in all required personal details.', 'error');
+        
+        // Check if any required personal details are missing
+        let missingFields = [];
+        if (!data.personal.fullName) missingFields.push('Full Name');
+        else if (!data.personal.email) missingFields.push('Email');
+        else if (!data.personal.phone) missingFields.push('Phone');
+        else if (!data.personal.address) missingFields.push('Address');
+
+        //show the error notification
+        showNotification('Please fill in your ' + missingFields.join(', ') + '.', 'error');
+       // Go to step 1 to fill in personal details
         goToStep(1);
+
+        //scroll to the top of page to see the step 1 clearly
+            setTimeout(function() {
+            var formContainer = document.querySelector('.form-container') || document.querySelector('#cvForm');
+            if(formContainer){
+                formContainer.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start"
+                });
+            }
+        }, 300); 
+
         return;
     }
+     
 
     if (data.education.length === 0) {
+
+        // Check if any education entries are missing
+        let missingEducationFields = [];
+        if (data.education.length === 0) missingEducationFields.push('Education');
+        else if (data.education.some(e => !e.school || !e.qualification || !e.year)) missingEducationFields.push('School, Qualification, and Year');
+        //noyify the user to add at least one education entry with school, qualification and year
         showNotification('Please add at least one education entry with school, qualification and year.', 'error');
+        //go to step 2 to add education entries
         goToStep(2);
+
+        //scroll to the top of page to see the step 2 clearly
+        setTimeout(function() {
+            var formContainer = document.querySelector('.form-container') || document.querySelector('#cvForm');
+            if(formContainer){
+                formContainer.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start"
+                });
+            }
+        }, 300);
         return;
     }
 
@@ -1038,13 +1689,15 @@ async function generateCVWithAI() {
     generateBtn.disabled = true;
 
     try {
+        // Build the Prompt
         var prompt = buildCVPrompt(data);
         console.log('Prompt built successfully');
 
+        // ====== USING THE WORKING BACKEND FETCH LOGIC ======
         var messages = [
             {
                 role: 'system',
-                content: 'You are a professional CV writer with 20+ years of experience. Write a complete, well-structured CV. The PROFESSIONAL SUMMARY is the most important section - it must be a complete, compelling paragraph of 4-6 sentences that sells the candidate. DO NOT leave any section incomplete or cut off. Write the complete summary without truncation. Do NOT put any text in the SKILLS section - leave it empty.'
+                content: 'You are a professional CV writer with 20+ years of experience. Write a complete, well-structured CV. The PROFESSIONAL SUMMARY is the most important section - it must be a complete, compelling paragraph of 4-6 sentences that sells the candidate. DO NOT leave any section incomplete or cut off. Write the complete summary without truncation.'
             },
             {
                 role: 'user',
@@ -1059,11 +1712,12 @@ async function generateCVWithAI() {
             },
             body: JSON.stringify({
                 messages: messages,
-                model: OR_MODEL,
+                model: OR_MODEL, // Uses your original 'meta-llama/llama-3.1-8b-instruct'
                 temperature: 0.7,
                 max_tokens: 8000
             })
         });
+        
 
         if (!response.ok) {
             var errorData = await response.json();
@@ -1192,7 +1846,18 @@ function buildCVPrompt(data) {
     
     prompt += 'REFERENCES\n';
     prompt += 'Available upon request.\n';
-    prompt += '========================================\n';
+
+     prompt += '\n\n==============================\n';
+    prompt += 'CRITICAL WRITING STYLE RULES (STRICTLY FOLLOW):\n';
+    prompt += '==============================\n';
+
+    prompt += '1. Use PRESENT TENSE. Do NOT use past tense (e.g., write "Manage a team" instead of "Managed a team").\n';
+    prompt += '2. Start EVERY bullet point with a strong ACTION VERB (e.g., Lead, Develop, Create, Design, Analyze, Optimize).\n';
+    prompt += '3. NEVER use passive voice. (Write "I deliver high-quality code" instead of "High-quality code was delivered by me").\n';
+    prompt += '4. Be direct, confident, and professional. Do not use weak words like "helped" or "assisted".\n';
+    prompt += '5. Keep the summary to 4-6 compelling, powerful sentences.\n';
+
+    return prompt;  
     
     prompt += '\nIMPORTANT: The PROFESSIONAL SUMMARY must be a complete paragraph with 4-6 lines. Do not cut it off.';
 
@@ -1250,7 +1915,7 @@ function parseAICV(text) {
     var eduMatch = cleanText.match(/EDUCATION\s*\n\s*([\s\S]*?)(?=SKILLS|$)/i);
     if (eduMatch) {
         var eduText = eduMatch[1].trim();
-        var eduLines = eduText.split('\n').filter(function(l) { return l.trim() && l.includes('|') });
+        var eduLines = eduText.split('\n').filter(function(l) { return l.trim() && l.includes('|'); });
         sections.education = eduLines.map(function(line) {
             var parts = line.split('|');
             return {
@@ -1380,14 +2045,14 @@ function renderGenericCV(summary, experience, education, skills, languages, refe
 
     if (summary) {
         html += '<div class="cv-section">';
-        html += '<h3 class="cv-section-title">PROFESSIONAL SUMMARY</h3>';
+        html += '<h2 class="cv-section-title">PROFESSIONAL SUMMARY</h2>';
         html += '<p class="cv-summary-text">' + summary + '</p>';
         html += '</div>';
     }
 
     if (experience && experience.length > 0 && experience[0].title) {
         html += '<div class="cv-section">';
-        html += '<h3 class="cv-section-title">WORK EXPERIENCE</h3>';
+        html += '<h2 class="cv-section-title">WORK EXPERIENCE</h2>';
         experience.forEach(function(e) {
             html += '<div class="cv-exp-item">';
             html += '<div class="cv-exp-header">';
@@ -1411,7 +2076,7 @@ function renderGenericCV(summary, experience, education, skills, languages, refe
 
     if (education && education.length > 0) {
         html += '<div class="cv-section">';
-        html += '<h3 class="cv-section-title">EDUCATION</h3>';
+        html += '<h2 class="cv-section-title">EDUCATION</h2>';
         education.forEach(function(e) {
             html += '<div class="cv-edu-item">';
             html += '<strong>' + (e.school || 'Institution') + '</strong> | ' + (e.qualification || 'Qualification');
@@ -1424,7 +2089,7 @@ function renderGenericCV(summary, experience, education, skills, languages, refe
 
     if (skills && skills.length > 0) {
         html += '<div class="cv-section">';
-        html += '<h3 class="cv-section-title">SKILLS</h3>';
+        html += '<h2 class="cv-section-title">SKILLS</h2>';
         html += '<ul class="cv-skills-list">';
         skills.forEach(function(s) {
             html += '<li>' + s + '</li>';
@@ -1433,7 +2098,7 @@ function renderGenericCV(summary, experience, education, skills, languages, refe
     }
 
     html += '<div class="cv-section">';
-    html += '<h3 class="cv-section-title">LANGUAGES</h3>';
+    html += '<h2 class="cv-section-title">LANGUAGES</h2>';
     html += '<ul class="cv-languages-list">';
     if (languages && languages.length > 0) {
         languages.forEach(function(l) {
@@ -1446,7 +2111,7 @@ function renderGenericCV(summary, experience, education, skills, languages, refe
     html += '</ul></div>';
 
     html += '<div class="cv-section">';
-    html += '<h3 class="cv-section-title">REFERENCES</h3>';
+    html += '<h2 class="cv-section-title">REFERENCES</h2>';
     if (references && references.length > 0 && references[0].name) {
         html += '<ul class="cv-references-list">';
         references.forEach(function(r) {
