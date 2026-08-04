@@ -15,7 +15,6 @@ function refreshAOS() {
     }
 }
 
-
 // ============================================
 // HAMBURGER MENU TOGGLE
 // ============================================
@@ -25,7 +24,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const nav = document.getElementById('mainNav');
     const body = document.body;
 
-    // Create overlay
     let overlay = document.querySelector('.navbar-overlay');
     if (!overlay) {
         overlay = document.createElement('div');
@@ -47,25 +45,19 @@ document.addEventListener('DOMContentLoaded', function() {
         body.style.overflow = '';
     }
 
-    // Toggle on hamburger click
     hamburger.addEventListener('click', toggleMenu);
-
-    // Close on overlay click
     overlay.addEventListener('click', closeMenu);
 
-    // Close on Escape key
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape' && nav.classList.contains('open')) {
             closeMenu();
         }
     });
 
-    // Close when a nav link is clicked
     nav.querySelectorAll('a').forEach(function(link) {
         link.addEventListener('click', closeMenu);
     });
 
-    // Close on resize to desktop
     window.addEventListener('resize', function() {
         if (window.innerWidth > 768 && nav.classList.contains('open')) {
             closeMenu();
@@ -195,15 +187,11 @@ var OR_MODEL = 'meta-llama/llama-3.1-8b-instruct';
 // ==========================================
 var API_URL = '';
 
-// Detect environment
 if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-    // Local development - use local API
     API_URL = '/api/generate-cv';
 } else if (window.location.hostname.includes('github.io')) {
-    // GitHub Pages - use Vercel API
     API_URL = 'https://a-i-cv-generator.vercel.app/api/generate-cv';
 } else {
-    // Production on Vercel - use relative path
     API_URL = '/api/generate-cv';
 }
 
@@ -470,7 +458,7 @@ function openPhotoModal() {
     modal.id = 'cvPhotoModalOverlay';
     modal.style.cssText = `
         position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-        background: rgba(11, 42, 53, 0.7); backdrop-filter: blur(5px);
+        background: rgba(11, 42, 53, 0.7); backdrop-filter: blur(15px);
         z-index: 9999; display: flex; justify-content: center; align-items: center;
         opacity: 0; transition: opacity 0.3s ease;
     `;
@@ -560,7 +548,7 @@ function openPhotoModal() {
     confirmBtn.addEventListener('click', function() {
         if (uploadedProfilePhotoURL) {
             closePhotoModal();
-            showNotification('✅ Photo added! Generating your CV...', 'success');
+            showNotification(' Photo added! Generating your CV...', 'success');
             proceedWithAIGeneration(); // Trigger the AI NOW
         }
     });
@@ -596,12 +584,12 @@ function closePhotoModal() {
 
 function updateCVWithAI() {
     if (!uploadedFileData) {
-        showNotification('⚠️ Please upload a PDF file first.', 'error');
+        showNotification(' Please upload a PDF file first.', 'error');
         return;
     }
 
     if (!uploadedFileContent || uploadedFileContent.length < 20) {
-        showNotification('⚠️ Please wait for text extraction to finish.', 'error');
+        showNotification(' Please wait for text extraction to finish.', 'error');
         return;
     }
 
@@ -631,53 +619,57 @@ async function proceedWithAIGeneration() {
         </div>`;
     }
 
-    // Build the prompt with the EXACT extracted text
-    const prompt = `Reformat this CV professionally as clean HTML (no markdown, no explanations, no extra text outside the HTML). I must be able to inject a photo at the top if needed, so just create the text/heading sections beautifully:\n\n${uploadedFileContent}`;
+    // =========================================================
+    // UPDATED STRICT PROMPT TO MATCH YOUR CSS EXACTLY
+    // =========================================================
+    const prompt = `Reformat this CV professionally. 
+
+    STRICT RULES:
+    1. ONLY output clean HTML.
+    2. Use ONLY these tags: <h3> for Section Headers, <p> for paragraphs, <ul> and <li> for lists.
+    3. REMOVE all decorative lines like "===========", "---", or "___".
+    4. REMOVE the words "Curriculum Vitae" or "CV" as a title.
+    5. DO NOT use <h1> or <h2>. ONLY use <h3> for section headers (Examples: Professional Summary, Work Experience, Education, Skills, Languages).
+    6. The Skills and Languages lists MUST be formatted as <ul><li>...</li></ul>.
+    7. Ensure the Work Experience section uses bullet points (<ul><li>) for responsibilities.
+
+    Here is the CV text to format:\n\n${uploadedFileContent}`;
+    // =========================================================
+
+    // VERCEL URL
+    const API_ENDPOINT = 'https://a-i-cv-generator.vercel.app/api/generate-cv';
 
     try {
-        // ==========================================
-        // REVERTED TO YOUR ORIGINAL, WORKING FETCH CODE
-        // ==========================================
-        var messages = [
-            {
-                role: 'system',
-                content: 'You are a professional CV formatter. Return ONLY clean HTML matching the structure of a standard CV, using <h1>, <h2>, <p>, <ul>, <li> tags.'
-            },
-            {
-                role: 'user',
-                content: prompt
-            }
-        ];
-
-        var response = await fetch(API_URL, {
+        const response = await fetch(API_ENDPOINT, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                messages: messages,
-                model: OR_MODEL, // USES YOUR ORIGINAL 'meta-llama/llama-3.1-8b-instruct'
+                messages: [
+                    { role: 'system', content: 'You are a professional CV formatter. Return ONLY clean HTML. Use <h3> for headers, <p> for text, and <ul><li> for lists. Remove decorative lines.' },
+                    { role: 'user', content: prompt }
+                ],
+                model: 'meta-llama/llama-3.1-8b-instruct',
                 temperature: 0.3,
-                max_tokens: 8000
+                max_tokens: 4000
             })
         });
-        // ==========================================
 
-        if (!response.ok) {
-            var errorData = await response.json();
-            throw new Error(errorData.error || 'API request failed');
-        }
-
-        var result = await response.json();
-        var updatedContent = result.choices[0].message.content;
+        if (!response.ok) throw new Error('API request failed');
+        const data = await response.json();
+        
+        let updatedContent = data.choices[0].message.content;
+        
+        // Clean up AI markdown and nonsense
         updatedContent = updatedContent.replace(/```html/g, '').replace(/```/g, '').trim();
         updatedContent = updatedContent.replace(/^Here is.*CV:?\s*/i, '');
+        
+        // Force removal of decorative lines if AI accidentally keeps them
+        updatedContent = updatedContent.replace(/={10,}/g, '').replace(/-{10,}/g, '');
 
-        // --- FORMAT THE AI OUTPUT ---
+        // --- FORMAT THE AI OUTPUT USING YOUR BEAUTIFUL CLASSES ---
         let finalCVHtml = '';
         
         if (uploadedProfilePhotoURL) {
-            // Add Photo at the top if user uploaded one
             finalCVHtml += `
                 <div style="text-align: center; margin-bottom: 25px; padding-bottom: 20px;">
                     <img src="${uploadedProfilePhotoURL}" 
@@ -687,9 +679,12 @@ async function proceedWithAIGeneration() {
             `;
         }
 
+        // Wrap inside your standard .cv-generic class
         finalCVHtml += `
-            <div style="font-family: 'Times New Roman', Times, serif; line-height: 1.6; padding: 10px;">
-                ${updatedContent}
+            <div class="cv-generic">
+                <div class="cv-body">
+                    ${updatedContent}
+                </div>
             </div>
         `;
 
@@ -718,9 +713,9 @@ async function proceedWithAIGeneration() {
         showNotification('❌ AI failed. Showing raw text.', 'error');
         
         // Fallback
-        window._updatedCVContent = `<div style="padding:20px; white-space: pre-wrap;">${uploadedFileContent}</div>`;
+        window._updatedCVContent = `<div class="cv-generic"><div class="cv-body"><p>${uploadedFileContent.split('\n').map(line => line).join('<br>')}</p></div></div>`;
         if (container) {
-            container.innerHTML = `<div style="font-family: 'Times New Roman'; padding:20px; background:white; border-radius:12px;">${window._updatedCVContent}</div>`;
+            container.innerHTML = `<div style="font-family: 'Times New Roman'; padding:20px;">${window._updatedCVContent}</div>`;
         }
         const downloadSection = document.getElementById('cvDownloadSection');
         if (downloadSection) {
@@ -765,6 +760,7 @@ function downloadUpdatedCV(format) {
             <head>
                 <title>${name} - Updated CV</title>
                 <meta charset="utf-8">
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
                 <style>
                     * { margin: 0; padding: 0; box-sizing: border-box; }
                     body { 
@@ -778,6 +774,13 @@ function downloadUpdatedCV(format) {
                     }
                     @page { margin: 1.5cm; size: A4; }
                     @media print { body { padding: 0; } }
+                    /* INJECT YOUR CV CLASS STYLES HERE FOR PROPER PRINTING */
+                    .cv-generic .cv-body { padding: 10px; }
+                    .cv-generic .cv-section { margin-bottom: 20px; }
+                    .cv-generic .cv-section-title { font-size: 16px; font-weight: 700; text-transform: uppercase; border-bottom: 2px solid #c9a84c; padding-bottom: 5px; margin-bottom: 10px; }
+                    .cv-generic h1 { font-size: 24px; text-align: center; margin-bottom: 5px; }
+                    .cv-generic ul { padding-left: 20px; margin: 5px 0; }
+                    .cv-generic li { margin-bottom: 3px; }
                 </style>
             </head>
             <body>
@@ -795,7 +798,7 @@ function downloadUpdatedCV(format) {
 
         win.document.write(htmlContent);
         win.document.close();
-        showNotification('✅ PDF downloaded!', 'success');
+        showNotification(' PDF downloaded!', 'success');
 
     } else if (format === 'word') {
         const docContent = `
@@ -814,16 +817,16 @@ function downloadUpdatedCV(format) {
                     </w:WordDocument>
                 </xml>
                 <![endif]-->
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
                 <style>
-                    body { 
-                        font-family: 'Times New Roman', Times, serif; 
-                        line-height: 1.5; 
-                        color: #000000; 
-                        padding: 40px; 
-                        max-width: 900px; 
-                        margin: 0 auto;
-                    }
+                    body { font-family: 'Times New Roman', Times, serif; line-height: 1.5; color: #000000; padding: 40px; max-width: 900px; margin: 0 auto; }
                     @page { margin: 1.5cm; }
+                    .cv-generic .cv-body { padding: 10px; }
+                    .cv-generic .cv-section { margin-bottom: 20px; }
+                    .cv-generic .cv-section-title { font-size: 16px; font-weight: 700; text-transform: uppercase; border-bottom: 2px solid #c9a84c; padding-bottom: 5px; margin-bottom: 10px; }
+                    .cv-generic h1 { font-size: 24px; text-align: center; margin-bottom: 5px; }
+                    .cv-generic ul { padding-left: 20px; margin: 5px 0; }
+                    .cv-generic li { margin-bottom: 3px; }
                 </style>
             </head>
             <body>
@@ -841,7 +844,7 @@ function downloadUpdatedCV(format) {
         document.body.removeChild(link);
         setTimeout(() => URL.revokeObjectURL(link.href), 100);
 
-        showNotification('✅ Word downloaded!', 'success');
+        showNotification(' Word downloaded!', 'success');
     }
 }
 
@@ -878,6 +881,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     initGenerator();
+    initCVUpload();
      
     setTimeout(refreshAOS, 200);
 
@@ -949,7 +953,6 @@ function initGenerator() {
     initFormNavigation();
     updateRequiredFields();
     
-    // Real-time duplicate school validation on input
     document.addEventListener('input', function(e) {
         if (e.target.classList.contains('edu-school')) {
             document.querySelectorAll('.edu-school').forEach(function(input) {
@@ -1140,7 +1143,6 @@ function validateStep(step) {
         }
     });
 
-    // STEP 1: Personal Details Validation
     if (step === 1) {
         var fullName = document.getElementById('fullName');
         if (fullName && fullName.value.trim()) {
@@ -1205,7 +1207,6 @@ function validateStep(step) {
         }
     }
 
-    // STEP 2: Education Validation with Duplicate School Check
     if (step === 2) {
         var eduSchools = document.querySelectorAll('.edu-school');
         var eduQuals = document.querySelectorAll('.edu-qualification');
@@ -1250,7 +1251,6 @@ function validateStep(step) {
         }
     }
 
-    // STEP 3: Experience Validation
     if (step === 3 && selectedCVType === 'professional') {
         var expTitles = document.querySelectorAll('.exp-title');
         var expCompanies = document.querySelectorAll('.exp-company');
@@ -1847,7 +1847,7 @@ function buildCVPrompt(data) {
     prompt += 'REFERENCES\n';
     prompt += 'Available upon request.\n';
 
-     prompt += '\n\n==============================\n';
+    prompt += '\n\n==============================\n';
     prompt += 'CRITICAL WRITING STYLE RULES (STRICTLY FOLLOW):\n';
     prompt += '==============================\n';
 
@@ -1857,8 +1857,6 @@ function buildCVPrompt(data) {
     prompt += '4. Be direct, confident, and professional. Do not use weak words like "helped" or "assisted".\n';
     prompt += '5. Keep the summary to 4-6 compelling, powerful sentences.\n';
 
-    return prompt;  
-    
     prompt += '\nIMPORTANT: The PROFESSIONAL SUMMARY must be a complete paragraph with 4-6 lines. Do not cut it off.';
 
     return prompt;

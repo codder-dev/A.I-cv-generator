@@ -274,13 +274,14 @@ nav ul li.active a i {
 }
 
 /* ============================================
-   HERO CAROUSEL
+   HERO CAROUSEL - COMPLETE FIX
    ============================================ */
 .hero-carousel {
     position: relative;
     width: 100%;
     height: 100vh;
     min-height: 700px;
+    max-height: 900px;
     overflow: hidden;
     margin-top: 82px;
 }
@@ -301,7 +302,7 @@ nav ul li.active a i {
 
 .carousel-slide .carousel-image {
     width: 100%;
-    height: 100vh;
+    height: 100%;
     object-fit: cover;
 }
 
@@ -316,11 +317,11 @@ nav ul li.active a i {
 
 .carousel-caption {
     position: absolute;
-    top: 30%;
+    top: 45%;
     left: 10%;
     transform: translateY(-50%);
     max-width: 580px;
-    padding: 0;
+    padding: 0 20px 0 0;
     z-index: 2;
 }
 
@@ -373,7 +374,7 @@ nav ul li.active a i {
    ============================================ */
 .hero-buttons {
     position: absolute;
-    bottom: 35%;
+    bottom: 20%;
     left: 10%;
     z-index: 2;
     display: flex;
@@ -499,7 +500,7 @@ nav ul li.active a i {
    ============================================ */
 .carousel-indicators {
     position: absolute;
-    bottom: 50px;
+    bottom: 30px;
     left: 50%;
     transform: translateX(-50%);
     z-index: 3;
@@ -1141,7 +1142,298 @@ nav ul li.active a i {
 .field-error.show {
     display: block;
 }
+/* ============================================
+   CV UPLOAD & UPDATE - DESKTOP STYLES (ADDED)
+   ============================================ */
 
+/* Main Container */
+.cv-upload-container {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: 30px;
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--gray-200);
+    transition: var(--transition);
+}
+
+.cv-upload-container:hover {
+    box-shadow: var(--shadow-lg);
+}
+
+/* Header */
+.cv-upload-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.cv-upload-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: rgba(201, 168, 76, 0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.cv-upload-icon i {
+    font-size: 22px;
+    color: var(--gold);
+}
+
+.cv-upload-title h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--primary);
+    font-family: var(--font-heading);
+    margin-bottom: 2px;
+}
+
+.cv-upload-title p {
+    font-size: 14px;
+    color: var(--gray-500);
+    margin: 0;
+}
+
+/* Upload Area */
+.cv-upload-area {
+    margin-top: 4px;
+}
+
+/* Dropzone */
+.cv-upload-dropzone {
+    border: 2px dashed var(--gray-300);
+    border-radius: var(--radius);
+    padding: 50px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: var(--transition);
+    background: var(--off-white);
+}
+
+.cv-upload-dropzone:hover {
+    border-color: var(--gold);
+    background: rgba(201, 168, 76, 0.03);
+}
+
+.cv-upload-dropzone.dragover {
+    border-color: var(--gold);
+    background: rgba(201, 168, 76, 0.08);
+    transform: scale(1.01);
+}
+
+.cv-upload-dropzone i.fa-file-pdf {
+    font-size: 48px;
+    color: var(--gold);
+    margin-bottom: 12px;
+    display: block;
+}
+
+.cv-upload-dropzone h4 {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--primary);
+    margin-bottom: 4px;
+}
+
+.cv-upload-dropzone h4 i {
+    font-size: 16px;
+    color: var(--gold);
+    margin-right: 6px;
+}
+
+.cv-upload-dropzone p {
+    font-size: 13px;
+    color: var(--gray-500);
+}
+
+.cv-upload-dropzone p i {
+    font-size: 12px;
+    color: var(--gold);
+    margin-right: 4px;
+}
+
+/* Preview */
+.cv-upload-preview {
+    display: none;
+    border: 2px solid var(--gray-200);
+    border-radius: var(--radius);
+    padding: 20px;
+    background: var(--off-white);
+    animation: fadeInUp 0.4s ease;
+}
+
+.cv-upload-file-info {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--gray-200);
+}
+
+.cv-upload-file-info i.fa-file-pdf {
+    font-size: 32px;
+    color: var(--gold);
+}
+
+.cv-upload-file-info .file-name {
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--gray-700);
+    display: block;
+}
+
+.cv-upload-file-info .file-size {
+    font-size: 12px;
+    color: var(--gray-500);
+}
+
+.cv-upload-remove {
+    background: none;
+    border: none;
+    color: var(--gray-400);
+    cursor: pointer;
+    font-size: 18px;
+    padding: 4px 8px;
+    border-radius: 6px;
+    transition: var(--transition);
+    margin-left: auto;
+}
+
+.cv-upload-remove:hover {
+    color: #dc3545;
+    background: #fff5f5;
+}
+
+.cv-upload-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.cv-upload-actions .btn {
+    flex: 1;
+    justify-content: center;
+}
+
+.cv-upload-actions .btn i {
+    margin-right: 8px;
+}
+
+/* Error */
+.cv-upload-error {
+    background: #fff5f5;
+    border: 1px solid #fecaca;
+    border-radius: var(--radius);
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #dc3545;
+    font-size: 14px;
+    font-weight: 500;
+    animation: fadeInUp 0.3s ease;
+}
+
+.cv-upload-error i {
+    font-size: 18px;
+    color: #dc3545;
+}
+
+/* CV Download Section Desktop */
+.cv-download-section {
+    display: none;
+    margin-top: 16px;
+    padding: 16px 20px;
+    background: #faf8f4;
+    border-radius: 12px;
+    border: 2px solid #c9a84c;
+    text-align: center;
+    animation: fadeInUp 0.5s ease;
+}
+
+.cv-download-section.show {
+    display: block;
+}
+
+.cv-download-section .download-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.cv-download-section .btn-download-pdf,
+.cv-download-section .btn-download-word {
+    padding: 8px 20px;
+    font-size: 13px;
+    border-radius: 999px;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'Times New Roman', Times, serif;
+    transition: all 0.3s ease;
+}
+
+.cv-download-section .btn-download-pdf {
+    background: #c9a84c;
+    color: #0b2a35;
+    border: none;
+    box-shadow: 0 3px 12px rgba(201, 168, 76, 0.25);
+}
+
+.cv-download-section .btn-download-pdf:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(201, 168, 76, 0.35);
+}
+
+.cv-download-section .btn-download-word {
+    background: transparent;
+    color: #0b2a35;
+    border: 2px solid #0b2a35;
+}
+
+.cv-download-section .btn-download-word:hover {
+    background: #0b2a35;
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* ============================================
+   CV PHOTO MODAL CSS (Added for the optional Modal)
+   ============================================ */
+#cvPhotoModalBox .cv-modal-dropzone {
+    border: 2px dashed var(--gray-300);
+    border-radius: var(--radius);
+    padding: 25px 20px;
+    background: var(--off-white);
+    cursor: pointer;
+    transition: var(--transition);
+    text-align: center;
+}
+
+#cvPhotoModalBox .cv-modal-dropzone:hover {
+    border-color: var(--gold);
+    background: rgba(201, 168, 76, 0.03);
+}
+
+#cvPhotoModalBox .cv-modal-dropzone i {
+    font-size: 32px;
+    color: var(--gold);
+    display: block;
+    margin-bottom: 6px;
+}
+
+#cvPhotoModalBox .cv-modal-dropzone p {
+    font-size: 14px;
+    color: var(--gray-600);
+    margin: 0;
+}
 /* ============================================
    ENTRY ITEMS
    ============================================ */
@@ -1208,6 +1500,73 @@ nav ul li.active a i {
     color: var(--gold);
     background: rgba(201, 168, 76, 0.05);
 }
+/* ============================================
+   CV DOWNLOAD SECTION
+   ============================================ */
+
+.cv-download-section {
+    display: none;
+    margin-top: 20px;
+    padding: 20px;
+    background: #faf8f4;
+    border-radius: 12px;
+    border: 2px solid #c9a84c;
+    text-align: center;
+    animation: fadeInUp 0.5s ease;
+}
+
+.cv-download-section.show {
+    display: block;
+}
+
+.cv-download-section p {
+    font-size: 14px;
+    color: #22c55e;
+    margin-bottom: 14px;
+    font-weight: 600;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.cv-download-section .btn-download-pdf,
+.cv-download-section .btn-download-word {
+    padding: 12px 30px;
+    font-size: 15px;
+    border-radius: 999px;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Times New Roman', Times, serif;
+    transition: all 0.3s ease;
+}
+
+.cv-download-section .btn-download-pdf {
+    background: #c9a84c;
+    color: #0b2a35;
+    border: none;
+    box-shadow: 0 4px 16px rgba(201, 168, 76, 0.3);
+}
+
+.cv-download-section .btn-download-pdf:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(201, 168, 76, 0.4);
+}
+
+.cv-download-section .btn-download-word {
+    background: transparent;
+    color: #0b2a35;
+    border: 2px solid #0b2a35;
+}
+
+.cv-download-section .btn-download-word:hover {
+    background: #0b2a35;
+    color: white;
+    transform: translateY(-2px);
+}
+
+
+
 
 /* ============================================
    PHOTO UPLOAD
@@ -3742,6 +4101,7 @@ nav ul li.active a i {
     transform: translateY(-2px);
     box-shadow: 0 12px 32px rgba(201, 168, 76, 0.4);
 }
+
 /* ============================================
    WHY CHOOSE US - FIXED FOR MOBILE
    ============================================ */
@@ -3843,7 +4203,255 @@ nav ul li.active a i {
 }
 
 /* ============================================
-   MOBILE RESPONSIVENESS - FINAL FIX
+   WHY CHOOSE US - MOBILE RESPONSIVE
+   ============================================ */
+
+@media (max-width: 768px) {
+    .why-choose-section {
+        padding: 30px 16px !important;
+    }
+    
+    .why-choose-header h2 {
+        font-size: 26px !important;
+    }
+    
+    .why-choose-header p {
+        font-size: 15px !important;
+        padding: 0 10px !important;
+    }
+    
+    .why-choose-grid {
+        grid-template-columns: 1fr !important;
+        gap: 16px !important;
+    }
+    
+    .why-choose-card {
+        padding: 20px 16px !important;
+        width: 100% !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .why-choose-header h2 {
+        font-size: 22px !important;
+    }
+    
+    .why-choose-card {
+        padding: 16px 14px !important;
+    }
+    
+    .why-choose-card h3 {
+        font-size: 16px !important;
+    }
+    
+    .why-choose-card p {
+        font-size: 13px !important;
+    }
+}
+
+/* ============================================
+   CAROUSEL - MOBILE RESPONSIVE - WIDTH FIX
+   ============================================ */
+
+/* Tablets & Large Phones (768px and below) */
+@media (max-width: 768px) {
+    .hero-carousel {
+        width: 100% !important;
+        overflow: hidden !important;
+        height: 70vh !important;
+        min-height: 500px !important;
+        margin-top: 64px !important;
+    }
+    
+    .carousel-container {
+        width: 100% !important;
+    }
+    
+    .carousel-slide {
+        min-width: 100% !important;
+        width: 100% !important;
+    }
+    
+    .carousel-slide .carousel-image {
+        width: 100% !important;
+        max-width: 100% !important;
+        object-fit: cover !important;
+    }
+    
+    .carousel-caption {
+        left: 5% !important;
+        right: 5% !important;
+        max-width: 100% !important;
+        padding: 0 15px !important;
+        width: 90% !important;
+        top: 45% !important;
+        transform: translateY(-50%) !important;
+    }
+    
+    .carousel-caption .badge {
+        font-size: 10px !important;
+        padding: 4px 14px !important;
+        margin-bottom: 10px !important;
+        display: inline-flex !important;
+    }
+    
+    .carousel-caption h1 {
+        font-size: 24px !important;
+        line-height: 1.2 !important;
+        margin-bottom: 8px !important;
+        word-wrap: break-word !important;
+    }
+    
+    .carousel-caption p {
+        font-size: 13px !important;
+        max-width: 100% !important;
+        line-height: 1.5 !important;
+        margin-bottom: 0 !important;
+    }
+    
+    .carousel-controls {
+        padding: 0 8px !important;
+    }
+    
+    .carousel-controls .prev,
+    .carousel-controls .next {
+        width: 30px !important;
+        height: 30px !important;
+        font-size: 12px !important;
+    }
+    
+    .carousel-indicators {
+        bottom: 15px !important;
+        gap: 6px !important;
+    }
+    
+    .carousel-indicators .indicator {
+        width: 18px !important;
+        height: 2px !important;
+    }
+    
+    .carousel-indicators .indicator.active {
+        width: 28px !important;
+    }
+    
+    .hero-buttons {
+        left: 5% !important;
+        right: 5% !important;
+        gap: 6px !important;
+        width: 90% !important;
+        bottom: 12% !important;
+    }
+    
+    .hero-buttons .btn-primary,
+    .hero-buttons .btn-secondary,
+    .hero-buttons .btn-prysec {
+        padding: 8px 16px !important;
+        font-size: 11px !important;
+        width: 100% !important;
+        justify-content: center !important;
+        gap: 4px !important;
+        text-align: center !important;
+        white-space: normal !important;
+        word-wrap: break-word !important;
+    }
+    
+    .hero-buttons .btn-primary i,
+    .hero-buttons .btn-secondary i,
+    .hero-buttons .btn-prysec i {
+        font-size: 11px !important;
+    }
+}
+
+/* Small Phones (480px and below) */
+@media (max-width: 480px) {
+    .hero-carousel {
+        height: 65vh !important;
+        min-height: 420px !important;
+        max-height: 550px !important;
+        margin-top: 58px !important;
+    }
+    
+    .carousel-caption h1 {
+        font-size: 20px !important;
+    }
+    
+    .carousel-caption p {
+        font-size: 12px !important;
+    }
+    
+    .carousel-caption .badge {
+        font-size: 8px !important;
+        padding: 3px 10px !important;
+        margin-bottom: 6px !important;
+    }
+    
+    .carousel-controls .prev,
+    .carousel-controls .next {
+        width: 26px !important;
+        height: 26px !important;
+        font-size: 10px !important;
+    }
+    
+    .carousel-indicators .indicator {
+        width: 14px !important;
+        height: 2px !important;
+    }
+    
+    .carousel-indicators .indicator.active {
+        width: 22px !important;
+    }
+    
+    .hero-buttons .btn-primary,
+    .hero-buttons .btn-secondary,
+    .hero-buttons .btn-prysec {
+        padding: 6px 12px !important;
+        font-size: 10px !important;
+    }
+}
+
+/* Extra Small Phones (360px and below) */
+@media (max-width: 360px) {
+    .hero-carousel {
+        height: 60vh !important;
+        min-height: 350px !important;
+        max-height: 450px !important;
+    }
+    
+    .carousel-caption h1 {
+        font-size: 17px !important;
+    }
+    
+    .carousel-caption p {
+        font-size: 11px !important;
+    }
+    
+    .carousel-caption .badge {
+        font-size: 7px !important;
+        padding: 2px 8px !important;
+        gap: 4px !important;
+    }
+    
+    .carousel-caption .badge i {
+        font-size: 8px !important;
+    }
+    
+    .carousel-controls .prev,
+    .carousel-controls .next {
+        width: 22px !important;
+        height: 22px !important;
+        font-size: 8px !important;
+    }
+    
+    .hero-buttons .btn-primary,
+    .hero-buttons .btn-secondary,
+    .hero-buttons .btn-prysec {
+        padding: 5px 10px !important;
+        font-size: 9px !important;
+    }
+}
+
+/* ============================================
+   MOBILE RESPONSIVENESS - MAIN
    ============================================ */
 
 /* ===== TABLET (1024px) ===== */
@@ -3854,9 +4462,6 @@ nav ul li.active a i {
     }
     .logo-container h1 {
         font-size: 22px;
-    }
-    .carousel-caption h1 {
-        font-size: 40px;
     }
     .main-text h2 {
         font-size: 32px;
@@ -3872,6 +4477,54 @@ nav ul li.active a i {
     }
     .cv-type-selector {
         grid-template-columns: repeat(2, 1fr);
+    }
+}
+/* Mobile */
+@media (max-width: 768px) {
+    .cv-upload-container {
+        padding: 16px !important;
+    }
+    .cv-upload-header {
+        flex-direction: column !important;
+        text-align: center !important;
+        gap: 10px !important;
+    }
+    .cv-upload-title h3 {
+        font-size: 16px !important;
+    }
+    .cv-upload-title p {
+        font-size: 13px !important;
+    }
+    .cv-upload-dropzone {
+        padding: 30px 16px !important;
+    }
+    .cv-upload-dropzone i {
+        font-size: 36px !important;
+    }
+    .cv-upload-dropzone h4 {
+        font-size: 14px !important;
+    }
+    .cv-upload-preview {
+        padding: 14px !important;
+    }
+    .cv-upload-actions {
+        flex-direction: column !important;
+    }
+    .cv-upload-actions .btn {
+        width: 100% !important;
+    }
+}
+@media (max-width: 768px) {
+    .cv-download-section {
+        padding: 16px !important;
+    }
+    
+    .cv-download-section .btn-download-pdf,
+    .cv-download-section .btn-download-word {
+        width: 100% !important;
+        justify-content: center !important;
+        padding: 10px 20px !important;
+        font-size: 13px !important;
     }
 }
 
@@ -3939,75 +4592,6 @@ nav ul li.active a i {
     }
     .navbar-overlay.active {
         display: block !important;
-    }
-
-    /* ----- HERO CAROUSEL ----- */
-    .hero-carousel {
-        height: 55vh !important;
-        min-height: 300px !important;
-        margin-top: 64px !important;
-    }
-    .carousel-slide .carousel-image {
-        height: 100% !important;
-        object-fit: cover !important;
-    }
-    .carousel-caption {
-        top: 30% !important;
-        left: 5% !important;
-        right: 5% !important;
-        transform: translateY(-50%) !important;
-        max-width: 100% !important;
-        padding: 0 10px !important;
-    }
-    .carousel-caption .badge {
-        font-size: 10px !important;
-        padding: 4px 12px !important;
-        margin-bottom: 8px !important;
-    }
-    .carousel-caption h1 {
-        font-size: 22px !important;
-        line-height: 1.2 !important;
-        margin-bottom: 8px !important;
-    }
-    .carousel-caption p {
-        font-size: 13px !important;
-        max-width: 100% !important;
-        line-height: 1.5 !important;
-    }
-    .carousel-controls {
-        padding: 0 10px !important;
-    }
-    .carousel-controls .prev,
-    .carousel-controls .next {
-        width: 30px !important;
-        height: 30px !important;
-        font-size: 12px !important;
-    }
-    .carousel-indicators {
-        bottom: 15px !important;
-        gap: 6px !important;
-    }
-    .carousel-indicators .indicator {
-        width: 18px !important;
-        height: 2px !important;
-    }
-    .carousel-indicators .indicator.active {
-        width: 28px !important;
-    }
-    .hero-buttons {
-        bottom: 12% !important;
-        left: 5% !important;
-        right: 5% !important;
-        gap: 8px !important;
-    }
-    .hero-buttons .btn-primary,
-    .hero-buttons .btn-secondary,
-    .hero-buttons .btn-prysec {
-        padding: 10px 18px !important;
-        font-size: 12px !important;
-        width: 100% !important;
-        justify-content: center !important;
-        gap: 6px !important;
     }
 
     /* ===== MAIN CONTENT - STACKS ===== */
@@ -4630,33 +5214,6 @@ nav ul li.active a i {
 
 /* ===== SMALL PHONES (480px) ===== */
 @media (max-width: 480px) {
-    .hero-carousel {
-        height: 50vh !important;
-        min-height: 260px !important;
-    }
-    .carousel-caption h1 {
-        font-size: 18px !important;
-    }
-    .carousel-caption p {
-        font-size: 12px !important;
-    }
-    .carousel-caption .badge {
-        font-size: 9px !important;
-        padding: 3px 10px !important;
-        margin-bottom: 6px !important;
-    }
-    .carousel-controls .prev,
-    .carousel-controls .next {
-        width: 26px !important;
-        height: 26px !important;
-        font-size: 10px !important;
-    }
-    .hero-buttons .btn-primary,
-    .hero-buttons .btn-secondary,
-    .hero-buttons .btn-prysec {
-        padding: 8px 14px !important;
-        font-size: 11px !important;
-    }
     .main-text h2 {
         font-size: 20px !important;
     }
@@ -4720,20 +5277,6 @@ nav ul li.active a i {
 
 /* ===== EXTRA SMALL PHONES (360px) ===== */
 @media (max-width: 360px) {
-    .hero-carousel {
-        height: 45vh !important;
-        min-height: 220px !important;
-    }
-    .carousel-caption h1 {
-        font-size: 16px !important;
-    }
-    .carousel-caption p {
-        font-size: 11px !important;
-    }
-    .carousel-caption .badge {
-        font-size: 8px !important;
-        padding: 2px 8px !important;
-    }
     .main-text h2 {
         font-size: 18px !important;
     }
@@ -4863,53 +5406,5 @@ textarea:focus-visible {
     }
     .page-header-content h1 .highlight {
         color: var(--gold-dark);
-    }
-}
-
-
-/* ============================================
-   WHY CHOOSE US - MOBILE RESPONSIVE
-   ============================================ */
-
-@media (max-width: 768px) {
-    .why-choose-section {
-        padding: 30px 16px !important;
-    }
-    
-    .why-choose-header h2 {
-        font-size: 26px !important;
-    }
-    
-    .why-choose-header p {
-        font-size: 15px !important;
-        padding: 0 10px !important;
-    }
-    
-    .why-choose-grid {
-        grid-template-columns: 1fr !important;
-        gap: 16px !important;
-    }
-    
-    .why-choose-card {
-        padding: 20px 16px !important;
-        width: 100% !important;
-    }
-}
-
-@media (max-width: 480px) {
-    .why-choose-header h2 {
-        font-size: 22px !important;
-    }
-    
-    .why-choose-card {
-        padding: 16px 14px !important;
-    }
-    
-    .why-choose-card h3 {
-        font-size: 16px !important;
-    }
-    
-    .why-choose-card p {
-        font-size: 13px !important;
     }
 }

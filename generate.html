@@ -16,11 +16,12 @@
     
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+   
+    <!-- PDF.js for PDF text extraction -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     
     <!-- AOS Animation -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     
     <!-- Main Styles -->
     <link rel="stylesheet" href="styles.css" />
@@ -126,7 +127,7 @@
                 <p>Experienced professionals</p>
             </div>
         </div>
-
+       
         <!-- MULTI-STEP FORM -->
         <div class="form-container" data-aos="fade-up" data-aos-delay="100">
             
@@ -416,107 +417,114 @@
         </div>
 
     </section>
-<!-- ========================================== -->
-<!-- CV UPLOAD & UPDATE SECTION -->
-<!-- ========================================== -->
-<div class="cv-upload-section" data-aos="fade-up" data-aos-delay="100">
-    <div class="cv-upload-container">
-        <div class="cv-upload-header">
-            <div class="cv-upload-icon">
-                <i class="fas fa-cloud-upload-alt"></i>
-            </div>
-            <div class="cv-upload-title">
-                <h3><i class="fas fa-file-pdf" style="color: var(--gold); margin-right: 8px;"></i> Upload & Update Your CV</h3>
-                <p><i class="fas fa-robot" style="color: var(--gold); margin-right: 6px;"></i> Upload your existing CV (PDF) and let AI reformat it professionally</p>
-            </div>
-        </div>
-        
-        <div class="cv-upload-area" id="cvUploadArea">
-            <div class="cv-upload-dropzone" id="cvUploadDropzone">
-                <i class="fas fa-file-pdf"></i>
-                <h4><i class="fas fa-upload"></i> Drop your PDF here or click to browse</h4>
-                <p><i class="fas fa-info-circle"></i> Only PDF files are accepted. Max size: 10MB</p>
-                <input type="file" id="cvFileInput" accept=".pdf" style="display:none;">
-            </div>
-            
-            <div class="cv-upload-preview" id="cvUploadPreview" style="display:none;">
-                <div class="cv-upload-file-info">
-                    <i class="fas fa-file-pdf"></i>
-                    <div>
-                        <span class="file-name" id="uploadFileName">CV.pdf</span>
-                        <span class="file-size" id="uploadFileSize">0 KB</span>
-                    </div>
-                    <button class="cv-upload-remove" id="cvUploadRemove" title="Remove file">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-                <div class="cv-upload-actions">
-                    <button class="btn btn-primary" id="cvUpdateBtn">
-                        <i class="fas fa-wand-magic-sparkles"></i> Update CV with AI
-                    </button>
-                </div>
-            </div>
-            
-            <div class="cv-upload-error" id="cvUploadError" style="display:none;">
-                <i class="fas fa-exclamation-circle"></i>
-                <span id="cvUploadErrorMessage">Invalid file. Please upload a PDF.</span>
-            </div>
-            
-            <!-- ===== DOWNLOAD BUTTONS - ADDED HERE ===== -->
-            <div class="cv-download-section" id="cvDownloadSection" style="display: none;">
-                <p>
-                    <i class="fas fa-check-circle"></i> Your CV has been updated!
-                </p>
-                <div class="download-buttons">
-                    <button onclick="downloadUpdatedCV('pdf')" class="btn-download-pdf">
-                        <i class="fas fa-file-pdf"></i> Download PDF
-                    </button>
-                    <button onclick="downloadUpdatedCV('word')" class="btn-download-word">
-                        <i class="fas fa-file-word"></i> Download Word
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+
     <!-- ========================================== -->
-<!-- WHY CHOOSE SECTION - FIXED -->
-<!-- ========================================== -->
-<section class="why-choose-section" data-aos="fade-up" data-aos-duration="800">
-    <div class="why-choose-header">
-        <span class="section-badge">
-            <i class="fas fa-star"></i> Why Choose Our AI CV Generator
-        </span>
-        <h2>Build a CV That <span class="highlight">Opens Doors</span></h2>
-        <p>Our AI-powered tool helps you create professional documents that impress employers.</p>
-    </div>
-    
-    <div class="why-choose-grid">
-        <div class="why-choose-card">
-            <div class="why-choose-icon">
-                <i class="fas fa-robot"></i>
+    <!-- CV UPLOAD & UPDATE SECTION -->
+    <!-- ========================================== -->
+    <div class="cv-upload-section" data-aos="fade-up" data-aos-delay="100">
+        <div class="cv-upload-container">
+            <div class="cv-upload-header">
+                <div class="cv-upload-icon">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                </div>
+                <div class="cv-upload-title">
+                    <h3><i class="fas fa-file-pdf" style="color: var(--gold); margin-right: 8px;"></i> Upload & Update Your CV</h3>
+                    <p><i class="fas fa-robot" style="color: var(--gold); margin-right: 6px;"></i> Upload your existing CV (PDF) and let AI reformat it professionally</p>
+                </div>
             </div>
-            <h3>AI-Powered CV Writing</h3>
-            <p>Our AI analyzes your input to generate professional, ATS-friendly CVs that stand out to recruiters.</p>
+            
+            <div class="cv-upload-area" id="cvUploadArea">
+                <!-- Dropzone -->
+                <div class="cv-upload-dropzone" id="cvUploadDropzone">
+                    <i class="fas fa-file-pdf"></i>
+                    <h4><i class="fas fa-upload"></i> Drop your PDF here or click to browse</h4>
+                    <p><i class="fas fa-info-circle"></i> Only PDF files are accepted. Max size: 10MB</p>
+                </div>
+                
+                <!-- Hidden File Input -->
+                <input type="file" id="cvFileInput" accept=".pdf" style="display:none;">
+                
+                <!-- Preview -->
+                <div class="cv-upload-preview" id="cvUploadPreview" style="display:none;">
+                    <div class="cv-upload-file-info">
+                        <i class="fas fa-file-pdf"></i>
+                        <div>
+                            <span class="file-name" id="uploadFileName">CV.pdf</span>
+                            <span class="file-size" id="uploadFileSize">0 KB</span>
+                        </div>
+                        <button class="cv-upload-remove" id="cvUploadRemove" title="Remove file">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="cv-upload-actions">
+                        <button class="btn btn-primary" id="cvUpdateBtn">
+                            <i class="fas fa-wand-magic-sparkles"></i> Update CV with AI
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Error -->
+                <div class="cv-upload-error" id="cvUploadError" style="display:none;">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span id="cvUploadErrorMessage">Invalid file. Please upload a PDF.</span>
+                </div>
+                
+                <!-- ===== DOWNLOAD BUTTONS - ALWAYS IN HTML BUT HIDDEN ===== -->
+                <div class="cv-download-section" id="cvDownloadSection" style="display: none; margin-top: 20px; padding: 20px; background: #faf8f4; border-radius: 12px; border: 2px solid #c9a84c; text-align: center;">
+                    <p style="font-size: 14px; color: #22c55e; margin-bottom: 14px; font-weight: 600; font-family: 'Times New Roman', Times, serif;">
+                        <i class="fas fa-check-circle"></i> Your CV has been updated successfully!
+                    </p>
+                    <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+                        <button onclick="downloadUpdatedCV('pdf')" class="btn-download-pdf" style="padding: 12px 30px; font-size: 15px; background: #c9a84c; color: #0b2a35; border: none; border-radius: 999px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 16px rgba(201, 168, 76, 0.3); font-family: 'Times New Roman', Times, serif;">
+                            <i class="fas fa-file-pdf"></i> Download PDF
+                        </button>
+                        <button onclick="downloadUpdatedCV('word')" class="btn-download-word" style="padding: 12px 30px; font-size: 15px; background: transparent; color: #0b2a35; border: 2px solid #0b2a35; border-radius: 999px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; font-family: 'Times New Roman', Times, serif;">
+                            <i class="fas fa-file-word"></i> Download Word
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- WHY CHOOSE SECTION - FIXED -->
+    <!-- ========================================== -->
+    <section class="why-choose-section" data-aos="fade-up" data-aos-duration="800">
+        <div class="why-choose-header">
+            <span class="section-badge">
+                <i class="fas fa-star"></i> Why Choose Our AI CV Generator
+            </span>
+            <h2>Build a CV That <span class="highlight">Opens Doors</span></h2>
+            <p>Our AI-powered tool helps you create professional documents that impress employers.</p>
         </div>
         
-        <div class="why-choose-card">
-            <div class="why-choose-icon">
-                <i class="fas fa-envelope"></i>
+        <div class="why-choose-grid">
+            <div class="why-choose-card">
+                <div class="why-choose-icon">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <h3>AI-Powered CV Writing</h3>
+                <p>Our AI analyzes your input to generate professional, ATS-friendly CVs that stand out to recruiters.</p>
             </div>
-            <h3>Smart Application Letters</h3>
-            <p>Generate compelling cover letters from your CV or create a standalone letter that captures attention.</p>
-        </div>
-        
-        <div class="why-choose-card">
-            <div class="why-choose-icon">
-                <i class="fas fa-shield-alt"></i>
+            
+            <div class="why-choose-card">
+                <div class="why-choose-icon">
+                    <i class="fas fa-envelope"></i>
+                </div>
+                <h3>Smart Application Letters</h3>
+                <p>Generate compelling cover letters from your CV or create a standalone letter that captures attention.</p>
             </div>
-            <h3>100% Privacy Guaranteed</h3>
-            <p>All processing happens locally in your browser. We never store or share your personal information.</p>
+            
+            <div class="why-choose-card">
+                <div class="why-choose-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <h3>100% Privacy Guaranteed</h3>
+                <p>All processing happens locally in your browser. We never store or share your personal information.</p>
+            </div>
         </div>
-    </div>
-</section>
+    </section>
 
     <!-- ========================================== -->
     <!-- STANDALONE APPLICATION LETTER SECTION -->
@@ -742,52 +750,47 @@
     </script>
 
     <!-- ========================================== -->
-<!-- SCROLL TO TOP FIX - MODIFIED -->
-<!-- ========================================== -->
-<script>
-    (function() {
-        // DON'T remove the hash - let it work naturally
-        // if (window.location.hash) {
-        //     history.replaceState(null, document.title, window.location.pathname + window.location.search);
-        // }
-        
-        // Force scroll to top only if no hash
-        if (!window.location.hash) {
-            window.scrollTo(0, 0);
-        }
-        
-        // On page load, handle hash
-        window.addEventListener('load', function() {
-            if (window.location.hash) {
-                // Let the hash work naturally
-                // Don't remove it
-            } else {
+    <!-- SCROLL TO TOP FIX - MODIFIED -->
+    <!-- ========================================== -->
+    <script>
+        (function() {
+            // Force scroll to top only if no hash
+            if (!window.location.hash) {
                 window.scrollTo(0, 0);
             }
-        });
-        
-        // Fix for header buttons - handle cross-page links properly
-        document.querySelectorAll('.header-actions a, .navbar a').forEach(function(link) {
-            link.addEventListener('click', function(e) {
-                var href = this.getAttribute('href');
-                if (href && href.startsWith('#')) {
-                    e.preventDefault();
-                    var targetId = href.substring(1);
-                    var target = document.getElementById(targetId);
-                    if (target) {
-                        var rect = target.getBoundingClientRect();
-                        var offset = 100;
-                        var targetPosition = window.pageYOffset + rect.top - offset;
-                        window.scrollTo({
-                            top: targetPosition,
-                            behavior: 'smooth'
-                        });
-                    }
+            
+            // On page load, handle hash
+            window.addEventListener('load', function() {
+                if (window.location.hash) {
+                    // Let the hash work naturally
+                } else {
+                    window.scrollTo(0, 0);
                 }
-                // For cross-page links (generate.html#letter-section), let them work naturally
             });
-        });
-        
-        console.log('✅ Page scroll fix applied');
-    })();
-</script>
+            
+            // Fix for header buttons - handle cross-page links properly
+            document.querySelectorAll('.header-actions a, .navbar a').forEach(function(link) {
+                link.addEventListener('click', function(e) {
+                    var href = this.getAttribute('href');
+                    if (href && href.startsWith('#')) {
+                        e.preventDefault();
+                        var targetId = href.substring(1);
+                        var target = document.getElementById(targetId);
+                        if (target) {
+                            var rect = target.getBoundingClientRect();
+                            var offset = 100;
+                            var targetPosition = window.pageYOffset + rect.top - offset;
+                            window.scrollTo({
+                                top: targetPosition,
+                                behavior: 'smooth'
+                            });
+                        }
+                    }
+                });
+            });
+            
+            console.log('✅ Page scroll fix applied');
+        })();
+    </script>
+</body>
+</html>
